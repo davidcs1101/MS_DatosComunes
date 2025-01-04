@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DCO.DataAccess\DCO.DataAcces.csproj" />
+    <ProjectReference Include="..\DCO.Dominio\DCO.Dominio.csproj" />
+    <ProjectReference Include="..\DCO.Dtos\DCO.Dtos.csproj" />
+  </ItemGroup>
+
+</Project>

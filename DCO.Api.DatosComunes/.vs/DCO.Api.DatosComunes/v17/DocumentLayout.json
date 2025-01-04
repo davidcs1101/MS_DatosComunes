@@ -1,0 +1,109 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Api.DatosComunes\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{56BCCBC5-3FAC-46F5-AE0B-278C4F4F21E4}|..\\DCO.Servicio\\DCO.Servicio.csproj|c:\\users\\lenovo\\onedrive\\documentos\\herramientas escafandra\\react\\csharp\\src_be\\ms_datoscomunes\\dco.servicio\\implementaciones\\msseguridadservicio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BBCDABB8-00DE-4F53-ACBE-199B10779BB3}|DCO.Api.DatosComunes.csproj|c:\\users\\lenovo\\onedrive\\documentos\\herramientas escafandra\\react\\csharp\\src_be\\ms_datoscomunes\\dco.api.datoscomunes\\controllers\\listacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BBCDABB8-00DE-4F53-ACBE-199B10779BB3}|DCO.Api.DatosComunes.csproj|solutionrelative:controllers\\listacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BBCDABB8-00DE-4F53-ACBE-199B10779BB3}|DCO.Api.DatosComunes.csproj|c:\\users\\lenovo\\onedrive\\documentos\\herramientas escafandra\\react\\csharp\\src_be\\ms_datoscomunes\\dco.api.datoscomunes\\controllers\\listadetallecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BBCDABB8-00DE-4F53-ACBE-199B10779BB3}|DCO.Api.DatosComunes.csproj|solutionrelative:controllers\\listadetallecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BBCDABB8-00DE-4F53-ACBE-199B10779BB3}|DCO.Api.DatosComunes.csproj|c:\\users\\lenovo\\onedrive\\documentos\\herramientas escafandra\\react\\csharp\\src_be\\ms_datoscomunes\\dco.api.datoscomunes\\infraestructura\\middlewareexcepcionesglobales.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BBCDABB8-00DE-4F53-ACBE-199B10779BB3}|DCO.Api.DatosComunes.csproj|solutionrelative:infraestructura\\middlewareexcepcionesglobales.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:16:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:17:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:18:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:12:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:13:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MiddlewareExcepcionesGlobales.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Api.DatosComunes\\Infraestructura\\MiddlewareExcepcionesGlobales.cs",
+              "RelativeDocumentMoniker": "Infraestructura\\MiddlewareExcepcionesGlobales.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Api.DatosComunes\\Infraestructura\\MiddlewareExcepcionesGlobales.cs",
+              "RelativeToolTip": "Infraestructura\\MiddlewareExcepcionesGlobales.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-31T04:18:03.35Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MSSeguridadServicio.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Servicio\\Implementaciones\\MSSeguridadServicio.cs",
+              "RelativeDocumentMoniker": "..\\DCO.Servicio\\Implementaciones\\MSSeguridadServicio.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Servicio\\Implementaciones\\MSSeguridadServicio.cs",
+              "RelativeToolTip": "..\\DCO.Servicio\\Implementaciones\\MSSeguridadServicio.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAADwvygAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-24T21:22:01.648Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ListaDetalleController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Api.DatosComunes\\Controllers\\ListaDetalleController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ListaDetalleController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Api.DatosComunes\\Controllers\\ListaDetalleController.cs",
+              "RelativeToolTip": "Controllers\\ListaDetalleController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-24T21:51:49.077Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ListaController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Api.DatosComunes\\Controllers\\ListaController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ListaController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\OneDrive\\Documentos\\Herramientas Escafandra\\React\\CSHARP\\SRC_BE\\MS_DatosComunes\\DCO.Api.DatosComunes\\Controllers\\ListaController.cs",
+              "RelativeToolTip": "Controllers\\ListaController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC0AAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-24T20:26:52.313Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{99b8fa2f-ab90-4f57-9c32-949f146f1914}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

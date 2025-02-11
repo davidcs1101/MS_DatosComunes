@@ -20,14 +20,14 @@ namespace ApiDCO.Controllers
             _listaDetalleServicio = listaDetalleServicio;
         }
 
-        [HttpGet("listarPorcodigoLista")]
+        [HttpGet("listarPorCodigoLista")]
         public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoLista(string codigoLista)
         {
             var listasDetatalles = await _listaDetalleServicio.ListarPorCodigoListaAsync(codigoLista);
             return listasDetatalles;
         }
 
-        [HttpGet("listarPorcodigoConstante")]
+        [HttpGet("listarPorCodigoConstante")]
         public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstate)
         {
             var listasDetatalles = await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstate);

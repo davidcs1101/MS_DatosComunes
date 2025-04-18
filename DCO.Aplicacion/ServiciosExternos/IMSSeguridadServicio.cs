@@ -1,8 +1,10 @@
-﻿namespace DCO.Aplicacion.ServiciosExternos
+﻿using DCO.Dtos;
+
+namespace DCO.Aplicacion.ServiciosExternos
 {
     public interface IMSSeguridadServicio
     {
         Task<HttpResponseMessage> ObtenerNombreUsuarioPorIdAsync(int id);
-        Task<HttpResponseMessage> ObtenerNombresUsuariosPorIds(List<int?>? usuarioIds);
+        Task<HttpResponseMessage> ObtenerNombresUsuariosPorIds(IdsListadoDto usuarioIds);
     }
 }

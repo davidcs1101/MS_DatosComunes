@@ -9,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using DCO.Dominio.Repositorio;
 using DCO.Infraestructura.Dominio.Repositorio;
 using DCO.Infraestructura.Aplicacion.ServiciosExternos;
+using DCO.Infraestructura.Servicios.Interfaces;
+using DCO.Infraestructura.Servicios.Implementaciones;
 using DCO.Api.DatosComunes.Middlewares;
 using DCO.Aplicacion.CasosUso.Implementaciones;
 using DCO.Aplicacion.CasosUso.Interfaces;
@@ -96,6 +98,8 @@ builder.Services.AddScoped<IListaDetalleRepositorio, ListaDetalleRepositorio>();
 builder.Services.AddScoped<IListaDetalleServicio, ListaDetalleServicio>();
 builder.Services.AddScoped<IDatoConstanteRepositorio, DatoConstanteRepositorio>();
 builder.Services.AddScoped<IDatoConstanteServicio, DatoConstanteServicio>();
+builder.Services.AddScoped<IRespuestaHttpValidador, RespuestaHttpValidador>();
+
 builder.Services.AddDbContext<AppDbContext>
     (opciones => opciones
     .UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),

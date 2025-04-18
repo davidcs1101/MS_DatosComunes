@@ -2,15 +2,19 @@
 using DCO.Dtos;
 using DCO.Aplicacion.ServiciosExternos;
 using Utilidades;
+using DCO.Infraestructura.Servicios.Interfaces;
 
 namespace DCO.Infraestructura.Aplicacion.ServiciosExternos
 {
     public class MSSeguridadServicio : IMSSeguridadServicio
     {
         private readonly HttpClient _httpClient;
-        public MSSeguridadServicio(HttpClient httpClient) 
+        private readonly IRespuestaHttpValidador _respuestaHttpValidador;
+
+        public MSSeguridadServicio(HttpClient httpClient, IRespuestaHttpValidador respuestaHttpValidador)
         {
             _httpClient = httpClient;
+            _respuestaHttpValidador = respuestaHttpValidador;
         }
 
         public async Task<HttpResponseMessage> ObtenerNombreUsuarioPorIdAsync(int id)
@@ -18,19 +22,17 @@ namespace DCO.Infraestructura.Aplicacion.ServiciosExternos
             var url = $"api/usuarios/obtenerNombreUsuarioPorId?id={id}";
             var respuesta = await _httpClient.GetAsync(url);
 
-            if (!respuesta.IsSuccessStatusCode)
-                throw new HttpRequestException($"{Textos.Generales.MENSAJE_CORREO_ENVIADO_ERROR}: No se pudo obtener el nombre de usuario. : {respuesta.ReasonPhrase}");
+            _respuestaHttpValidador.ValidarRespuesta(respuesta, Textos.Generales.MENSAJE_ERROR_CONSUMO_SERVICIO);
 
             return respuesta;
         }
-        //ApiResponse<List<UsuarioDto>?>
-        public async Task<HttpResponseMessage> ObtenerNombresUsuariosPorIds(List<int?>? usuarioIds) 
+
+        public async Task<HttpResponseMessage> ObtenerNombresUsuariosPorIds(IdsListadoDto usuarioIds) 
         {
             var url = "api/usuarios/listar";
-            var respuesta = await _httpClient.PostAsJsonAsync(url, new IdsListadoDto { Ids = usuarioIds });
+            var respuesta = await _httpClient.PostAsJsonAsync(url, usuarioIds);
 
-            if (!respuesta.IsSuccessStatusCode)
-                throw new HttpRequestException($"{Textos.Generales.MENSAJE_CORREO_ENVIADO_ERROR}: No se pudo obtener los nombres de los usuarios. : {respuesta.ReasonPhrase}");
+            _respuestaHttpValidador.ValidarRespuesta(respuesta, Textos.Generales.MENSAJE_ERROR_CONSUMO_SERVICIO);
 
             return respuesta;
         }

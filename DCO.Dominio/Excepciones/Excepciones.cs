@@ -9,4 +9,9 @@
     {
         public DatoNoEncontradoException(string mensaje) : base(mensaje) { }
     }
+
+    public class SolicitudHttpException : Exception
+    {
+        public SolicitudHttpException(string mensaje) : base(mensaje) { }
+    }
 }

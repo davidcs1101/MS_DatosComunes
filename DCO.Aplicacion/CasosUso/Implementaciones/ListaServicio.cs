@@ -7,6 +7,9 @@ using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
 using System.Net.Http.Json;
+using DCO.Dominio.Servicios;
+using DCO.Aplicacion.Servicios.Interfaces;
+using DCO.Aplicacion.Servicios.Implementaciones;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -15,19 +18,22 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IListaRepositorio _listaRepositorio;
         private readonly IMapper _mapper;
         private readonly IMSSeguridadServicio _msSeguridadServicio;
+        private readonly IListaValidador _listaValidador;
+        public readonly IApiResponse _apiResponseServicio;
 
-        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IMSSeguridadServicio msSeguridadServicio) 
+        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IMSSeguridadServicio msSeguridadServicio, IListaValidador listaValidador = null, IApiResponse apiResponseServicio = null)
         {
             _listaRepositorio = listaRepositorio;
             _mapper = mapper;
             _msSeguridadServicio = msSeguridadServicio;
+            _listaValidador = listaValidador;
+            _apiResponseServicio = apiResponseServicio;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(ListaCreacionRequest listaCreacionRequest)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorCodigoAsync(listaCreacionRequest.Codigo);
-            if (listaExiste != null)
-                throw new DbUpdateException(Textos.Listas.MENSAJE_LISTA_CODIGO_EXISTE);
+            _listaValidador.ValidarDatoYaExiste(listaExiste, Textos.Listas.MENSAJE_LISTA_CODIGO_EXISTE);
 
             var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaCreacionRequest.UsuarioCreadorId);
             var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
@@ -39,14 +45,13 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var id = await _listaRepositorio.CrearAsync(lista);
 
-            return new ApiResponse<int> { Correcto = true, Mensaje = Textos.Generales.MENSAJE_REGISTRO_CREADO, Data = id };
+            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
         public async Task<ApiResponse<string>> ModificarAsync(ListaModificacionRequest listaModificacionRequest)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorIdAsync(listaModificacionRequest.Id);
-            if (listaExiste == null)
-                throw new KeyNotFoundException(Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
+            _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
 
             var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaModificacionRequest.UsuarioModificadorId);
             var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
@@ -58,51 +63,50 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             await _listaRepositorio.ModificarAsync(listaExiste);
 
-            return new ApiResponse<string> { Correcto = true, Mensaje = Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO };
+            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
         public async Task<ApiResponse<string>> EliminarAsync(int id)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorIdAsync(id);
-            if (listaExiste == null)
-                throw new KeyNotFoundException(Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
+            _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
 
             var eliminado = await _listaRepositorio.EliminarAsync(id);
 
             if (eliminado)
-                return new ApiResponse<string> { Correcto = true, Mensaje = Textos.Generales.MENSAJE_REGISTRO_ELIMINADO };
+                return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
 
-            return new ApiResponse<string> { Correcto = false, Mensaje = Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO };
+            return _apiResponseServicio.CrearRespuesta(false, Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO, "");
         }
 
         public async Task<ApiResponse<ListaDto?>> ObtenerPorIdAsync(int id)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorIdAsync(id);
-            if (listaExiste == null)
-                throw new KeyNotFoundException(Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
+            _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
 
             var listaDto = _mapper.Map<ListaDto>(listaExiste);
 
-            return new ApiResponse<ListaDto?> { Correcto = true, Mensaje = "", Data = listaDto };
+            return _apiResponseServicio.CrearRespuesta<ListaDto?>(true, "", listaDto);
         }
 
         public async Task<ApiResponse<ListaDto?>> ObtenerPorCodigoAsync(string codigo)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorCodigoAsync(codigo);
-            if (listaExiste == null)
-                throw new KeyNotFoundException(Textos.Listas.MENSAJE_LISTA_NO_EXISTE_CODIGO);
+            _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_CODIGO);
 
             var listaDto = _mapper.Map<ListaDto>(listaExiste);
 
-            return new ApiResponse<ListaDto?> { Correcto = true, Mensaje = "", Data = listaDto };
+            return _apiResponseServicio.CrearRespuesta<ListaDto?>(true, "", listaDto);
         }
 
         public async Task<ApiResponse<List<ListaDto>?>> ListarAsync()
         {
             var listas = await _listaRepositorio.Listar().ToListAsync();
             var listasDto = _mapper.Map<List<ListaDto>>(listas);
+            IdsListadoDto usuarioIds = new IdsListadoDto();
+
             // Obtener los IDs únicos de los usuarios
-            var usuarioIds = listasDto
+            usuarioIds.Ids = listasDto
                 .SelectMany(lista => new[] { lista.UsuarioCreadorId, lista.UsuarioModificadorId })
                 .Distinct()
                 .ToList();
@@ -124,7 +128,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                     lista.NombreUsuarioModificador = diccionarioUsuarios?.GetValueOrDefault((int)lista.UsuarioModificadorId);
             }
 
-            return new ApiResponse<List<ListaDto>?> { Correcto = true, Mensaje = "", Data = listasDto };
+            return _apiResponseServicio.CrearRespuesta<List<ListaDto>?>(true, "", listasDto);
         }
     }
 }

@@ -101,9 +101,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         {
             var datosConstantes = await _datoConstanteRepositorio.Listar().ToListAsync();
             var datosConstantesDto = _mapper.Map<List<DatoConstanteDto>>(datosConstantes);
+            IdsListadoDto usuarioIds = new IdsListadoDto();
 
             // Obtener los IDs únicos de los usuarios
-            var usuarioIds = datosConstantesDto
+            usuarioIds.Ids = datosConstantesDto
                 .SelectMany(datoConstante => new[] { datoConstante.UsuarioCreadorId, datoConstante.UsuarioModificadorId })
                 .Distinct()
                 .ToList();

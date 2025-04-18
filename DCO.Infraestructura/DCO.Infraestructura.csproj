@@ -17,8 +17,4 @@
     <ProjectReference Include="..\DCO.Dtos\DCO.Dtos.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dominio\Servicios\" />
-  </ItemGroup>
-
 </Project>

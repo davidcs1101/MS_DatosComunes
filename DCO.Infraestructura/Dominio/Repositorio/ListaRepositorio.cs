@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DCO.DataAccess;
+﻿using DCO.DataAccess;
 using DCO.Dominio.Entidades;
-using DCO.Dtos;
-using DCO.Repositorio.Interfaces;
+using DCO.Dominio.Repositorio;
 using Microsoft.EntityFrameworkCore;
 
-namespace DCO.Repositorio.Implementaciones
+namespace DCO.Infraestructura.Dominio.Repositorio
 {
     public class ListaRepositorio : IListaRepositorio
     {
@@ -48,21 +42,9 @@ namespace DCO.Repositorio.Implementaciones
             return await _context.DCO_Listas.FirstOrDefaultAsync(g => g.Codigo == codigo);
         }
 
-        public IQueryable<ListaDto> Listar()
+        public IQueryable<DCO_Lista> Listar()
         {
-            var listas = _context.DCO_Listas
-                .Select(g => new ListaDto
-                {
-                    Id = g.Id,
-                    Codigo = g.Codigo,
-                    Nombre = g.Nombre,
-                    UsuarioCreadorId = g.UsuarioCreadorId,
-                    FechaCreado = g.FechaCreado,
-                    UsuarioModificadorId = g.UsuarioModificadorId,
-                    FechaModificado = g.FechaModificado,
-                    EstadoActivo = g.EstadoActivo
-                });
-            return listas;
+            return _context.DCO_Listas;
         }
     }
 }

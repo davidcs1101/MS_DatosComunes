@@ -18,9 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DCO.Aplicacion\DCO.Aplicacion.csproj" />
     <ProjectReference Include="..\DCO.Dominio\DCO.Dominio.csproj" />
     <ProjectReference Include="..\DCO.Dtos\DCO.Dtos.csproj" />
-    <ProjectReference Include="..\DCO.Servicio\DCO.Servicio.csproj" />
+    <ProjectReference Include="..\DCO.Infraestructura\DCO.Infraestructura.csproj" />
   </ItemGroup>
 
 </Project>

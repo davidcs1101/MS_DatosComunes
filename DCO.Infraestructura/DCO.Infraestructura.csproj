@@ -11,8 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utilidades\Utilidades.csproj" />
+    <ProjectReference Include="..\DCO.Aplicacion\DCO.Aplicacion.csproj" />
+    <ProjectReference Include="..\DCO.DataAccess\DCO.DataAcces.csproj" />
+    <ProjectReference Include="..\DCO.Dominio\DCO.Dominio.csproj" />
     <ProjectReference Include="..\DCO.Dtos\DCO.Dtos.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dominio\Servicios\" />
   </ItemGroup>
 
 </Project>

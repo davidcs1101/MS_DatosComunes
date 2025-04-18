@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using DCO.DataAccess;
 using DCO.Dominio.Entidades;
-using DCO.Dtos;
-using DCO.Repositorio.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using DCO.Dominio.Repositorio;
 
-namespace DCO.Repositorio.Implementaciones
+namespace DCO.Infraestructura.Dominio.Repositorio
 {
     public class DatoConstanteRepositorio : IDatoConstanteRepositorio
     {
@@ -48,21 +42,9 @@ namespace DCO.Repositorio.Implementaciones
             return await _context.DCO_DatosConstantes.FirstOrDefaultAsync(g => g.Codigo == codigo);
         }
 
-        public IQueryable<DatoConstanteDto> Listar()
+        public IQueryable<DCO_DatoConstante> Listar()
         {
-            var datoConstantes = _context.DCO_DatosConstantes
-                .Select(g => new DatoConstanteDto
-                {
-                    Id = g.Id,
-                    Codigo = g.Codigo,
-                    Nombre = g.Nombre,
-                    UsuarioCreadorId = g.UsuarioCreadorId,
-                    FechaCreado = g.FechaCreado,
-                    UsuarioModificadorId = g.UsuarioModificadorId,
-                    FechaModificado = g.FechaModificado,
-                    EstadoActivo = g.EstadoActivo
-                });
-            return datoConstantes;
+            return _context.DCO_DatosConstantes;
         }
     }
 }

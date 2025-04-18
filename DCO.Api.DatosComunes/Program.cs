@@ -1,17 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using DCO.DataAccess;
-using DCO.Repositorio.Implementaciones;
-using DCO.Repositorio.Interfaces;
-using DCO.Servicio.Interfaces;
-using DCO.Servicio.Implementaciones;
 using log4net;
 using log4net.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Options;
-using DCO.Api.DatosComunes.Infraestructura;
+using DCO.Dominio.Repositorio;
+using DCO.Infraestructura.Dominio.Repositorio;
+using DCO.Infraestructura.Aplicacion.ServiciosExternos;
+using DCO.Api.DatosComunes.Middlewares;
+using DCO.Aplicacion.CasosUso.Implementaciones;
+using DCO.Aplicacion.CasosUso.Interfaces;
+using DCO.Aplicacion.ServiciosExternos;
 
 var builder = WebApplication.CreateBuilder(args);
 

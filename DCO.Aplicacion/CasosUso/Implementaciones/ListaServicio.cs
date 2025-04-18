@@ -1,19 +1,14 @@
-﻿using DCO.Dtos;
-using DCO.Servicio.Interfaces;
-using DCO.Dominio.Entidades;
+﻿using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DCO.Repositorio.Interfaces;
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
+using DCO.Dtos;
+using DCO.Dominio.Entidades;
 using Utilidades;
 using DCO.Dominio.Repositorio;
+using DCO.Aplicacion.CasosUso.Interfaces;
+using DCO.Aplicacion.ServiciosExternos;
+using System.Net.Http.Json;
 
-namespace DCO.Servicio.Implementaciones
+namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
     public class ListaServicio : IListaServicio
     {
@@ -34,7 +29,8 @@ namespace DCO.Servicio.Implementaciones
             if (listaExiste != null)
                 throw new DbUpdateException(Textos.Listas.MENSAJE_LISTA_CODIGO_EXISTE);
 
-            var usuarioAuditoriaExiste = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaCreacionRequest.UsuarioCreadorId);
+            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaCreacionRequest.UsuarioCreadorId);
+            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
             if (!usuarioAuditoriaExiste.Correcto)
                 throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
 
@@ -52,7 +48,8 @@ namespace DCO.Servicio.Implementaciones
             if (listaExiste == null)
                 throw new KeyNotFoundException(Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
 
-            var usuarioAuditoriaExiste = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaModificacionRequest.UsuarioModificadorId);
+            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaModificacionRequest.UsuarioModificadorId);
+            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
             if (!usuarioAuditoriaExiste.Correcto)
                 throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
 
@@ -102,16 +99,17 @@ namespace DCO.Servicio.Implementaciones
 
         public async Task<ApiResponse<List<ListaDto>?>> ListarAsync()
         {
-            var listasResultado = await _listaRepositorio.Listar().ToListAsync();
-
+            var listas = await _listaRepositorio.Listar().ToListAsync();
+            var listasDto = _mapper.Map<List<ListaDto>>(listas);
             // Obtener los IDs únicos de los usuarios
-            var usuarioIds = listasResultado
+            var usuarioIds = listasDto
                 .SelectMany(lista => new[] { lista.UsuarioCreadorId, lista.UsuarioModificadorId })
                 .Distinct()
                 .ToList();
 
             // Consulta en lote al microservicio de seguridad
-            var nombresUsuarios = await _msSeguridadServicio.ObtenerNombresUsuariosPorIds(usuarioIds);
+            var respuesta = await _msSeguridadServicio.ObtenerNombresUsuariosPorIds(usuarioIds);
+            var nombresUsuarios = await respuesta.Content.ReadFromJsonAsync<ApiResponse<List<UsuarioDto>?>>();
             if (!nombresUsuarios.Correcto)
                 throw new KeyNotFoundException("OJO CAMBIAR: NO FUE POSIBLE OBTENER LOS DATOS DEL MICROSERVICIO DE USUARIOS");
 
@@ -119,14 +117,14 @@ namespace DCO.Servicio.Implementaciones
             var diccionarioUsuarios = nombresUsuarios?.Data?.ToDictionary(u => u.Id, u => u.NombreUsuario);
 
             // Asignar los nombres a los DTOs
-            foreach (var lista in listasResultado)
+            foreach (var lista in listasDto)
             {
                 lista.NombreUsuarioCreador = diccionarioUsuarios?.GetValueOrDefault(lista.UsuarioCreadorId);
                 if (lista.UsuarioModificadorId is not null)
                     lista.NombreUsuarioModificador = diccionarioUsuarios?.GetValueOrDefault((int)lista.UsuarioModificadorId);
             }
 
-            return new ApiResponse<List<ListaDto>?> { Correcto = true, Mensaje = "", Data = listasResultado };
+            return new ApiResponse<List<ListaDto>?> { Correcto = true, Mensaje = "", Data = listasDto };
         }
     }
 }

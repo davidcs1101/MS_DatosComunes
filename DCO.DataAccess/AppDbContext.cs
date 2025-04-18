@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DCO.Dominio.Entidades;
-using DCO.Dominio.Entidades.Configuraciones;
-using DCO.Dominio.Entidades.Semilla;
-using System.Reflection;
+using DCO.DataAcces.EntidadesConfig;
+using DCO.DataAcces.Semilla;
 
 namespace DCO.DataAccess
 {

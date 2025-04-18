@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using DCO.DataAccess;
+using DCO.Dominio.Repositorio;
 using DCO.Dominio.Entidades;
-using DCO.Repositorio.Interfaces;
-using DCO.Dtos;
-using Microsoft.EntityFrameworkCore;
+using DCO.Dominio.Entidades.ModelosVistas;
 
-namespace DCO.Repositorio.Implementaciones
+namespace DCO.Infraestructura.Dominio.Repositorio
 {
     public class ListaDetalleRepositorio : IListaDetalleRepositorio
     {
@@ -48,11 +43,11 @@ namespace DCO.Repositorio.Implementaciones
             return await _context.DCO_ListasDetalles.FirstOrDefaultAsync(g => g.Codigo == codigo);
         }
 
-        public IQueryable<ListaDetalleDto> Listar()
+        public IQueryable<ListaDetalleMV> Listar()
         {
-            var listasDetalle = _context.DCO_ListasDetalles
+            return _context.DCO_ListasDetalles
                          .Include(ld => ld.Lista)
-                         .Select(ld => new ListaDetalleDto
+                         .Select(ld => new ListaDetalleMV
                          {
                              Id = ld.Id,
                              ListaId = ld.ListaId,
@@ -66,16 +61,15 @@ namespace DCO.Repositorio.Implementaciones
 
                              CodigoLista = ld.Lista.Codigo
                          });
-            return listasDetalle;
         }
 
-        public IQueryable<ListaDetalleDto> ListarPorCodigoConstante(string codigoDatoConstante)
+        public IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante)
         {
-            var datosConstantesDetalles = from dc in _context.DCO_DatosConstantes
+            return from dc in _context.DCO_DatosConstantes
                                           join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
                                           join ld in _context.DCO_ListasDetalles on dcd.DatoId equals ld.Id
                                           where dc.Codigo == codigoDatoConstante
-                                          select new ListaDetalleDto
+                                          select new ListaDetalleMV
                                           {
                                               Id = ld.Id,
                                               ListaId = ld.ListaId,
@@ -89,7 +83,6 @@ namespace DCO.Repositorio.Implementaciones
 
                                               CodigoDatoConstante = dc.Codigo
                                           };
-            return datosConstantesDetalles;
         }
     }
 }

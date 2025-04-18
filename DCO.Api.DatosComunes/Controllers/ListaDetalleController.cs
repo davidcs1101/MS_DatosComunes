@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DCO.Dominio.Entidades;
+﻿using Microsoft.AspNetCore.Mvc;
 using DCO.Dtos;
-using DCO.Repositorio.Interfaces;
-using DCO.Servicio.Interfaces;
-using Utilidades;
+using DCO.Aplicacion.CasosUso.Interfaces;
 
 namespace ApiDCO.Controllers
 {

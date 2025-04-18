@@ -1,19 +1,14 @@
 ﻿using DCO.Dtos;
-using DCO.Servicio.Interfaces;
 using DCO.Dominio.Entidades;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DCO.Repositorio.Interfaces;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Utilidades;
 using DCO.Dominio.Repositorio;
+using DCO.Aplicacion.CasosUso.Interfaces;
+using DCO.Aplicacion.ServiciosExternos;
+using System.Net.Http.Json;
 
-namespace DCO.Servicio.Implementaciones
+namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
     public class DatoConstanteServicio : IDatoConstanteServicio
     {
@@ -34,7 +29,8 @@ namespace DCO.Servicio.Implementaciones
             if (datoConstanteExiste != null)
                 throw new DbUpdateException(Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_CODIGO_EXISTE);
 
-            var usuarioAuditoriaExiste = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(datoConstanteCreacionRequest.UsuarioCreadorId);
+            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(datoConstanteCreacionRequest.UsuarioCreadorId);
+            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
             if (!usuarioAuditoriaExiste.Correcto)
                 throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
 
@@ -52,7 +48,8 @@ namespace DCO.Servicio.Implementaciones
             if (datoConstanteExiste == null)
                 throw new KeyNotFoundException(Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_ID);
 
-            var usuarioAuditoriaExiste = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(datoConstanteModificacionRequest.UsuarioModificadorId);
+            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(datoConstanteModificacionRequest.UsuarioModificadorId);
+            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
             if (!usuarioAuditoriaExiste.Correcto)
                 throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
 
@@ -102,16 +99,18 @@ namespace DCO.Servicio.Implementaciones
 
         public async Task<ApiResponse<List<DatoConstanteDto>?>> ListarAsync()
         {
-            var datosConstantesResultado = await _datoConstanteRepositorio.Listar().ToListAsync();
+            var datosConstantes = await _datoConstanteRepositorio.Listar().ToListAsync();
+            var datosConstantesDto = _mapper.Map<List<DatoConstanteDto>>(datosConstantes);
 
             // Obtener los IDs únicos de los usuarios
-            var usuarioIds = datosConstantesResultado
+            var usuarioIds = datosConstantesDto
                 .SelectMany(datoConstante => new[] { datoConstante.UsuarioCreadorId, datoConstante.UsuarioModificadorId })
                 .Distinct()
                 .ToList();
 
             // Consulta en lote al microservicio de seguridad
-            var nombresUsuarios = await _msSeguridadServicio.ObtenerNombresUsuariosPorIds(usuarioIds);
+            var respuesta = await _msSeguridadServicio.ObtenerNombresUsuariosPorIds(usuarioIds);
+            var nombresUsuarios = await respuesta.Content.ReadFromJsonAsync<ApiResponse<List<UsuarioDto>?>>();
             if (!nombresUsuarios.Correcto)
                 throw new KeyNotFoundException("OJO CAMBIAR: NO FUE POSIBLE OBTENER LOS DATOS DEL MICROSERVICIO DE USUARIOS");
 
@@ -119,14 +118,14 @@ namespace DCO.Servicio.Implementaciones
             var diccionarioUsuarios = nombresUsuarios?.Data?.ToDictionary(u => u.Id, u => u.NombreUsuario);
 
             // Asignar los nombres a los DTOs
-            foreach (var datoConstante in datosConstantesResultado)
+            foreach (var datoConstante in datosConstantesDto)
             {
                 datoConstante.NombreUsuarioCreador = diccionarioUsuarios?.GetValueOrDefault(datoConstante.UsuarioCreadorId);
                 if (datoConstante.UsuarioModificadorId is not null)
                     datoConstante.NombreUsuarioModificador = diccionarioUsuarios?.GetValueOrDefault((int)datoConstante.UsuarioModificadorId);
             }
 
-            var datoConstanteDto = _mapper.Map<List<DatoConstanteDto>>(datosConstantesResultado);
+            var datoConstanteDto = _mapper.Map<List<DatoConstanteDto>>(datosConstantesDto);
 
             return new ApiResponse<List<DatoConstanteDto>?> { Correcto = true, Mensaje = "", Data = datoConstanteDto };
         }

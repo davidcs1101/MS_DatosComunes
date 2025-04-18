@@ -1,6 +1,6 @@
-﻿namespace DCO.Dtos
+﻿namespace DCO.Dominio.Entidades.ModelosVistas
 {
-    public class ListaDetalleDto
+    public class ListaDetalleMV
     {
         public int Id { get; set; }
         public int ListaId { get; set; }

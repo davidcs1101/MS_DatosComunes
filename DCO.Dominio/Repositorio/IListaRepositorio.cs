@@ -1,12 +1,6 @@
 ﻿using DCO.Dominio.Entidades;
-using DCO.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DCO.Repositorio.Interfaces
+namespace DCO.Dominio.Repositorio
 {
     public interface IListaRepositorio
     {
@@ -15,6 +9,6 @@ namespace DCO.Repositorio.Interfaces
         Task<bool> EliminarAsync(int id);
         Task<DCO_Lista?> ObtenerPorIdAsync(int id);
         Task<DCO_Lista?> ObtenerPorCodigoAsync(string codigo);
-        IQueryable<ListaDto> Listar();
+        IQueryable<DCO_Lista> Listar();
     }
 }

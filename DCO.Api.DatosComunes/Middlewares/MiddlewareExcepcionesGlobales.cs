@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.Json;
-using MySqlConnector;
+//using MySqlConnector;
 using Newtonsoft.Json;
 using DCO.Dtos;
-using System;
 using System.Net;
 using Utilidades;
 
-namespace DCO.Api.DatosComunes.Infraestructura
+namespace DCO.Api.DatosComunes.Middlewares
 {
     public class MiddlewareExcepcionesGlobales
     {

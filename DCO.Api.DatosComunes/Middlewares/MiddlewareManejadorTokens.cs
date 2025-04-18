@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DCO.Api.DatosComunes.Infraestructura
+namespace DCO.Api.DatosComunes.Middlewares
 {
     public class MiddlewareManejadorTokens : DelegatingHandler
     {

@@ -1,16 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DCO.Dominio.Entidades;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DCO.Dominio.Entidades.Configuraciones
+namespace DCO.DataAcces.EntidadesConfig
 {
-    public class DCO_DatoConstanteConfig : IEntityTypeConfiguration<DCO_DatoConstante>
+    public class DCO_ListaConfig : IEntityTypeConfiguration<DCO_Lista>
     {
-        public void Configure(EntityTypeBuilder<DCO_DatoConstante> builder) 
+        public void Configure(EntityTypeBuilder<DCO_Lista> builder) 
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Codigo).HasColumnType("varchar(30)");
@@ -18,7 +14,7 @@ namespace DCO.Dominio.Entidades.Configuraciones
             builder.Property(x => x.FechaCreado).HasColumnType("datetime");
             builder.Property(x => x.FechaModificado).HasColumnType("datetime");
 
-            builder.HasIndex(x => new { x.Codigo }).IsUnique();
+            builder.HasIndex(x => x.Codigo).IsUnique();
         }
     }
 }

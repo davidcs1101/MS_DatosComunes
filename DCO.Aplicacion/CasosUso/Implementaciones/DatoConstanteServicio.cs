@@ -7,6 +7,9 @@ using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
 using System.Net.Http.Json;
+using DCO.Aplicacion.Servicios.Interfaces;
+using DCO.Dominio.Servicios;
+using static Utilidades.Textos;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -14,30 +17,29 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
     {
         private readonly IDatoConstanteRepositorio _datoConstanteRepositorio;
         private readonly IMapper _mapper;
-        private readonly IMSSeguridadServicio _msSeguridadServicio;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
+        private readonly ISeguridadUsuarios _seguridadUsuarios;
+        private readonly IDatoConstanteValidador _datoConstanteValidador;
+        private readonly IApiResponse _apiResponseServicio;
 
-        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IMSSeguridadServicio msSeguridadServicio, IUsuarioContextoServicio usuarioContextoServicio)
+        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, ISeguridadUsuarios seguridadUsuarios, IDatoConstanteValidador datoConstanteValidador, IApiResponse apiResponseServicio)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _mapper = mapper;
-            _msSeguridadServicio = msSeguridadServicio;
             _usuarioContextoServicio = usuarioContextoServicio;
+            _seguridadUsuarios = seguridadUsuarios;
+            _datoConstanteValidador = datoConstanteValidador;
+            _apiResponseServicio = apiResponseServicio;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(DatoConstanteCreacionRequest datoConstanteCreacionRequest)
         {
             var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorCodigoAsync(datoConstanteCreacionRequest.Codigo);
-            if (datoConstanteExiste != null)
-                throw new DbUpdateException(Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_CODIGO_EXISTE);
-
-            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(datoConstanteCreacionRequest.UsuarioCreadorId);
-            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
-            if (!usuarioAuditoriaExiste.Correcto)
-                throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
+            _datoConstanteValidador.ValidarDatoYaExiste(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_CODIGO_EXISTE);
 
             var datoConstante = _mapper.Map<DCO_DatoConstante>(datoConstanteCreacionRequest);
             datoConstante.FechaCreado = DateTime.Now;
+            datoConstante.UsuarioCreadorId = _usuarioContextoServicio.ObtenerUsuarioIdToken();
 
             var id = await _datoConstanteRepositorio.CrearAsync(datoConstante);
 
@@ -47,56 +49,48 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         public async Task<ApiResponse<string>> ModificarAsync(DatoConstanteModificacionRequest datoConstanteModificacionRequest)
         {
             var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorIdAsync(datoConstanteModificacionRequest.Id);
-            if (datoConstanteExiste == null)
-                throw new KeyNotFoundException(Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_ID);
-
-            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(datoConstanteModificacionRequest.UsuarioModificadorId);
-            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
-            if (!usuarioAuditoriaExiste.Correcto)
-                throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
+            _datoConstanteValidador.ValidarDatoNoEncontrado(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_ID);
 
             _mapper.Map(datoConstanteModificacionRequest, datoConstanteExiste);
             datoConstanteExiste.FechaModificado = DateTime.Now;
+            datoConstanteExiste.UsuarioModificadorId = _usuarioContextoServicio.ObtenerUsuarioIdToken();
 
             await _datoConstanteRepositorio.ModificarAsync(datoConstanteExiste);
 
-            return new ApiResponse<string> { Correcto = true, Mensaje = Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO };
+            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
         public async Task<ApiResponse<string>> EliminarAsync(int id)
         {
             var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorIdAsync(id);
-            if (datoConstanteExiste == null)
-                throw new KeyNotFoundException(Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_ID);
+            _datoConstanteValidador.ValidarDatoNoEncontrado(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_ID);
 
             var eliminado = await _datoConstanteRepositorio.EliminarAsync(id);
 
             if (eliminado)
-                return new ApiResponse<string> { Correcto = true, Mensaje = Textos.Generales.MENSAJE_REGISTRO_ELIMINADO };
+                return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
 
-            return new ApiResponse<string> { Correcto = false, Mensaje = Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO };
+            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO, "");
         }
 
         public async Task<ApiResponse<DatoConstanteDto?>> ObtenerPorIdAsync(int id)
         {
             var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorIdAsync(id);
-            if (datoConstanteExiste == null)
-                throw new KeyNotFoundException(Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_ID);
+            _datoConstanteValidador.ValidarDatoNoEncontrado(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_ID);
 
             var datoConstanteDto = _mapper.Map<DatoConstanteDto>(datoConstanteExiste);
 
-            return new ApiResponse<DatoConstanteDto?> { Correcto = true, Mensaje = "", Data = datoConstanteDto };
+            return _apiResponseServicio.CrearRespuesta<DatoConstanteDto?>(true, "", datoConstanteDto);
         }
 
         public async Task<ApiResponse<DatoConstanteDto?>> ObtenerPorCodigoAsync(string codigo)
         {
             var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorCodigoAsync(codigo);
-            if (datoConstanteExiste == null)
-                throw new KeyNotFoundException(Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_CODIGO);
+            _datoConstanteValidador.ValidarDatoNoEncontrado(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_CODIGO);
 
             var datoConstanteDto = _mapper.Map<DatoConstanteDto>(datoConstanteExiste);
 
-            return new ApiResponse<DatoConstanteDto?> { Correcto = true, Mensaje = "", Data = datoConstanteDto };
+            return _apiResponseServicio.CrearRespuesta<DatoConstanteDto?>(true, "", datoConstanteDto);
         }
 
         public async Task<ApiResponse<List<DatoConstanteDto>?>> ListarAsync()
@@ -112,10 +106,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 .ToList();
 
             // Consulta en lote al microservicio de seguridad
-            var respuesta = await _msSeguridadServicio.ObtenerNombresUsuariosPorIds(usuarioIds);
-            var nombresUsuarios = await respuesta.Content.ReadFromJsonAsync<ApiResponse<List<UsuarioDto>?>>();
-            if (!nombresUsuarios.Correcto)
-                throw new KeyNotFoundException("OJO CAMBIAR: NO FUE POSIBLE OBTENER LOS DATOS DEL MICROSERVICIO DE USUARIOS");
+            var nombresUsuarios = await _seguridadUsuarios.Listar(usuarioIds);
 
             // Crear un diccionario para facilitar la asignación
             var diccionarioUsuarios = nombresUsuarios?.Data?.ToDictionary(u => u.Id, u => u.NombreUsuario);
@@ -130,7 +121,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var datoConstanteDto = _mapper.Map<List<DatoConstanteDto>>(datosConstantesDto);
 
-            return new ApiResponse<List<DatoConstanteDto>?> { Correcto = true, Mensaje = "", Data = datoConstanteDto };
+            return _apiResponseServicio.CrearRespuesta<List<DatoConstanteDto>?>(true, "", datoConstanteDto);
         }
     }
 }    

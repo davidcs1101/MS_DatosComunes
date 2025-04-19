@@ -1,24 +1,24 @@
 using Microsoft.EntityFrameworkCore;
-using DCO.DataAccess;
 using log4net;
 using log4net.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using DCO.Api.DatosComunes.Middlewares;
 using DCO.Dominio.Repositorio;
+using DCO.Dominio.Servicios;
 using DCO.Infraestructura.Dominio.Repositorio;
+using DCO.Infraestructura.Dominio.Servicios;
 using DCO.Infraestructura.Aplicacion.ServiciosExternos;
 using DCO.Infraestructura.Servicios.Interfaces;
 using DCO.Infraestructura.Servicios.Implementaciones;
-using DCO.Api.DatosComunes.Middlewares;
 using DCO.Aplicacion.CasosUso.Implementaciones;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Aplicacion.Servicios.Implementaciones;
-using DCO.Dominio.Servicios;
-using DCO.Infraestructura.Dominio.Servicios;
+using DCO.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,6 +104,8 @@ builder.Services.AddScoped<IDatoConstanteRepositorio, DatoConstanteRepositorio>(
 builder.Services.AddScoped<IDatoConstanteServicio, DatoConstanteServicio>();
 
 builder.Services.AddScoped<IListaValidador, ListaValidador>();
+builder.Services.AddScoped<IListaDetalleValidador, ListaDetalleValidador>();
+builder.Services.AddScoped<IDatoConstanteValidador, DatoConstanteValidador>();
 
 builder.Services.AddScoped<IApiResponse, ApiResponse>();
 builder.Services.AddScoped<ISeguridadUsuarios, SeguridadUsuarios>();

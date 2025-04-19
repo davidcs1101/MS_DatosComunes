@@ -15,8 +15,5 @@ namespace DCO.Dtos
 
         [Required(ErrorMessage = Textos.Generales.VALIDA_CAMPO_OBLIGATORIO)]
         public bool EstadoActivo { get; set; }
-
-        [Required(ErrorMessage = Textos.Generales.VALIDA_CAMPO_OBLIGATORIO)]
-        public int UsuarioCreadorId { get; set; }
     }
 }

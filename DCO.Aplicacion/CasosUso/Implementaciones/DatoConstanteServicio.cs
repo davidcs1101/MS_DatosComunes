@@ -15,12 +15,14 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IDatoConstanteRepositorio _datoConstanteRepositorio;
         private readonly IMapper _mapper;
         private readonly IMSSeguridadServicio _msSeguridadServicio;
+        private readonly IUsuarioContextoServicio _usuarioContextoServicio;
 
-        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IMSSeguridadServicio msSeguridadServicio) 
+        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IMSSeguridadServicio msSeguridadServicio, IUsuarioContextoServicio usuarioContextoServicio)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _mapper = mapper;
             _msSeguridadServicio = msSeguridadServicio;
+            _usuarioContextoServicio = usuarioContextoServicio;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(DatoConstanteCreacionRequest datoConstanteCreacionRequest)

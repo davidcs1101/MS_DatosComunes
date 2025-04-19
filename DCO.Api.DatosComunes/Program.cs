@@ -15,6 +15,10 @@ using DCO.Api.DatosComunes.Middlewares;
 using DCO.Aplicacion.CasosUso.Implementaciones;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
+using DCO.Aplicacion.Servicios.Interfaces;
+using DCO.Aplicacion.Servicios.Implementaciones;
+using DCO.Dominio.Servicios;
+using DCO.Infraestructura.Dominio.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,7 +102,13 @@ builder.Services.AddScoped<IListaDetalleRepositorio, ListaDetalleRepositorio>();
 builder.Services.AddScoped<IListaDetalleServicio, ListaDetalleServicio>();
 builder.Services.AddScoped<IDatoConstanteRepositorio, DatoConstanteRepositorio>();
 builder.Services.AddScoped<IDatoConstanteServicio, DatoConstanteServicio>();
+
+builder.Services.AddScoped<IListaValidador, ListaValidador>();
+
+builder.Services.AddScoped<IApiResponse, ApiResponse>();
+builder.Services.AddScoped<ISeguridadUsuarios, SeguridadUsuarios>();
 builder.Services.AddScoped<IRespuestaHttpValidador, RespuestaHttpValidador>();
+builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
 
 builder.Services.AddDbContext<AppDbContext>
     (opciones => opciones

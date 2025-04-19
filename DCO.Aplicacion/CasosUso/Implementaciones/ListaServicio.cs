@@ -17,17 +17,19 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
     {
         private readonly IListaRepositorio _listaRepositorio;
         private readonly IMapper _mapper;
-        private readonly IMSSeguridadServicio _msSeguridadServicio;
         private readonly IListaValidador _listaValidador;
-        public readonly IApiResponse _apiResponseServicio;
+        private readonly IApiResponse _apiResponseServicio;
+        private readonly IUsuarioContextoServicio _usuarioContextoServicio;
+        private readonly ISeguridadUsuarios _seguridadUsuarios;
 
-        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IMSSeguridadServicio msSeguridadServicio, IListaValidador listaValidador = null, IApiResponse apiResponseServicio = null)
+        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IListaValidador listaValidador = null, IApiResponse apiResponseServicio = null, IUsuarioContextoServicio usuarioContextoServicio = null, ISeguridadUsuarios seguridadUsuarios = null)
         {
             _listaRepositorio = listaRepositorio;
             _mapper = mapper;
-            _msSeguridadServicio = msSeguridadServicio;
             _listaValidador = listaValidador;
             _apiResponseServicio = apiResponseServicio;
+            _usuarioContextoServicio = usuarioContextoServicio;
+            _seguridadUsuarios = seguridadUsuarios;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(ListaCreacionRequest listaCreacionRequest)
@@ -35,13 +37,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             var listaExiste = await _listaRepositorio.ObtenerPorCodigoAsync(listaCreacionRequest.Codigo);
             _listaValidador.ValidarDatoYaExiste(listaExiste, Textos.Listas.MENSAJE_LISTA_CODIGO_EXISTE);
 
-            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaCreacionRequest.UsuarioCreadorId);
-            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
-            if (!usuarioAuditoriaExiste.Correcto)
-                throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
-
             var lista = _mapper.Map<DCO_Lista>(listaCreacionRequest);
             lista.FechaCreado = DateTime.Now;
+            lista.UsuarioCreadorId = _usuarioContextoServicio.ObtenerUsuarioIdToken();
 
             var id = await _listaRepositorio.CrearAsync(lista);
 
@@ -53,13 +51,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             var listaExiste = await _listaRepositorio.ObtenerPorIdAsync(listaModificacionRequest.Id);
             _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
 
-            var respuesta = await _msSeguridadServicio.ObtenerNombreUsuarioPorIdAsync(listaModificacionRequest.UsuarioModificadorId);
-            var usuarioAuditoriaExiste = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
-            if (!usuarioAuditoriaExiste.Correcto)
-                throw new KeyNotFoundException(Textos.Usuarios.MENSAJE_USUARIO_AUDITORIA_NO_EXISTE_ID);
-
             _mapper.Map(listaModificacionRequest, listaExiste);
             listaExiste.FechaModificado = DateTime.Now;
+            listaExiste.UsuarioModificadorId = _usuarioContextoServicio.ObtenerUsuarioIdToken();
 
             await _listaRepositorio.ModificarAsync(listaExiste);
 
@@ -112,10 +106,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 .ToList();
 
             // Consulta en lote al microservicio de seguridad
-            var respuesta = await _msSeguridadServicio.ObtenerNombresUsuariosPorIds(usuarioIds);
-            var nombresUsuarios = await respuesta.Content.ReadFromJsonAsync<ApiResponse<List<UsuarioDto>?>>();
-            if (!nombresUsuarios.Correcto)
-                throw new KeyNotFoundException("OJO CAMBIAR: NO FUE POSIBLE OBTENER LOS DATOS DEL MICROSERVICIO DE USUARIOS");
+            var nombresUsuarios = await _seguridadUsuarios.Listar(usuarioIds);
 
             // Crear un diccionario para facilitar la asignación
             var diccionarioUsuarios = nombresUsuarios?.Data?.ToDictionary(u => u.Id, u => u.NombreUsuario);

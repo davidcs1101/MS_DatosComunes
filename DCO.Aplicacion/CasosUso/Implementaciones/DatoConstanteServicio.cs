@@ -20,7 +20,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly ISeguridadUsuarios _seguridadUsuarios;
         private readonly IDatoConstanteValidador _datoConstanteValidador;
-        private readonly IApiResponse _apiResponseServicio;
+        private readonly IApiResponse _apiResponse;
 
         public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, ISeguridadUsuarios seguridadUsuarios, IDatoConstanteValidador datoConstanteValidador, IApiResponse apiResponseServicio)
         {
@@ -29,7 +29,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _usuarioContextoServicio = usuarioContextoServicio;
             _seguridadUsuarios = seguridadUsuarios;
             _datoConstanteValidador = datoConstanteValidador;
-            _apiResponseServicio = apiResponseServicio;
+            _apiResponse = apiResponseServicio;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(DatoConstanteCreacionRequest datoConstanteCreacionRequest)
@@ -57,7 +57,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             await _datoConstanteRepositorio.ModificarAsync(datoConstanteExiste);
 
-            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
+            return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
         public async Task<ApiResponse<string>> EliminarAsync(int id)
@@ -68,9 +68,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             var eliminado = await _datoConstanteRepositorio.EliminarAsync(id);
 
             if (eliminado)
-                return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
+                return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
 
-            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO, "");
+            return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO, "");
         }
 
         public async Task<ApiResponse<DatoConstanteDto?>> ObtenerPorIdAsync(int id)
@@ -80,7 +80,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var datoConstanteDto = _mapper.Map<DatoConstanteDto>(datoConstanteExiste);
 
-            return _apiResponseServicio.CrearRespuesta<DatoConstanteDto?>(true, "", datoConstanteDto);
+            return _apiResponse.CrearRespuesta<DatoConstanteDto?>(true, "", datoConstanteDto);
         }
 
         public async Task<ApiResponse<DatoConstanteDto?>> ObtenerPorCodigoAsync(string codigo)
@@ -90,7 +90,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var datoConstanteDto = _mapper.Map<DatoConstanteDto>(datoConstanteExiste);
 
-            return _apiResponseServicio.CrearRespuesta<DatoConstanteDto?>(true, "", datoConstanteDto);
+            return _apiResponse.CrearRespuesta<DatoConstanteDto?>(true, "", datoConstanteDto);
         }
 
         public async Task<ApiResponse<List<DatoConstanteDto>?>> ListarAsync()
@@ -121,7 +121,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var datoConstanteDto = _mapper.Map<List<DatoConstanteDto>>(datosConstantesDto);
 
-            return _apiResponseServicio.CrearRespuesta<List<DatoConstanteDto>?>(true, "", datoConstanteDto);
+            return _apiResponse.CrearRespuesta<List<DatoConstanteDto>?>(true, "", datoConstanteDto);
         }
     }
 }    

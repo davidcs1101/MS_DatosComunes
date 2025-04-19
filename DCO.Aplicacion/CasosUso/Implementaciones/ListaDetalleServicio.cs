@@ -12,13 +12,13 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
     {
         private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
         private readonly IMapper _mapper;
-        private readonly IApiResponse _apiResponseServicio;
+        private readonly IApiResponse _apiResponse;
 
         public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio)
         {
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _mapper = mapper;
-            _apiResponseServicio = apiResponseServicio;
+            _apiResponse = apiResponseServicio;
         }
 
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista)
@@ -28,7 +28,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 .ToListAsync();
             var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
 
-            return _apiResponseServicio.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
+            return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
 
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoConstanteAsync(string codigoConstante)
@@ -36,7 +36,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoConstante(codigoConstante).ToListAsync();
             var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
 
-            return _apiResponseServicio.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
+            return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
     }
 }

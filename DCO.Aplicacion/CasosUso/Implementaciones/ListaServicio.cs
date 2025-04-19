@@ -18,7 +18,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IListaRepositorio _listaRepositorio;
         private readonly IMapper _mapper;
         private readonly IListaValidador _listaValidador;
-        private readonly IApiResponse _apiResponseServicio;
+        private readonly IApiResponse _apiResponse;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly ISeguridadUsuarios _seguridadUsuarios;
 
@@ -27,7 +27,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _listaRepositorio = listaRepositorio;
             _mapper = mapper;
             _listaValidador = listaValidador;
-            _apiResponseServicio = apiResponseServicio;
+            _apiResponse = apiResponseServicio;
             _usuarioContextoServicio = usuarioContextoServicio;
             _seguridadUsuarios = seguridadUsuarios;
         }
@@ -43,7 +43,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var id = await _listaRepositorio.CrearAsync(lista);
 
-            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
+            return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
         public async Task<ApiResponse<string>> ModificarAsync(ListaModificacionRequest listaModificacionRequest)
@@ -57,7 +57,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             await _listaRepositorio.ModificarAsync(listaExiste);
 
-            return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
+            return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
         public async Task<ApiResponse<string>> EliminarAsync(int id)
@@ -68,9 +68,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             var eliminado = await _listaRepositorio.EliminarAsync(id);
 
             if (eliminado)
-                return _apiResponseServicio.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
+                return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
 
-            return _apiResponseServicio.CrearRespuesta(false, Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO, "");
+            return _apiResponse.CrearRespuesta(false, Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO, "");
         }
 
         public async Task<ApiResponse<ListaDto?>> ObtenerPorIdAsync(int id)
@@ -80,7 +80,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var listaDto = _mapper.Map<ListaDto>(listaExiste);
 
-            return _apiResponseServicio.CrearRespuesta<ListaDto?>(true, "", listaDto);
+            return _apiResponse.CrearRespuesta<ListaDto?>(true, "", listaDto);
         }
 
         public async Task<ApiResponse<ListaDto?>> ObtenerPorCodigoAsync(string codigo)
@@ -90,7 +90,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var listaDto = _mapper.Map<ListaDto>(listaExiste);
 
-            return _apiResponseServicio.CrearRespuesta<ListaDto?>(true, "", listaDto);
+            return _apiResponse.CrearRespuesta<ListaDto?>(true, "", listaDto);
         }
 
         public async Task<ApiResponse<List<ListaDto>?>> ListarAsync()
@@ -119,7 +119,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                     lista.NombreUsuarioModificador = diccionarioUsuarios?.GetValueOrDefault((int)lista.UsuarioModificadorId);
             }
 
-            return _apiResponseServicio.CrearRespuesta<List<ListaDto>?>(true, "", listasDto);
+            return _apiResponse.CrearRespuesta<List<ListaDto>?>(true, "", listasDto);
         }
     }
 }

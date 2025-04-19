@@ -4,16 +4,18 @@ using Newtonsoft.Json;
 using DCO.Dtos;
 using System.Net;
 using Utilidades;
+using DCO.Aplicacion.Servicios.Interfaces;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {
     public class MiddlewareExcepcionesGlobales
     {
         private readonly RequestDelegate _requestDelegate;
-
-        public MiddlewareExcepcionesGlobales(RequestDelegate requestDelegate)
+        private readonly IServiceProvider _serviceProvider;
+        public MiddlewareExcepcionesGlobales(RequestDelegate requestDelegate, IServiceProvider serviceProvider)
         {
             _requestDelegate = requestDelegate;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task InvokeAsync(HttpContext httpContext) 
@@ -32,36 +34,36 @@ namespace DCO.Api.DatosComunes.Middlewares
         private Task ManejarExcepcionesAsync(HttpContext httpContext, Exception e) 
         {
             httpContext.Response.ContentType = "application/json";
-            var respuesta = new ApiResponse<string>
+            using (var scope = _serviceProvider.CreateScope()) 
             {
-                Correcto = false,
-                Mensaje = Textos.Generales.MENSAJE_ERROR_SERVIDOR
-            };
+                var _apiResponse = scope.ServiceProvider.GetRequiredService<IApiResponse>();
+                var respuesta = _apiResponse.CrearRespuesta(false, Textos.Generales.MENSAJE_ERROR_SERVIDOR, "");
 
-            if (e is KeyNotFoundException) 
-            {
-                httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                respuesta.Mensaje = e.Message;
-            }
-            else if (e is DbUpdateException) 
-            {
-                httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                respuesta.Mensaje = e.Message;
-            }
-            else
-            {
-                httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                Logs.EscribirLog("e", "", e);
-            }
+                if (e is KeyNotFoundException)
+                {
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    respuesta.Mensaje = e.Message;
+                }
+                else if (e is DbUpdateException)
+                {
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                    respuesta.Mensaje = e.Message;
+                }
+                else
+                {
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    Logs.EscribirLog("e", "", e);
+                }
 
-            // Si es desarrollo, incluir el detalle del error
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                //respuesta.Mensaje = e.Message;
-            }
+                // Si es desarrollo, incluir el detalle del error
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                {
+                    //respuesta.Mensaje = e.Message;
+                }
 
-            var respuestaJson = JsonConvert.SerializeObject(respuesta);
-            return httpContext.Response.WriteAsync(respuestaJson);
+                var respuestaJson = JsonConvert.SerializeObject(respuesta);
+                return httpContext.Response.WriteAsync(respuestaJson);
+            }
         }
     }
 }

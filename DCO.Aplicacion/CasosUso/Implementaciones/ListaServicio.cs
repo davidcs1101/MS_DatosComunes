@@ -7,9 +7,9 @@ using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
 using System.Net.Http.Json;
-using DCO.Dominio.Servicios;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Aplicacion.Servicios.Implementaciones;
+using DCO.Dominio.Servicios.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {

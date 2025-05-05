@@ -8,8 +8,8 @@ using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
 using System.Net.Http.Json;
 using DCO.Aplicacion.Servicios.Interfaces;
-using DCO.Dominio.Servicios;
 using static Utilidades.Textos;
+using DCO.Dominio.Servicios.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {

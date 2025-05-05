@@ -6,10 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using DCO.Api.DatosComunes.Middlewares;
-using DCO.Dominio.Repositorio;
-using DCO.Dominio.Servicios;
 using DCO.Infraestructura.Dominio.Repositorio;
-using DCO.Infraestructura.Dominio.Servicios;
 using DCO.Infraestructura.Aplicacion.ServiciosExternos;
 using DCO.Infraestructura.Servicios.Interfaces;
 using DCO.Infraestructura.Servicios.Implementaciones;
@@ -19,6 +16,9 @@ using DCO.Aplicacion.ServiciosExternos;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Aplicacion.Servicios.Implementaciones;
 using DCO.DataAccess;
+using DCO.Dominio.Repositorio;
+using DCO.Dominio.Servicios.Interfaces;
+using DCO.Dominio.Servicios.Implementaciones;
 
 var builder = WebApplication.CreateBuilder(args);
 

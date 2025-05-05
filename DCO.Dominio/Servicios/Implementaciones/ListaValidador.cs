@@ -1,8 +1,8 @@
 ﻿using DCO.Dominio.Entidades;
 using DCO.Dominio.Excepciones;
-using DCO.Dominio.Servicios;
+using DCO.Dominio.Servicios.Interfaces;
 
-namespace DCO.Infraestructura.Dominio.Servicios
+namespace DCO.Dominio.Servicios.Implementaciones
 {
     public class ListaValidador : IListaValidador
     {

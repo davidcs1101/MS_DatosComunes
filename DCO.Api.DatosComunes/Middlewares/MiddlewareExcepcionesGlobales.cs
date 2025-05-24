@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 //using MySqlConnector;
 using Newtonsoft.Json;
-using DCO.Dtos;
 using System.Net;
 using Utilidades;
 using DCO.Aplicacion.Servicios.Interfaces;
+using DCO.Dominio.Excepciones;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {
@@ -31,27 +31,32 @@ namespace DCO.Api.DatosComunes.Middlewares
             }
         }
 
-        private Task ManejarExcepcionesAsync(HttpContext httpContext, Exception e) 
+        private Task ManejarExcepcionesAsync(HttpContext contexto, Exception e) 
         {
-            httpContext.Response.ContentType = "application/json";
+            contexto.Response.ContentType = "application/json";
             using (var scope = _serviceProvider.CreateScope()) 
             {
                 var _apiResponse = scope.ServiceProvider.GetRequiredService<IApiResponse>();
                 var respuesta = _apiResponse.CrearRespuesta(false, Textos.Generales.MENSAJE_ERROR_SERVIDOR, "");
 
-                if (e is KeyNotFoundException)
+                if (e is DatoNoEncontradoException)
                 {
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    contexto.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     respuesta.Mensaje = e.Message;
                 }
-                else if (e is DbUpdateException)
+                else if (e is DatoYaExisteException)
                 {
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                    contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                    respuesta.Mensaje = e.Message;
+                }
+                else if (e is SolicitudHttpException)
+                {
+                    contexto.Response.StatusCode = (int)HttpStatusCode.BadGateway;
                     respuesta.Mensaje = e.Message;
                 }
                 else
                 {
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    contexto.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     Logs.EscribirLog("e", "", e);
                 }
 
@@ -62,7 +67,7 @@ namespace DCO.Api.DatosComunes.Middlewares
                 }
 
                 var respuestaJson = JsonConvert.SerializeObject(respuesta);
-                return httpContext.Response.WriteAsync(respuestaJson);
+                return contexto.Response.WriteAsync(respuestaJson);
             }
         }
     }

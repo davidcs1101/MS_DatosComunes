@@ -120,9 +120,10 @@ builder.Services.AddDbContext<AppDbContext>
     ));
 
 
-//Configuracion para llamado de otros MicroServicios
+//Servicio para obtener el usuarioId de los Tokens de la solicitud
 builder.Services.AddHttpContextAccessor();
 
+//Configuracion para llamado de otros MicroServicios
 builder.Services.AddTransient<MiddlewareManejadorTokens>();
 var configuracionUrlMicroServicios = builder.Configuration.GetSection("UrlMicroservicios");
 var urlSeguridad = configuracionUrlMicroServicios["UrlMSSeguridad"];

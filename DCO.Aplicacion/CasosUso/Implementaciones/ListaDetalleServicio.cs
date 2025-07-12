@@ -15,7 +15,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IApiResponse _apiResponse;
 
         public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio)
-        {
+         {
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _mapper = mapper;
             _apiResponse = apiResponseServicio;
@@ -37,6 +37,15 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
 
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
+        }
+
+        public async Task<ApiResponse<bool>> ValidarIdDetalleExisteEnCodigoListaAsync(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest) 
+        {
+            var existe = await _listaDetalleRepositorio.Listar()
+                .Where(ld => ld.CodigoLista == codigoListaIdDetalleRequest.CodigoLista && ld.Id == codigoListaIdDetalleRequest.Id)
+                .AnyAsync();
+
+            return _apiResponse.CrearRespuesta<bool>(true, "", existe);
         }
     }
 }

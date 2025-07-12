@@ -28,5 +28,12 @@ namespace ApiDCO.Controllers
             var listasDetatalles = await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstate);
             return listasDetatalles;
         }
+
+        [HttpPost("validarIdDetalleExisteEnCodigoLista")]
+        public async Task<ActionResult<ApiResponse<bool>>> ValidarIdDetalleExisteEnCodigoLista(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest)
+        {
+            var listasDetatalles = await _listaDetalleServicio.ValidarIdDetalleExisteEnCodigoListaAsync(codigoListaIdDetalleRequest);
+            return listasDetatalles;
+        }
     }
 }

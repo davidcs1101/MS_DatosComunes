@@ -2,6 +2,6 @@
 {
     public interface IRespuestaHttpValidador
     {
-        void ValidarRespuesta(HttpResponseMessage respuesta, string mensaje);
+        Task ValidarRespuesta(HttpResponseMessage respuesta, string mensaje);
     }
 }

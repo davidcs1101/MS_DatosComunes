@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
         public int DatoConstanteId { get; set; }
-        public int DatoId { get; set; }
-        public bool EstadoActivo { get; set; }
+        public int ListaDetalleId { get; set; }
 
         public DCO_DatoConstante DatoConstante { get; set; } = null!;
+        public DCO_ListaDetalle ListaDetalle { get; set; } = null!;
     }
 }

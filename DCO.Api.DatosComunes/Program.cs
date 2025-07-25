@@ -103,9 +103,7 @@ builder.Services.AddScoped<IListaDetalleServicio, ListaDetalleServicio>();
 builder.Services.AddScoped<IDatoConstanteRepositorio, DatoConstanteRepositorio>();
 builder.Services.AddScoped<IDatoConstanteServicio, DatoConstanteServicio>();
 
-builder.Services.AddScoped<IListaValidador, ListaValidador>();
-builder.Services.AddScoped<IListaDetalleValidador, ListaDetalleValidador>();
-builder.Services.AddScoped<IDatoConstanteValidador, DatoConstanteValidador>();
+builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<>));
 
 builder.Services.AddScoped<IApiResponse, ApiResponse>();
 builder.Services.AddScoped<ISeguridadUsuarios, SeguridadUsuarios>();

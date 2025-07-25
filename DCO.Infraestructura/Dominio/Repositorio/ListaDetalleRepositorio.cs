@@ -67,7 +67,7 @@ namespace DCO.Infraestructura.Dominio.Repositorio
         {
             return from dc in _context.DCO_DatosConstantes
                                           join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
-                                          join ld in _context.DCO_ListasDetalles on dcd.DatoId equals ld.Id
+                                          join ld in _context.DCO_ListasDetalles on dcd.ListaDetalleId equals ld.Id
                                           where dc.Codigo == codigoDatoConstante
                                           select new ListaDetalleMV
                                           {

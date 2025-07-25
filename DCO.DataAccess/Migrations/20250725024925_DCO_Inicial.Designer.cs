@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DCO.DataAcces.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241025183236_DCO_Inicial")]
+    [Migration("20250725024925_DCO_Inicial")]
     partial class DCO_Inicial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace DCO.DataAcces.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -69,7 +69,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 1,
                             Codigo = "CAUSAEXTERNAANEXO2",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3521),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9613),
                             Nombre = "CAUSAS EXTERNAS DE CONSULTA PARA ANEXO 2",
                             UsuarioCreadorId = 1
                         },
@@ -78,7 +78,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 2,
                             Codigo = "TIPOIDENTIANEXO",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3523),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9615),
                             Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE ANEXOS TÉCNICOS A PACIENTES",
                             UsuarioCreadorId = 1
                         },
@@ -87,7 +87,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 3,
                             Codigo = "TIPOIDENTIEMPRESA",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3525),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9617),
                             Nombre = "TIPOS DE IDENTIFICACION PARA REGISTRO DE EMPRESAS",
                             UsuarioCreadorId = 1
                         },
@@ -96,7 +96,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 4,
                             Codigo = "TIPOIDENTIREGISTROUSUARIO",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3526),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9619),
                             Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE USUARIOS DE APLICACIÓN",
                             UsuarioCreadorId = 1
                         },
@@ -105,7 +105,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 5,
                             Codigo = "TIPOREGIMENANEXO2",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3527),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9621),
                             Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 2",
                             UsuarioCreadorId = 1
                         },
@@ -114,7 +114,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 6,
                             Codigo = "TIPOREGIMENANEXO3",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3529),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9623),
                             Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 3",
                             UsuarioCreadorId = 1
                         },
@@ -123,7 +123,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 7,
                             Codigo = "TIPOREGIMENANEXO9",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3530),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9625),
                             Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 9",
                             UsuarioCreadorId = 1
                         },
@@ -132,7 +132,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 8,
                             Codigo = "TRIAGEANEXO2",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3531),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9626),
                             Nombre = "NIVELES DE TRIAGE PARA EL ANEXO 2",
                             UsuarioCreadorId = 1
                         });
@@ -149,9 +149,6 @@ namespace DCO.DataAcces.Migrations
                     b.Property<int>("DatoConstanteId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DatoId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("EstadoActivo")
                         .HasColumnType("tinyint(1)");
 
@@ -161,6 +158,9 @@ namespace DCO.DataAcces.Migrations
                     b.Property<DateTime?>("FechaModificado")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("ListaDetalleId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UsuarioCreadorId")
                         .HasColumnType("int");
 
@@ -169,7 +169,9 @@ namespace DCO.DataAcces.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DatoConstanteId", "DatoId")
+                    b.HasIndex("ListaDetalleId");
+
+                    b.HasIndex("DatoConstanteId", "ListaDetalleId")
                         .IsUnique();
 
                     b.ToTable("DCO_DatosConstantesDetalles");
@@ -219,7 +221,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 1,
                             Codigo = "CARGOSEMPLEADOS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3387),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9496),
                             Nombre = "CARGOS PARA EMPLEADOS",
                             UsuarioCreadorId = 1
                         },
@@ -228,7 +230,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 2,
                             Codigo = "CAUSASEXTERNAS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3404),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9499),
                             Nombre = "CAUSAS EXTERNAS SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -237,7 +239,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 3,
                             Codigo = "ESPECIALIDAD",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3406),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9501),
                             Nombre = "ESPECIALIDADES",
                             UsuarioCreadorId = 1
                         },
@@ -246,7 +248,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 4,
                             Codigo = "NIVELESCOMPLEJIDAD",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3407),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9503),
                             Nombre = "NIVELES DE COMPLEJIDAD EN SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -255,7 +257,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 5,
                             Codigo = "ESTADOANEXOS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3409),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9504),
                             Nombre = "ESTADOS DE LOS ANEXOS TÉCNICOS",
                             UsuarioCreadorId = 1
                         },
@@ -264,7 +266,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 6,
                             Codigo = "SERVICIOS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3410),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9506),
                             Nombre = "SERVICIOS DE SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -273,7 +275,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 7,
                             Codigo = "SEXOBIOLOGICO",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3412),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9508),
                             Nombre = "SEXO BIOLÓGICO",
                             UsuarioCreadorId = 1
                         },
@@ -282,7 +284,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 8,
                             Codigo = "TIPOAFILIACION",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3413),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9510),
                             Nombre = "TIPOS DE AFILIACIÓN EN SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -291,7 +293,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 9,
                             Codigo = "TIPOSIDENTIFICACION",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3414),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9512),
                             Nombre = "TIPOS DE IDENTIFICACIÓN",
                             UsuarioCreadorId = 1
                         },
@@ -300,7 +302,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 10,
                             Codigo = "TIPOREGIMEN",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3416),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9513),
                             Nombre = "TIPOS DE REGIMEN EN SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -309,7 +311,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 11,
                             Codigo = "TIPOSTRIAGE",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2024, 10, 25, 13, 32, 35, 823, DateTimeKind.Local).AddTicks(3417),
+                            FechaCreado = new DateTime(2025, 7, 24, 21, 49, 24, 982, DateTimeKind.Local).AddTicks(9515),
                             Nombre = "TIPOS DE TRIAGE",
                             UsuarioCreadorId = 1
                         });
@@ -365,7 +367,15 @@ namespace DCO.DataAcces.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DCO.Dominio.Entidades.DCO_ListaDetalle", "ListaDetalle")
+                        .WithMany("DatosConstantesDetalles")
+                        .HasForeignKey("ListaDetalleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("DatoConstante");
+
+                    b.Navigation("ListaDetalle");
                 });
 
             modelBuilder.Entity("DCO.Dominio.Entidades.DCO_ListaDetalle", b =>
@@ -387,6 +397,11 @@ namespace DCO.DataAcces.Migrations
             modelBuilder.Entity("DCO.Dominio.Entidades.DCO_Lista", b =>
                 {
                     b.Navigation("ListasDetalles");
+                });
+
+            modelBuilder.Entity("DCO.Dominio.Entidades.DCO_ListaDetalle", b =>
+                {
+                    b.Navigation("DatosConstantesDetalles");
                 });
 #pragma warning restore 612, 618
         }

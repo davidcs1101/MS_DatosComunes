@@ -6,8 +6,8 @@
         public int ListaId { get; set; }
         public string Codigo { get; set; } = null!;
         public string Nombre { get; set; } = null!;
-        public bool EstadoActivo { get; set; }
 
         public DCO_Lista Lista { get; set; } = null!;
+        public List<DCO_DatoConstanteDetalle> DatosConstantesDetalles { get; set; } = new List<DCO_DatoConstanteDetalle>();
     }
 }

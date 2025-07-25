@@ -5,6 +5,8 @@ using DCO.Aplicacion.CasosUso.Interfaces;
 using AutoMapper;
 using DCO.Dominio.Entidades.ModelosVistas;
 using DCO.Aplicacion.Servicios.Interfaces;
+using DCO.Dominio.Servicios.Interfaces;
+using Utilidades;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -13,12 +15,14 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
         private readonly IMapper _mapper;
         private readonly IApiResponse _apiResponse;
+        private readonly IEntidadValidador<ListaDetalleMV> _listaDetalleValidador;
 
-        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio)
-         {
+        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleValidador)
+        {
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _mapper = mapper;
             _apiResponse = apiResponseServicio;
+            _listaDetalleValidador = listaDetalleValidador;
         }
 
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista)
@@ -39,13 +43,15 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
 
-        public async Task<ApiResponse<bool>> ValidarIdDetalleExisteEnCodigoListaAsync(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest) 
+        public async Task<ApiResponse<string>> ValidarIdDetalleExisteEnCodigoListaAsync(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest) 
         {
-            var existe = await _listaDetalleRepositorio.Listar()
+            var listaDetalle = await _listaDetalleRepositorio.Listar()
                 .Where(ld => ld.CodigoLista == codigoListaIdDetalleRequest.CodigoLista && ld.Id == codigoListaIdDetalleRequest.Id)
-                .AnyAsync();
+                .FirstOrDefaultAsync();
 
-            return _apiResponse.CrearRespuesta<bool>(true, "", existe);
+            _listaDetalleValidador.ValidarDatoNoEncontrado(listaDetalle, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_EN_CODIGOLISTA(codigoListaIdDetalleRequest.Id, codigoListaIdDetalleRequest.CodigoLista));
+
+            return _apiResponse.CrearRespuesta(true, "", "");
         }
     }
 }

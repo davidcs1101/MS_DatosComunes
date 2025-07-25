@@ -5,8 +5,7 @@
         public int Id { get; set; }
         public string Codigo { get; set; } = null!;
         public string Nombre { get; set; } = null!;
-        public bool EstadoActivo { get; set; }
 
-        public HashSet<DCO_DatoConstanteDetalle> DatosConstantesDetalles { get; set; } = new HashSet<DCO_DatoConstanteDetalle>();
+        public List<DCO_DatoConstanteDetalle> DatosConstantesDetalles { get; set; } = new List<DCO_DatoConstanteDetalle>();
     }
 }

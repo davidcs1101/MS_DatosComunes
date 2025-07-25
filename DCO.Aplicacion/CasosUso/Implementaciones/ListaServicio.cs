@@ -6,9 +6,7 @@ using Utilidades;
 using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
-using System.Net.Http.Json;
 using DCO.Aplicacion.Servicios.Interfaces;
-using DCO.Aplicacion.Servicios.Implementaciones;
 using DCO.Dominio.Servicios.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
@@ -17,12 +15,12 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
     {
         private readonly IListaRepositorio _listaRepositorio;
         private readonly IMapper _mapper;
-        private readonly IListaValidador _listaValidador;
+        private readonly IEntidadValidador<DCO_Lista> _listaValidador;
         private readonly IApiResponse _apiResponse;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly ISeguridadUsuarios _seguridadUsuarios;
 
-        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IListaValidador listaValidador = null, IApiResponse apiResponseServicio = null, IUsuarioContextoServicio usuarioContextoServicio = null, ISeguridadUsuarios seguridadUsuarios = null)
+        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IEntidadValidador<DCO_Lista> listaValidador, IApiResponse apiResponseServicio, IUsuarioContextoServicio usuarioContextoServicio, ISeguridadUsuarios seguridadUsuarios)
         {
             _listaRepositorio = listaRepositorio;
             _mapper = mapper;

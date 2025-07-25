@@ -8,8 +8,8 @@ using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
 using System.Net.Http.Json;
 using DCO.Aplicacion.Servicios.Interfaces;
-using static Utilidades.Textos;
 using DCO.Dominio.Servicios.Interfaces;
+using static Utilidades.Textos;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -19,10 +19,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IMapper _mapper;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly ISeguridadUsuarios _seguridadUsuarios;
-        private readonly IDatoConstanteValidador _datoConstanteValidador;
+        private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
         private readonly IApiResponse _apiResponse;
 
-        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, ISeguridadUsuarios seguridadUsuarios, IDatoConstanteValidador datoConstanteValidador, IApiResponse apiResponseServicio)
+        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, ISeguridadUsuarios seguridadUsuarios, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApiResponse apiResponseServicio)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _mapper = mapper;
@@ -123,5 +123,6 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             return _apiResponse.CrearRespuesta<List<DatoConstanteDto>?>(true, "", datoConstanteDto);
         }
+
     }
 }    

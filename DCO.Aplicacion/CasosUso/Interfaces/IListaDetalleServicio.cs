@@ -1,4 +1,5 @@
-﻿using DCO.Dtos;
+﻿using DCO.Dominio.Entidades.ModelosVistas;
+using DCO.Dtos;
 
 namespace DCO.Aplicacion.CasosUso.Interfaces
 {
@@ -6,6 +7,6 @@ namespace DCO.Aplicacion.CasosUso.Interfaces
     {
         Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista);
         Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoConstanteAsync(string codigoConstante);
-        Task<ApiResponse<bool>> ValidarIdDetalleExisteEnCodigoListaAsync(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest);
+        Task<ApiResponse<string>> ValidarIdDetalleExisteEnCodigoListaAsync(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest);
     }
 }

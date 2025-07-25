@@ -30,7 +30,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPost("validarIdDetalleExisteEnCodigoLista")]
-        public async Task<ActionResult<ApiResponse<bool>>> ValidarIdDetalleExisteEnCodigoLista(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest)
+        public async Task<ActionResult<ApiResponse<string>>> ValidarIdDetalleExisteEnCodigoLista(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest)
         {
             var listasDetatalles = await _listaDetalleServicio.ValidarIdDetalleExisteEnCodigoListaAsync(codigoListaIdDetalleRequest);
             return listasDetatalles;

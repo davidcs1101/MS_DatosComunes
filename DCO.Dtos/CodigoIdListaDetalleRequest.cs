@@ -3,7 +3,7 @@ using Utilidades;
 
 namespace DCO.Dtos
 {
-    public class CodigoListaIdDetalleRequest
+    public class CodigoIdListaDetalleRequest
     {
         [Required(ErrorMessage = Textos.Generales.VALIDA_CAMPO_OBLIGATORIO)]
         [MaxLength(30, ErrorMessage = Textos.Generales.VALIDA_VALOR_EXCEDE_LONGITUD)]

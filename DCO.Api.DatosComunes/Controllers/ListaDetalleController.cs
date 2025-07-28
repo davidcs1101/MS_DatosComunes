@@ -23,16 +23,23 @@ namespace ApiDCO.Controllers
         }
 
         [HttpGet("listarPorCodigoConstante")]
-        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstate)
+        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstante)
         {
-            var listasDetatalles = await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstate);
+            var listasDetatalles = await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstante);
             return listasDetatalles;
         }
 
         [HttpPost("validarIdDetalleExisteEnCodigoLista")]
-        public async Task<ActionResult<ApiResponse<string>>> ValidarIdDetalleExisteEnCodigoLista(CodigoListaIdDetalleRequest codigoListaIdDetalleRequest)
+        public async Task<ActionResult<ApiResponse<string>>> ValidarIdDetalleExisteEnCodigoLista(CodigoIdListaDetalleRequest codigoListaIdDetalleRequest)
         {
             var listasDetatalles = await _listaDetalleServicio.ValidarIdDetalleExisteEnCodigoListaAsync(codigoListaIdDetalleRequest);
+            return listasDetatalles;
+        }
+
+        [HttpPost("obtenerPorCodigoConstanteYCodigoListaDetalle")]
+        public async Task<ActionResult<ApiResponse<ListaDetalleDto?>>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
+        {
+            var listasDetatalles = await _listaDetalleServicio.ObtenerPorCodigoConstanteYCodigoListaDetalle(codigoDetalleRequest);
             return listasDetatalles;
         }
     }

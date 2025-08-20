@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DCO.Aplicacion.Servicios.Interfaces
 {
-    public interface ISeguridadUsuarios
+    public interface IMSSeguridad
     {
-        Task<ApiResponse<List<UsuarioDto>?>> Listar(IdsListadoDto idsListadoDto);
+        Task<List<UsuarioDto>?> ListarUsuarios(IdsListadoDto idsListadoDto);
     }
 }

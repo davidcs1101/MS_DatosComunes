@@ -72,9 +72,9 @@ builder.Services.AddLogging(loggingBuilder => { loggingBuilder.AddLog4Net(); });
 
 // Configuracion de JWT
 var configuracionJWT = builder.Configuration.GetSection("JWT");
-var issuer = configuracionJWT["Issuer"];
-var audience = configuracionJWT["Audience"];
-var key = configuracionJWT["Key"];
+var issuer = configuracionJWT["Emisor"];
+var audience = configuracionJWT["Audiencia"];
+var key = configuracionJWT["Llave"];
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer
     (opcion =>
@@ -106,9 +106,11 @@ builder.Services.AddScoped<IDatoConstanteServicio, DatoConstanteServicio>();
 builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<>));
 
 builder.Services.AddScoped<IApiResponse, ApiResponse>();
-builder.Services.AddScoped<ISeguridadUsuarios, SeguridadUsuarios>();
+builder.Services.AddScoped<IMSSeguridad, MSSeguridad>();
 builder.Services.AddScoped<IRespuestaHttpValidador, RespuestaHttpValidador>();
 builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
+
+builder.Services.AddScoped<ISerializadorJsonServicio, SerializadorJsonServicio>();
 
 builder.Services.AddDbContext<AppDbContext>
     (opciones => opciones
@@ -123,12 +125,11 @@ builder.Services.AddHttpContextAccessor();
 
 //Configuracion para llamado de otros MicroServicios
 builder.Services.AddTransient<MiddlewareManejadorTokens>();
-var configuracionUrlMicroServicios = builder.Configuration.GetSection("UrlMicroservicios");
-var urlSeguridad = configuracionUrlMicroServicios["UrlMSSeguridad"];
-builder.Services.AddHttpClient<IMSSeguridadServicio, MSSeguridadServicio>
+var urlGateway = builder.Configuration["UrlGateway"];
+builder.Services.AddHttpClient<IMSSeguridadContextoWebServicio, MSSeguridadContextoWebServicio>
     (cliente =>
     {
-        cliente.BaseAddress = new Uri(urlSeguridad);
+        cliente.BaseAddress = new Uri(urlGateway);
         cliente.DefaultRequestHeaders.Add("Accept", "application/json");
     })
     .AddHttpMessageHandler<MiddlewareManejadorTokens>();

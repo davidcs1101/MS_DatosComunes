@@ -18,16 +18,16 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IDatoConstanteRepositorio _datoConstanteRepositorio;
         private readonly IMapper _mapper;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
-        private readonly ISeguridadUsuarios _seguridadUsuarios;
+        private readonly IMSSeguridad _msSeguridad;
         private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
         private readonly IApiResponse _apiResponse;
 
-        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, ISeguridadUsuarios seguridadUsuarios, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApiResponse apiResponseServicio)
+        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApiResponse apiResponseServicio)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _mapper = mapper;
             _usuarioContextoServicio = usuarioContextoServicio;
-            _seguridadUsuarios = seguridadUsuarios;
+            _msSeguridad = msSeguridad;
             _datoConstanteValidador = datoConstanteValidador;
             _apiResponse = apiResponseServicio;
         }
@@ -106,10 +106,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 .ToList();
 
             // Consulta en lote al microservicio de seguridad
-            var nombresUsuarios = await _seguridadUsuarios.Listar(usuarioIds);
+            var nombresUsuarios = await _msSeguridad.ListarUsuarios(usuarioIds);
 
             // Crear un diccionario para facilitar la asignación
-            var diccionarioUsuarios = nombresUsuarios?.Data?.ToDictionary(u => u.Id, u => u.NombreUsuario);
+            var diccionarioUsuarios = nombresUsuarios?.ToDictionary(u => u.Id, u => u.NombreUsuario);
 
             // Asignar los nombres a los DTOs
             foreach (var datoConstante in datosConstantesDto)

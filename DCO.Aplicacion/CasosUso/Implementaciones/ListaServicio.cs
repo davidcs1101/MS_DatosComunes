@@ -18,16 +18,16 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IEntidadValidador<DCO_Lista> _listaValidador;
         private readonly IApiResponse _apiResponse;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
-        private readonly ISeguridadUsuarios _seguridadUsuarios;
+        private readonly IMSSeguridad _msSeguridad;
 
-        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IEntidadValidador<DCO_Lista> listaValidador, IApiResponse apiResponseServicio, IUsuarioContextoServicio usuarioContextoServicio, ISeguridadUsuarios seguridadUsuarios)
+        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IEntidadValidador<DCO_Lista> listaValidador, IApiResponse apiResponseServicio, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad)
         {
             _listaRepositorio = listaRepositorio;
             _mapper = mapper;
             _listaValidador = listaValidador;
             _apiResponse = apiResponseServicio;
             _usuarioContextoServicio = usuarioContextoServicio;
-            _seguridadUsuarios = seguridadUsuarios;
+            _msSeguridad = msSeguridad;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(ListaCreacionRequest listaCreacionRequest)
@@ -104,10 +104,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 .ToList();
 
             // Consulta en lote al microservicio de seguridad
-            var nombresUsuarios = await _seguridadUsuarios.Listar(usuarioIds);
+            var nombresUsuarios = await _msSeguridad.ListarUsuarios(usuarioIds);
 
             // Crear un diccionario para facilitar la asignación
-            var diccionarioUsuarios = nombresUsuarios?.Data?.ToDictionary(u => u.Id, u => u.NombreUsuario);
+            var diccionarioUsuarios = nombresUsuarios?.ToDictionary(u => u.Id, u => u.NombreUsuario);
 
             // Asignar los nombres a los DTOs
             foreach (var lista in listasDto)

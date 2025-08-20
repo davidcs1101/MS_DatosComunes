@@ -29,17 +29,17 @@ namespace ApiDCO.Controllers
             return listasDetatalles;
         }
 
-        [HttpPost("validarIdDetalleExisteEnCodigoLista")]
-        public async Task<ActionResult<ApiResponse<string>>> ValidarIdDetalleExisteEnCodigoLista(CodigoIdListaDetalleRequest codigoListaIdDetalleRequest)
-        {
-            var listasDetatalles = await _listaDetalleServicio.ValidarIdDetalleExisteEnCodigoListaAsync(codigoListaIdDetalleRequest);
-            return listasDetatalles;
-        }
-
         [HttpPost("obtenerPorCodigoConstanteYCodigoListaDetalle")]
         public async Task<ActionResult<ApiResponse<ListaDetalleDto?>>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
         {
             var listasDetatalles = await _listaDetalleServicio.ObtenerPorCodigoConstanteYCodigoListaDetalle(codigoDetalleRequest);
+            return listasDetatalles;
+        }
+
+        [HttpPost("obtenerPorCodigoListaYCodigoListaDetalle")]
+        public async Task<ActionResult<ApiResponse<ListaDetalleDto?>>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
+        {
+            var listasDetatalles = await _listaDetalleServicio.ObtenerPorCodigoListaYCodigoListaDetalle(codigoDetalleRequest);
             return listasDetatalles;
         }
     }

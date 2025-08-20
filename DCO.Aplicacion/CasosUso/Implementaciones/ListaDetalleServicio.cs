@@ -14,14 +14,19 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
     public class ListaDetalleServicio : IListaDetalleServicio
     {
-        private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
+
         private readonly IMapper _mapper;
         private readonly IApiResponse _apiResponse;
+
+        private readonly IListaRepositorio _listaRepositorio;
+        private readonly IEntidadValidador<DCO_Lista> _listaValidador;
+
+        private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
         private readonly IEntidadValidador<ListaDetalleMV> _listaDetalleValidador;
         private readonly IDatoConstanteRepositorio _datoConstanteRepositorio;
         private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
 
-        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio)
+        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio, IListaRepositorio listaRepositorio, IEntidadValidador<DCO_Lista> listaValidador)
         {
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _mapper = mapper;
@@ -29,6 +34,8 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _listaDetalleValidador = listaDetalleValidador;
             _datoConstanteValidador = datoConstanteValidador;
             _datoConstanteRepositorio = datoConstanteRepositorio;
+            _listaRepositorio = listaRepositorio;
+            _listaValidador = listaValidador;
         }
 
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista)
@@ -49,26 +56,18 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
 
-        public async Task<ApiResponse<string>> ValidarIdDetalleExisteEnCodigoListaAsync(CodigoIdListaDetalleRequest codigoListaIdDetalleRequest) 
+        public async Task<ApiResponse<ListaDetalleDto?>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
         {
-            var listaDetalle = await _listaDetalleRepositorio.Listar()
-                .Where(ld => ld.CodigoLista == codigoListaIdDetalleRequest.CodigoLista && ld.Id == codigoListaIdDetalleRequest.Id)
-                .FirstOrDefaultAsync();
+            var lista = await _listaRepositorio.ObtenerPorCodigoAsync(codigoDetalleRequest.Codigo);
+            _listaValidador.ValidarDatoNoEncontrado(lista, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_CODIGO);
 
-            _listaDetalleValidador.ValidarDatoNoEncontrado(listaDetalle, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_EN_CODIGOLISTA(codigoListaIdDetalleRequest.Id, codigoListaIdDetalleRequest.CodigoLista));
+            var listasDetallesMV = await _listaDetalleRepositorio.Listar()
+                .Where(ld => ld.CodigoLista == codigoDetalleRequest.Codigo && ld.Codigo == codigoDetalleRequest.CodigoListaDetalle).FirstOrDefaultAsync();
 
-            return _apiResponse.CrearRespuesta(true, "", "");
-        }
+            _listaDetalleValidador.ValidarDatoNoEncontrado(listasDetallesMV, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_EN_CODIGOLISTA(codigoDetalleRequest.Codigo, codigoDetalleRequest.CodigoListaDetalle));
+            var listasDetallesDto = _mapper.Map<ListaDetalleDto>(listasDetallesMV);
 
-        public async Task<ApiResponse<string>> ValidarIdDetalleExisteEnCodigoConstanteAsync(CodigoIdListaDetalleRequest codigoListaIdDetalleRequest)
-        {
-            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoConstante("TIPOIDENTIREGISTROUSUARIO")
-                .Where(ld => ld.CodigoLista == codigoListaIdDetalleRequest.CodigoLista && ld.Id == codigoListaIdDetalleRequest.Id)
-                .FirstOrDefaultAsync();
-
-            _listaDetalleValidador.ValidarDatoNoEncontrado(listasDetallesMV, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_EN_CODIGOLISTA(codigoListaIdDetalleRequest.Id, codigoListaIdDetalleRequest.CodigoLista));
-
-            return _apiResponse.CrearRespuesta(true, "", "");
+            return _apiResponse.CrearRespuesta<ListaDetalleDto?>(true, "", listasDetallesDto);
         }
 
         public async Task<ApiResponse<ListaDetalleDto?>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest) 

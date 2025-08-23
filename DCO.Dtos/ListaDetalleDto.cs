@@ -15,7 +15,7 @@
         public DateTime? FechaModificado { get; set; }
         public bool EstadoActivo { get; set; }
 
-        public string CodigoLista { get; set; } = null!;
-        public string CodigoDatoConstante { get; set; } = null!;
+        public string? CodigoLista { get; set; }
+        public string? CodigoDatoConstante { get; set; }
     }
 }

@@ -57,8 +57,10 @@ namespace DCO.Api.DatosComunes.Middlewares
                 else
                 {
                     contexto.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    Logs.EscribirLog("e", "", e);
                 }
+
+                //Siempre escribimos en los logs las diferentes Excepciones
+                Logs.EscribirLog("e", "", e);
 
                 // Si es desarrollo, incluir el detalle del error
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")

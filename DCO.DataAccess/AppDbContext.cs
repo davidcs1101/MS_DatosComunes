@@ -14,11 +14,7 @@ namespace DCO.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            modelBuilder.ApplyConfiguration(new DCO_ListaConfig());
-            modelBuilder.ApplyConfiguration(new DCO_ListaDetalleConfig());
-            modelBuilder.ApplyConfiguration(new DCO_DatoConstanteConfig());
-            modelBuilder.ApplyConfiguration(new DCO_DatoConstanteDetalleConfig());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
             DCO_DatosIniciales.Seed(modelBuilder);
             base.OnModelCreating(modelBuilder);

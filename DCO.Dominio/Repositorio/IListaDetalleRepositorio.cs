@@ -6,7 +6,9 @@ namespace DCO.Dominio.Repositorio
     public interface IListaDetalleRepositorio
     {
         Task<int> CrearAsync(DCO_ListaDetalle listaDetalle);
+        void MarcarCrear(DCO_ListaDetalle listaDetalle);
         Task ModificarAsync(DCO_ListaDetalle listaDetalle);
+        void MarcarModificar(DCO_ListaDetalle listaDetalle);
         Task<bool> EliminarAsync(int id);
         Task<DCO_ListaDetalle?> ObtenerPorIdAsync(int id);
         Task<DCO_ListaDetalle?> ObtenerPorCodigoAsync(string codigo);

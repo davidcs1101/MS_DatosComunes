@@ -21,10 +21,20 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             return listaDetalle.Id;
         }
 
+        public void MarcarCrear(DCO_ListaDetalle listaDetalle)
+        {
+            _context.DCO_ListasDetalles.Add(listaDetalle);
+        }
+
         public async Task ModificarAsync(DCO_ListaDetalle listaDetalle)
         {
             _context.DCO_ListasDetalles.Update(listaDetalle);
             await _context.SaveChangesAsync();
+        }
+
+        public void MarcarModificar(DCO_ListaDetalle listaDetalle)
+        {
+            _context.DCO_ListasDetalles.Update(listaDetalle);
         }
 
         public async Task<bool> EliminarAsync(int id)

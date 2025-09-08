@@ -13,6 +13,8 @@ namespace DCO.Infraestructura.Mapeos
             CreateMap<ListaModificacionRequest, DCO_Lista>();
             CreateMap<DCO_Lista, ListaDto>();
 
+            CreateMap<ListaDetalleCreacionRequest, DCO_ListaDetalle>();
+
             CreateMap<DatoConstanteCreacionRequest, DCO_DatoConstante>();
             CreateMap<DatoConstanteModificacionRequest, DCO_DatoConstante>();
             CreateMap<DCO_DatoConstante, DatoConstanteDto>();

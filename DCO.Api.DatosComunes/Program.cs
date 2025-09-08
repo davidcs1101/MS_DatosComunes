@@ -19,6 +19,15 @@ using DCO.DataAccess;
 using DCO.Dominio.Repositorio;
 using DCO.Dominio.Servicios.Interfaces;
 using DCO.Dominio.Servicios.Implementaciones;
+using DCO.Dominio.Repositorio.UnidadTrabajo;
+using DCO.Intraestructura.Dominio.Repositorio.UnidadTrabajo;
+using DCO.Intraestructura.Dominio.Repositorio;
+using DCO.Aplicacion.ServiciosExternos.config;
+using DCO.Dtos.AppSettings;
+using DCO.Infraestructura.Aplicacion.ServiciosExternos.Config;
+using SEG.Infraestructura.Aplicacion.ServiciosExternos.Config;
+using Hangfire;
+using Hangfire.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,15 +111,28 @@ builder.Services.AddScoped<IListaDetalleRepositorio, ListaDetalleRepositorio>();
 builder.Services.AddScoped<IListaDetalleServicio, ListaDetalleServicio>();
 builder.Services.AddScoped<IDatoConstanteRepositorio, DatoConstanteRepositorio>();
 builder.Services.AddScoped<IDatoConstanteServicio, DatoConstanteServicio>();
+builder.Services.AddScoped<IColaSolicitudRepositorio, ColaSolicitudRepositorio>();
+
+builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajoEF>();
 
 builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<>));
 
 builder.Services.AddScoped<IApiResponse, ApiResponse>();
 builder.Services.AddScoped<IMSSeguridad, MSSeguridad>();
 builder.Services.AddScoped<IRespuestaHttpValidador, RespuestaHttpValidador>();
+builder.Services.AddScoped<IColaSolicitudServicio, ColaSolicitudServicio>();
+builder.Services.AddScoped<IJobEncoladorServicio, JobEncoladorServicio>();
 builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
 
 builder.Services.AddScoped<ISerializadorJsonServicio, SerializadorJsonServicio>();
+
+#region REG_Servicios de configuraciones Appsettings
+builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));
+builder.Services.AddSingleton<IConfiguracionesTrabajosColas, ConfiguracionesTrabajosColas>();
+
+builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWT"));
+builder.Services.AddSingleton<IConfiguracionesJwt, ConfiguracionesJwt>();
+#endregion
 
 builder.Services.AddDbContext<AppDbContext>
     (opciones => opciones
@@ -119,6 +141,16 @@ builder.Services.AddDbContext<AppDbContext>
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     ));
 
+builder.Services.AddHangfire(opciones =>
+{
+    opciones.UseStorage(
+        new MySqlStorage(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            new MySqlStorageOptions { TablesPrefix = "XHAF_DCO_" }));
+});
+
+//Necesario para correr el background job server
+builder.Services.AddHangfireServer(opciones => { opciones.ServerName = "MSDatosComunesServer"; });
 
 //Servicio para obtener el usuarioId de los Tokens de la solicitud
 builder.Services.AddHttpContextAccessor();
@@ -135,6 +167,15 @@ builder.Services.AddHttpClient<IMSSeguridadContextoWebServicio, MSSeguridadConte
     .AddHttpMessageHandler<MiddlewareManejadorTokens>();
 
 var app = builder.Build();
+
+//Dashboard para ver los jobs en el navegador
+app.UseHangfireDashboard("/hangfire");
+
+//Configuracion para la tarea Job en segundo plano que rastrea las solicitudes pendientes de procesar.
+var configuracionTrabajosColas = app.Services.GetRequiredService<IConfiguracionesTrabajosColas>();
+RecurringJob.AddOrUpdate<IColaSolicitudServicio>("procesador_solicitudes", x => x.ProcesarColaSolicitudesAsync(),
+    configuracionTrabajosColas.ObtenerProcesarColaSolicitudesCron());
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

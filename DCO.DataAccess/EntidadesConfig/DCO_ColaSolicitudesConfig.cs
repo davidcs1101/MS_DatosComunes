@@ -10,6 +10,7 @@ namespace DCO.DataAccess.EntidadesConfig
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Tipo).HasColumnType("varchar(250)").HasComment("Tipo de solicitud a realizar.");
+            builder.Property(x => x.UrlDestino).HasColumnType("varchar(500)").HasComment("Url destino para la cual se publica el evento.");
             builder.Property(x => x.Payload).HasColumnType("Text").HasComment("Payload para la solicitud.");
             builder.Property(x => x.Estado).HasColumnType("smallint").HasComment("Estado del proceso de la solicitud. (0: Pendiente, 1: Procesando, 2: Exitosa, 3: Fallida).");
             builder.Property(x => x.Intentos).HasDefaultValue(0).HasComment("Intentos del proceso");

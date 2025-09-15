@@ -12,6 +12,7 @@ using DCO.Aplicacion.ServiciosExternos;
 using DCO.Dominio.Excepciones;
 using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Dominio.Enumeraciones;
+using DCO.Aplicacion.ServiciosExternos.config;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -30,8 +31,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly ISerializadorJsonServicio _serializadorJsonServicio;
         private readonly IJobEncoladorServicio _jobEncoladorServicio;
         private readonly IColaSolicitudRepositorio _colaSolicitudRepositorio;
+        private readonly IConfiguracionesEventosNotificar _configuracionesEventosNotificar;
 
-        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio, IListaRepositorio listaRepositorio, IEntidadValidador<DCO_Lista> listaValidador, IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio)
+        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApiResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio, IListaRepositorio listaRepositorio, IEntidadValidador<DCO_Lista> listaValidador, IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio, IConfiguracionesEventosNotificar configuracionesEventosNotificar)
         {
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _mapper = mapper;
@@ -45,6 +47,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _jobEncoladorServicio = jobEncoladorServicio;
             _serializadorJsonServicio = serializadorJsonServicio;
             _colaSolicitudRepositorio = colaSolicitudRepositorio;
+            _configuracionesEventosNotificar = configuracionesEventosNotificar;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(ListaDetalleCreacionRequest listaDetalleCreacionRequest)
@@ -63,12 +66,16 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
                 var datosListasDetalle = await this.ListarPorCodigoListaAsync(lista.Codigo);
-                var colaSolicitud = this.AgregarColaSolicitud(datosListasDetalle.Data);
+
+                var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
+                var colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
                 await transaccion.CommitAsync();
 
-                _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(colaSolicitud.Id, true);
+                foreach (var cola in colas)
+                    _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
+
                 return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, listaDetalle.Id);
             }
             catch (DatoYaExisteException)
@@ -129,18 +136,24 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta<ListaDetalleDto?>(true, "", listasDetallesDto);
         }
 
-        private DCO_ColaSolicitud AgregarColaSolicitud(List<ListaDetalleDto> datosListasDetalle)
+        private List<DCO_ColaSolicitud> AgregarColaSolicitud(List<ListaDetalleDto> datosListasDetalle, List<string> urls)
         {
-            var solicitud = new DCO_ColaSolicitud
+            var colas = new List<DCO_ColaSolicitud>();
+            foreach (var url in urls)
             {
-                Tipo = Textos.EventosColas.LISTASDETALLEACTUALIZADA,
-                Payload = _serializadorJsonServicio.Serializar(datosListasDetalle),
-                Estado = EstadoCola.Pendiente,
-                Intentos = 0,
-                FechaCreado = DateTime.Now
-            };
-            _colaSolicitudRepositorio.MarcarCrear(solicitud);
-            return solicitud;
+                var solicitud = new DCO_ColaSolicitud
+                {
+                    Tipo = Textos.EventosColas.LISTASDETALLEACTUALIZADA,
+                    UrlDestino = url,
+                    Payload = _serializadorJsonServicio.Serializar(datosListasDetalle),
+                    Estado = EstadoCola.Pendiente,
+                    Intentos = 0,
+                    FechaCreado = DateTime.Now
+                };
+                _colaSolicitudRepositorio.MarcarCrear(solicitud);
+                colas.Add(solicitud);
+            }
+            return colas;
         }
     }
 }

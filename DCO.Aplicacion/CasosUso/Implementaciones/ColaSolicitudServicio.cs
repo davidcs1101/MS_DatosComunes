@@ -19,14 +19,18 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly ISerializadorJsonServicio _serializadorJsonServicio;
         private readonly IEntidadValidador<DCO_ColaSolicitud> _colaSolicitudValidador;
         private readonly IConfiguracionesTrabajosColas _configuracionesTrabajosColas;
+        private readonly IConfiguracionesEventosNotificar _configuracionesEventosNotificar;
+        private readonly IPublicadorEventosBackgroundServicio _publicadorEventosBackgroundServicio;
 
-        public ColaSolicitudServicio(IUnidadDeTrabajo unidadTrabajo, IColaSolicitudRepositorio colaSolicitudRepositorio, ISerializadorJsonServicio serializadorJsonServicio, IEntidadValidador<DCO_ColaSolicitud> colaSolicitudValidador, IConfiguracionesTrabajosColas configuracionesTrabajosColas)
+        public ColaSolicitudServicio(IUnidadDeTrabajo unidadTrabajo, IColaSolicitudRepositorio colaSolicitudRepositorio, ISerializadorJsonServicio serializadorJsonServicio, IEntidadValidador<DCO_ColaSolicitud> colaSolicitudValidador, IConfiguracionesTrabajosColas configuracionesTrabajosColas, IConfiguracionesEventosNotificar configuracionesEventosNotificar, IPublicadorEventosBackgroundServicio publicadorEventosBackgroundServicio)
         {
             _unidadDeTrabajo = unidadTrabajo;
             _colaSolicitudRepositorio = colaSolicitudRepositorio;
             _serializadorJsonServicio = serializadorJsonServicio;
             _colaSolicitudValidador = colaSolicitudValidador;
             _configuracionesTrabajosColas = configuracionesTrabajosColas;
+            _configuracionesEventosNotificar = configuracionesEventosNotificar;
+            _publicadorEventosBackgroundServicio = publicadorEventosBackgroundServicio;
         }
 
         public async Task ProcesarColaSolicitudesAsync()
@@ -63,12 +67,11 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 _colaSolicitudRepositorio.MarcarModificar(solicitudExiste);
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
-                switch (solicitudExiste.Tipo)
-                {
-                    case Textos.EventosColas.LISTASDETALLEACTUALIZADA:
-                        //await _notificadorCorreo.EnviarAsync(_serializadorJsonServicio.Deserializar<List<ListaDetalleDto>>(solicitudExiste.Payload));
-                        break;
-                }
+                await _publicadorEventosBackgroundServicio.PublicarActualizacionListaDetalle
+                    (
+                    solicitudExiste.UrlDestino, 
+                    _serializadorJsonServicio.Deserializar<List<ListaDetalleDto>>(solicitudExiste.Payload)
+                    );
 
                 solicitudExiste.Estado = EstadoCola.Exitoso;
                 solicitudExiste.ErrorMensaje = null;

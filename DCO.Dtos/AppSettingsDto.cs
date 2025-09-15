@@ -19,4 +19,9 @@
         public string? ClaveIntegracion { get; set; }
     }
 
+    public class EventosNotificarSettings
+    {
+        public List<string?> ActualizarListasDetalleServicios { get; set; } = new List<string?>();
+    }
+
 }

@@ -130,8 +130,8 @@ builder.Services.AddScoped<ISerializadorJsonServicio, SerializadorJsonServicio>(
 builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));
 builder.Services.AddSingleton<IConfiguracionesTrabajosColas, ConfiguracionesTrabajosColas>();
 
-builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWT"));
-builder.Services.AddSingleton<IConfiguracionesJwt, ConfiguracionesJwt>();
+builder.Services.Configure<EventosNotificarSettings>(builder.Configuration.GetSection("EventosNotificar"));
+builder.Services.AddSingleton<IConfiguracionesEventosNotificar, ConfiguracionesEventosNotificar>();
 #endregion
 
 builder.Services.AddDbContext<AppDbContext>
@@ -165,6 +165,13 @@ builder.Services.AddHttpClient<IMSSeguridadContextoWebServicio, MSSeguridadConte
         cliente.DefaultRequestHeaders.Add("Accept", "application/json");
     })
     .AddHttpMessageHandler<MiddlewareManejadorTokens>();
+
+builder.Services.AddHttpClient<IPublicadorEventosBackgroundServicio, PublicadorEventosBackgroundServicio>
+    (cliente =>
+    {
+        cliente.BaseAddress = new Uri(urlGateway);
+        cliente.DefaultRequestHeaders.Add("Accept", "application/json");
+    });
 
 var app = builder.Build();
 

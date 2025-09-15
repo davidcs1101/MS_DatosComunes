@@ -5,6 +5,7 @@ namespace DCO.Dominio.Entidades
     {
         public int Id { get; set; }
         public string Tipo { get; set; } = string.Empty;
+        public string UrlDestino { get; set; } = string.Empty;
         public string Payload { get; set; } = string.Empty;
         public EstadoCola Estado { get; set; }
         public int Intentos { get; set; } = 0;

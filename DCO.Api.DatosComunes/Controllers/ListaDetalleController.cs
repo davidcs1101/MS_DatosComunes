@@ -24,6 +24,15 @@ namespace ApiDCO.Controllers
             return await _listaDetalleServicio.CrearAsync(listaDetalleCreacionRequest);
         }
 
+        [HttpPut("modificar")]
+        public async Task<ActionResult<ApiResponse<string>>> Modificar(ListaDetalleModificacionRequest listaDetalleModificacionRequest)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return await _listaDetalleServicio.ModificarAsync(listaDetalleModificacionRequest);
+        }
+
         [HttpGet("listarPorCodigoLista")]
         public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoLista(string codigoLista)
         {

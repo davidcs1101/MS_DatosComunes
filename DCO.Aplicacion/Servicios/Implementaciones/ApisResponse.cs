@@ -3,7 +3,7 @@ using DCO.Aplicacion.Servicios.Interfaces;
 
 namespace DCO.Aplicacion.Servicios.Implementaciones
 {
-    public class ApiResponse : IApiResponse
+    public class ApisResponse : IApisResponse
     {
         public ApiResponse<T> CrearRespuesta<T>(bool correcto, string mensaje, T? data = default)
         {

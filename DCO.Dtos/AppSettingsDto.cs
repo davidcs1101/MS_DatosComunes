@@ -23,5 +23,4 @@
     {
         public List<string?> ActualizarListasDetalleServicios { get; set; } = new List<string?>();
     }
-
 }

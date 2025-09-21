@@ -2,7 +2,7 @@
 
 namespace DCO.Aplicacion.Servicios.Interfaces
 {
-    public interface IApiResponse
+    public interface IApisResponse
     {
         ApiResponse<T> CrearRespuesta<T>(bool correcto, string mensaje, T? data = default);
     }

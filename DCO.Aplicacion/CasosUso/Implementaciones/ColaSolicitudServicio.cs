@@ -69,7 +69,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
                 await _publicadorEventosBackgroundServicio.PublicarActualizacionListaDetalle
                     (
-                    solicitudExiste.UrlDestino, 
+                    solicitudExiste.UrlDestino,
                     _serializadorJsonServicio.Deserializar<List<ListaDetalleDto>>(solicitudExiste.Payload)
                     );
 

@@ -16,11 +16,11 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IListaRepositorio _listaRepositorio;
         private readonly IMapper _mapper;
         private readonly IEntidadValidador<DCO_Lista> _listaValidador;
-        private readonly IApiResponse _apiResponse;
+        private readonly IApisResponse _apiResponse;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly IMSSeguridad _msSeguridad;
 
-        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IEntidadValidador<DCO_Lista> listaValidador, IApiResponse apiResponseServicio, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad)
+        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IEntidadValidador<DCO_Lista> listaValidador, IApisResponse apiResponseServicio, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad)
         {
             _listaRepositorio = listaRepositorio;
             _mapper = mapper;

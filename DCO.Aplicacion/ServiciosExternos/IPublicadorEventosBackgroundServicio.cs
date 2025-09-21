@@ -1,9 +1,12 @@
 ﻿using DCO.Dtos;
+using Refit;
+using System.ComponentModel.DataAnnotations;
 
 namespace DCO.Aplicacion.ServiciosExternos
 {
     public interface IPublicadorEventosBackgroundServicio
     {
-        Task<HttpResponseMessage> PublicarActualizacionListaDetalle(string urlNotificar, List<ListaDetalleDto> listaDetalleRequest);
+        [Post("")]
+        Task<HttpResponseMessage> PublicarActualizacionListaDetalle([Url] string urlCompleta, [Body] List<ListaDetalleDto> listaDetalleRequest);
     }
 }

@@ -28,6 +28,7 @@ using DCO.Infraestructura.Aplicacion.ServiciosExternos.Config;
 using SEG.Infraestructura.Aplicacion.ServiciosExternos.Config;
 using Hangfire;
 using Hangfire.MySql;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,7 +118,7 @@ builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajoEF>();
 
 builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<>));
 
-builder.Services.AddScoped<IApiResponse, ApiResponse>();
+builder.Services.AddScoped<IApisResponse, ApisResponse>();
 builder.Services.AddScoped<IMSSeguridad, MSSeguridad>();
 builder.Services.AddScoped<IRespuestaHttpValidador, RespuestaHttpValidador>();
 builder.Services.AddScoped<IColaSolicitudServicio, ColaSolicitudServicio>();
@@ -158,16 +159,18 @@ builder.Services.AddHttpContextAccessor();
 //Configuracion para llamado de otros MicroServicios
 builder.Services.AddTransient<MiddlewareManejadorTokens>();
 var urlGateway = builder.Configuration["UrlGateway"];
-builder.Services.AddHttpClient<IMSSeguridadContextoWebServicio, MSSeguridadContextoWebServicio>
-    (cliente =>
+builder.Services
+    .AddRefitClient<IMSSeguridadContextoWebServicio>()
+    .ConfigureHttpClient(c =>
     {
-        cliente.BaseAddress = new Uri(urlGateway);
-        cliente.DefaultRequestHeaders.Add("Accept", "application/json");
+        c.BaseAddress = new Uri(urlGateway);
+        c.DefaultRequestHeaders.Add("Accept", "application/json");
     })
     .AddHttpMessageHandler<MiddlewareManejadorTokens>();
 
-builder.Services.AddHttpClient<IPublicadorEventosBackgroundServicio, PublicadorEventosBackgroundServicio>
-    (cliente =>
+builder.Services
+    .AddRefitClient<IPublicadorEventosBackgroundServicio>()
+    .ConfigureHttpClient(cliente =>
     {
         cliente.BaseAddress = new Uri(urlGateway);
         cliente.DefaultRequestHeaders.Add("Accept", "application/json");

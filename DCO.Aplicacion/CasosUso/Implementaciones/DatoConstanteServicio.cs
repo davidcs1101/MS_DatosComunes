@@ -20,9 +20,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly IMSSeguridad _msSeguridad;
         private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
-        private readonly IApiResponse _apiResponse;
+        private readonly IApisResponse _apiResponse;
 
-        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApiResponse apiResponseServicio)
+        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApisResponse apiResponseServicio)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _mapper = mapper;

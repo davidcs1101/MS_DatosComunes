@@ -12,10 +12,14 @@ namespace DCO.Infraestructura.Aplicacion.ServiciosExternos.Config
             _opciones = opciones.Value;
         }
 
-
         public List<string?> ObtenerActualizarListasDetalleServicios()
         {
-            return _opciones.ActualizarListasDetalleServicios ?? new List<string?>();
+            var urls = _opciones.ActualizarListasDetalleServicios;
+            var urlsCompletas = new List<string?>();
+            foreach (var url in urls)
+                urlsCompletas.Add("https://localhost:7075/" + url);
+
+            return urlsCompletas ?? new List<string?>();
         }
     }
 }

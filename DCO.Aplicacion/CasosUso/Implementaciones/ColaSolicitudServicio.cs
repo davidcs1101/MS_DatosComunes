@@ -19,17 +19,15 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly ISerializadorJsonServicio _serializadorJsonServicio;
         private readonly IEntidadValidador<DCO_ColaSolicitud> _colaSolicitudValidador;
         private readonly IConfiguracionesTrabajosColas _configuracionesTrabajosColas;
-        private readonly IConfiguracionesEventosNotificar _configuracionesEventosNotificar;
         private readonly IPublicadorEventosBackgroundServicio _publicadorEventosBackgroundServicio;
 
-        public ColaSolicitudServicio(IUnidadDeTrabajo unidadTrabajo, IColaSolicitudRepositorio colaSolicitudRepositorio, ISerializadorJsonServicio serializadorJsonServicio, IEntidadValidador<DCO_ColaSolicitud> colaSolicitudValidador, IConfiguracionesTrabajosColas configuracionesTrabajosColas, IConfiguracionesEventosNotificar configuracionesEventosNotificar, IPublicadorEventosBackgroundServicio publicadorEventosBackgroundServicio)
+        public ColaSolicitudServicio(IUnidadDeTrabajo unidadTrabajo, IColaSolicitudRepositorio colaSolicitudRepositorio, ISerializadorJsonServicio serializadorJsonServicio, IEntidadValidador<DCO_ColaSolicitud> colaSolicitudValidador, IConfiguracionesTrabajosColas configuracionesTrabajosColas, IPublicadorEventosBackgroundServicio publicadorEventosBackgroundServicio)
         {
             _unidadDeTrabajo = unidadTrabajo;
             _colaSolicitudRepositorio = colaSolicitudRepositorio;
             _serializadorJsonServicio = serializadorJsonServicio;
             _colaSolicitudValidador = colaSolicitudValidador;
             _configuracionesTrabajosColas = configuracionesTrabajosColas;
-            _configuracionesEventosNotificar = configuracionesEventosNotificar;
             _publicadorEventosBackgroundServicio = publicadorEventosBackgroundServicio;
         }
 

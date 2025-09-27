@@ -33,6 +33,15 @@ namespace ApiDCO.Controllers
             return await _listaDetalleServicio.ModificarAsync(listaDetalleModificacionRequest);
         }
 
+        [HttpDelete("eliminar")]
+        public async Task<ActionResult<ApiResponse<string>>> Eliminar(int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return await _listaDetalleServicio.EliminarAsync(id);
+        }
+
         [HttpGet("listarPorCodigoLista")]
         public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoLista(string codigoLista)
         {

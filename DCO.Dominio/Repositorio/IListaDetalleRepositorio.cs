@@ -5,13 +5,11 @@ namespace DCO.Dominio.Repositorio
 {
     public interface IListaDetalleRepositorio
     {
-        Task<int> CrearAsync(DCO_ListaDetalle listaDetalle);
         void MarcarCrear(DCO_ListaDetalle listaDetalle);
-        Task ModificarAsync(DCO_ListaDetalle listaDetalle);
         void MarcarModificar(DCO_ListaDetalle listaDetalle);
-        Task<bool> EliminarAsync(int id);
+        void MarcarEliminar(DCO_ListaDetalle listaDetalle);
         Task<DCO_ListaDetalle?> ObtenerPorIdAsync(int id);
-        Task<DCO_ListaDetalle?> ObtenerPorCodigoAsync(string codigo);
+        Task<DCO_ListaDetalle?> ObtenerPorListaIdYCodigoAsync(int listaId,string codigo);
         IQueryable<ListaDetalleMV> Listar();
         IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante);
     }

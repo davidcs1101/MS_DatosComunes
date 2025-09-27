@@ -35,8 +35,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IColaSolicitudRepositorio _colaSolicitudRepositorio;
         private readonly IConfiguracionesEventosNotificar _configuracionesEventosNotificar;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
+        private readonly IServicioComun _servicioComun;
 
-        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApisResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleMVValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio, IListaRepositorio listaRepositorio, IEntidadValidador<DCO_Lista> listaValidador, IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio, IConfiguracionesEventosNotificar configuracionesEventosNotificar, IUsuarioContextoServicio usuarioContextoServicio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador)
+        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApisResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleMVValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio, IListaRepositorio listaRepositorio, IEntidadValidador<DCO_Lista> listaValidador, IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio, IConfiguracionesEventosNotificar configuracionesEventosNotificar, IUsuarioContextoServicio usuarioContextoServicio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IServicioComun servicioComun)
         {
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _mapper = mapper;
@@ -53,16 +54,20 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _configuracionesEventosNotificar = configuracionesEventosNotificar;
             _usuarioContextoServicio = usuarioContextoServicio;
             _listaDetalleValidador = listaDetalleValidador;
+            _servicioComun = servicioComun;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(ListaDetalleCreacionRequest listaDetalleCreacionRequest)
         {
-            await using var transaccion = await _unidadDeTrabajo.IniciarTransaccionAsync();
-
-            try
+            var id = 0;
+            var colas = new List<DCO_ColaSolicitud>();
+            await _servicioComun.EjecutarEnTransaccionAsync(async () =>
             {
                 var listaExiste = await _listaRepositorio.ObtenerPorCodigoAsync(listaDetalleCreacionRequest.CodigoLista);
                 _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_CODIGO);
+
+                var listaDetalleExiste = await _listaDetalleRepositorio.ObtenerPorListaIdYCodigoAsync(listaExiste.Id, listaDetalleCreacionRequest.Codigo);
+                _listaDetalleValidador.ValidarDatoYaExiste(listaDetalleExiste, Textos.ListasDetalles.MENSAJE_LISTADETALLE_CODIGO_EXISTE);
 
                 var listaDetalle = _mapper.Map<DCO_ListaDetalle>(listaDetalleCreacionRequest);
                 listaDetalle.ListaId = listaExiste.Id;
@@ -74,31 +79,17 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 var datosListasDetalle = await this.ListarPorCodigoListaAsync(listaExiste.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
-                var colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
+                colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
-                await transaccion.CommitAsync();
 
-                foreach (var cola in colas)
-                    _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
+                id = listaDetalle.Id;
+            });
 
-                return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, listaDetalle.Id);
-            }
-            catch (DatoNoEncontradoException)
-            {
-                await transaccion.RollbackAsync();
-                throw;
-            }
-            catch (DatoYaExisteException)
-            {
-                await transaccion.RollbackAsync();
-                throw;
-            }
-            catch
-            {
-                await transaccion.RollbackAsync();
-                throw;
-            }
+            foreach (var cola in colas)
+                _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
+
+            return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
         public async Task<ApiResponse<string>> ModificarAsync(ListaDetalleModificacionRequest listaDetalleModificacionRequest)
@@ -130,6 +121,45 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                     _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
 
                 return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
+            }
+            catch (DatoNoEncontradoException)
+            {
+                await transaccion.RollbackAsync();
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<ApiResponse<string>> EliminarAsync(int id)
+        {
+            await using var transaccion = await _unidadDeTrabajo.IniciarTransaccionAsync();
+
+            try
+            {
+                var listaDetalleExiste = await _listaDetalleRepositorio.ObtenerPorIdAsync(id);
+                _listaDetalleValidador.ValidarDatoNoEncontrado(listaDetalleExiste, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_ID);
+
+                var listaId = listaDetalleExiste.ListaId;
+
+                _listaDetalleRepositorio.MarcarEliminar(listaDetalleExiste);
+                await _unidadDeTrabajo.GuardarCambiosAsync();
+
+                var lista = await _listaRepositorio.ObtenerPorIdAsync(listaId);
+                var datosListasDetalle = await this.ListarPorCodigoListaAsync(lista.Codigo);
+
+                var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
+                var colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
+
+                await _unidadDeTrabajo.GuardarCambiosAsync();
+                await transaccion.CommitAsync();
+
+                foreach (var cola in colas)
+                    _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
+
+                return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
             }
             catch (DatoNoEncontradoException)
             {

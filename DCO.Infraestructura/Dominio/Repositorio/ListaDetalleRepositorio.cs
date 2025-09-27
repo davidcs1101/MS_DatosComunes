@@ -14,22 +14,9 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             _context = context;
         }
 
-        public async Task<int> CrearAsync(DCO_ListaDetalle listaDetalle)
-        {
-            _context.DCO_ListasDetalles.Add(listaDetalle);
-            await _context.SaveChangesAsync();
-            return listaDetalle.Id;
-        }
-
         public void MarcarCrear(DCO_ListaDetalle listaDetalle)
         {
             _context.DCO_ListasDetalles.Add(listaDetalle);
-        }
-
-        public async Task ModificarAsync(DCO_ListaDetalle listaDetalle)
-        {
-            _context.DCO_ListasDetalles.Update(listaDetalle);
-            await _context.SaveChangesAsync();
         }
 
         public void MarcarModificar(DCO_ListaDetalle listaDetalle)
@@ -37,10 +24,9 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             _context.DCO_ListasDetalles.Update(listaDetalle);
         }
 
-        public async Task<bool> EliminarAsync(int id)
+        public void MarcarEliminar(DCO_ListaDetalle listaDetalle)
         {
-            var eliminado = await _context.DCO_ListasDetalles.Where(u => u.Id == id).ExecuteDeleteAsync();
-            return eliminado > 0;
+            _context.DCO_ListasDetalles.Remove(listaDetalle);
         }
 
         public async Task<DCO_ListaDetalle?> ObtenerPorIdAsync(int id)
@@ -48,9 +34,9 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             return await _context.DCO_ListasDetalles.FirstOrDefaultAsync(g => g.Id == id);
         }
 
-        public async Task<DCO_ListaDetalle?> ObtenerPorCodigoAsync(string codigo)
+        public async Task<DCO_ListaDetalle?> ObtenerPorListaIdYCodigoAsync(int listaId, string codigo)
         {
-            return await _context.DCO_ListasDetalles.FirstOrDefaultAsync(g => g.Codigo == codigo);
+            return await _context.DCO_ListasDetalles.FirstOrDefaultAsync(g => g.ListaId == listaId && g.Codigo == codigo);
         }
 
         public IQueryable<ListaDetalleMV> Listar()

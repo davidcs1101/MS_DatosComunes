@@ -127,6 +127,8 @@ builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
 
 builder.Services.AddScoped<ISerializadorJsonServicio, SerializadorJsonServicio>();
 
+builder.Services.AddScoped<IServicioComun, ServicioComun>();
+
 #region REG_Servicios de configuraciones Appsettings
 builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));
 builder.Services.AddSingleton<IConfiguracionesTrabajosColas, ConfiguracionesTrabajosColas>();
@@ -172,7 +174,7 @@ builder.Services
     .AddRefitClient<IPublicadorEventosBackgroundServicio>()
     .ConfigureHttpClient(cliente =>
     {
-        cliente.BaseAddress = new Uri(urlGateway);
+        cliente.BaseAddress = new Uri("http://localhost");
         cliente.DefaultRequestHeaders.Add("Accept", "application/json");
     });
 

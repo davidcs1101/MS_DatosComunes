@@ -14,4 +14,9 @@
     {
         public SolicitudHttpException(string mensaje) : base(mensaje) { }
     }
+
+    public class LoguinException : Exception
+    {
+        public LoguinException(string mensaje) : base(mensaje) { }
+    }
 }

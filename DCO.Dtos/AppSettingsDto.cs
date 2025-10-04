@@ -5,8 +5,6 @@
         public string? Emisor { get; set; }
         public string? Audiencia { get; set; }
         public string? Llave { get; set; }
-        public string? MinutosDuracionTokenAutenticacionUsuario { get; set; }
-        public string? MinutosDuracionTokenAutenticacionSede { get; set; }
         public List<string?> AudienciasDestino { get; set; } = new List<string?>();
     }
 

@@ -82,9 +82,9 @@ builder.Services.AddLogging(loggingBuilder => { loggingBuilder.AddLog4Net(); });
 
 // Configuracion de JWT
 var configuracionJWT = builder.Configuration.GetSection("JWT");
-var issuer = configuracionJWT["Emisor"];
-var audience = configuracionJWT["Audiencia"];
-var key = configuracionJWT["Llave"];
+var emisor = configuracionJWT["Emisor"];
+var audiencia = configuracionJWT["Audiencia"];
+var llave = configuracionJWT["Llave"];
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer
     (opcion =>
@@ -95,9 +95,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = issuer,
-            ValidAudience = audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+            ValidIssuer = emisor,
+            ValidAudience = audiencia,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(llave)),
             ClockSkew = TimeSpan.Zero //No se permite tolerancia de tiempo una vez el token caduca (por defecto es 5 minutos si no se establece)
         };
     });
@@ -155,28 +155,39 @@ builder.Services.AddHangfire(opciones =>
 //Necesario para correr el background job server
 builder.Services.AddHangfireServer(opciones => { opciones.ServerName = "MSDatosComunesServer"; });
 
-//Servicio para obtener el usuarioId de los Tokens de la solicitud
+//Servicio para obtener el usuarioId de los Tokens de la solicitud Web
 builder.Services.AddHttpContextAccessor();
 
-//Configuracion para llamado de otros MicroServicios
 builder.Services.AddTransient<MiddlewareManejadorTokens>();
-var urlGateway = builder.Configuration["UrlGateway"];
+builder.Services.AddTransient<MiddlewareManejadorTokensBackGround>();
+
+//Configuracion para llamado de otros MicroServicios atraves de la Url Gateway
+var urlMsSeguridad = builder.Configuration["UrlMSSeguridad"];
+
 builder.Services
     .AddRefitClient<IMSSeguridadContextoWebServicio>()
     .ConfigureHttpClient(c =>
     {
-        c.BaseAddress = new Uri(urlGateway);
+        c.BaseAddress = new Uri(urlMsSeguridad);
         c.DefaultRequestHeaders.Add("Accept", "application/json");
     })
     .AddHttpMessageHandler<MiddlewareManejadorTokens>();
 
 builder.Services
-    .AddRefitClient<IPublicadorEventosBackgroundServicio>()
-    .ConfigureHttpClient(cliente =>
+    .AddRefitClient<IMSSeguridadBackgroundServicio>()
+    .ConfigureHttpClient(c =>
     {
-        cliente.BaseAddress = new Uri("http://localhost");
-        cliente.DefaultRequestHeaders.Add("Accept", "application/json");
+        c.BaseAddress = new Uri(urlMsSeguridad);
+        c.DefaultRequestHeaders.Add("Accept", "application/json");
     });
+
+builder.Services
+    .AddHttpClient<IPublicadorEventosBackgroundServicio, PublicadorEventosBackgroundServicio>
+    (cliente =>
+    {
+        cliente.DefaultRequestHeaders.Add("Accept", "application/json");
+    })
+    .AddHttpMessageHandler<MiddlewareManejadorTokensBackGround>();
 
 var app = builder.Build();
 

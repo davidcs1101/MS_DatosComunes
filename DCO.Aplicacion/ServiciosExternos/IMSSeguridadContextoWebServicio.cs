@@ -5,9 +5,9 @@ namespace DCO.Aplicacion.ServiciosExternos
 {
     public interface IMSSeguridadContextoWebServicio
     {
-        [Get("/seg/usuarios/obtenerNombreUsuarioPorId")]
+        [Get("/usuarios/obtenerNombreUsuarioPorId")]
         Task<HttpResponseMessage> ObtenerNombreUsuarioPorIdAsync([Query] int id);
-        [Post("/seg/usuarios/listar")]
+        [Post("/usuarios/listar")]
         Task<HttpResponseMessage> ObtenerNombresUsuariosPorIds([Body] IdsListadoDto usuarioIds);
     }
 }

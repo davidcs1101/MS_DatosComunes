@@ -17,7 +17,7 @@ namespace DCO.Infraestructura.Aplicacion.ServiciosExternos.Config
             var urls = _opciones.ActualizarListasDetalleServicios;
             var urlsCompletas = new List<string?>();
             foreach (var url in urls)
-                urlsCompletas.Add("https://localhost:7075/" + url);
+                urlsCompletas.Add(url);
 
             return urlsCompletas ?? new List<string?>();
         }

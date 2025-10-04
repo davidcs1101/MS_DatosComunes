@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using DCO.Aplicacion.ServiciosExternos.config;
-using DCO.Aplicacion.ServiciosExternos;
+﻿using DCO.Aplicacion.ServiciosExternos;
 using DCO.Dominio.Repositorio.UnidadTrabajo;
-using DCO.Dominio.Repositorio;
 using DCO.Dominio.Excepciones;
+using DCO.Dominio.Entidades;
 
 namespace DCO.Aplicacion.Servicios.Interfaces
 {
@@ -11,47 +9,39 @@ namespace DCO.Aplicacion.Servicios.Interfaces
     {
         private readonly IUnidadDeTrabajo _unidadDeTrabajo;
         private readonly IJobEncoladorServicio _jobEncoladorServicio;
-        private readonly IListaRepositorio _listaRepositorio;
-        private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
-        private readonly IMapper _mapper;
-        private readonly IConfiguracionesEventosNotificar _configuracionesEventosNotificar;
 
-        public ServicioComun(IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio,
-                             IListaRepositorio listaRepositorio, IListaDetalleRepositorio listaDetalleRepositorio,
-                             IMapper mapper, IConfiguracionesEventosNotificar configuracionesEventosNotificar)
+        public ServicioComun(IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio)
         {
             _unidadDeTrabajo = unidadDeTrabajo;
             _jobEncoladorServicio = jobEncoladorServicio;
-            _listaRepositorio = listaRepositorio;
-            _listaDetalleRepositorio = listaDetalleRepositorio;
-            _mapper = mapper;
-            _configuracionesEventosNotificar = configuracionesEventosNotificar;
         }
 
         public async Task EjecutarEnTransaccionAsync(Func<Task> operacion)
         {
             await using var transaccion = await _unidadDeTrabajo.IniciarTransaccionAsync();
 
-            try
-            {
+            try{
                 await operacion();
                 await transaccion.CommitAsync();
             }
-            catch (DatoNoEncontradoException)
-            {
+            catch (DatoNoEncontradoException){
                 await transaccion.RollbackAsync();
                 throw;
             }
-            catch (DatoYaExisteException)
-            {
+            catch (DatoYaExisteException){
                 await transaccion.RollbackAsync();
-                throw;
-            }
-            catch
-            {
+                throw;}
+            catch{
                 await transaccion.RollbackAsync();
                 throw;
             }
         }
+
+        public void EncolarSolicitudes(List<DCO_ColaSolicitud> listaColasSolicitudes) 
+        {
+            foreach (var cola in listaColasSolicitudes)
+                _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
+        }
+
     }
 }

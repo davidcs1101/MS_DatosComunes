@@ -10,6 +10,8 @@ using System.Net.Http.Json;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Dominio.Servicios.Interfaces;
 using static Utilidades.Textos;
+using DCO.Aplicacion.ServiciosExternos.config;
+using DCO.Dominio.Repositorio.UnidadTrabajo;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -21,8 +23,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IMSSeguridad _msSeguridad;
         private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
         private readonly IApisResponse _apiResponse;
+        private readonly IServicioComun _servicioComun;
+        private readonly IUnidadDeTrabajo _unidadDeTrabajo;
 
-        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApisResponse apiResponseServicio)
+        public DatoConstanteServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApisResponse apiResponseServicio, IServicioComun servicioComun, IUnidadDeTrabajo unidadDeTrabajo)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _mapper = mapper;
@@ -30,10 +34,40 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _msSeguridad = msSeguridad;
             _datoConstanteValidador = datoConstanteValidador;
             _apiResponse = apiResponseServicio;
+            _servicioComun = servicioComun;
+            _unidadDeTrabajo = unidadDeTrabajo;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(DatoConstanteCreacionRequest datoConstanteCreacionRequest)
         {
+            var id = 0;
+            var colas = new List<DCO_ColaSolicitud>();
+            await _servicioComun.EjecutarEnTransaccionAsync(async () =>
+            {
+                var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorCodigoAsync(datoConstanteCreacionRequest.Codigo);
+                _datoConstanteValidador.ValidarDatoYaExiste(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_CODIGO_EXISTE);
+
+                var datoConstante = _mapper.Map<DCO_DatoConstante>(datoConstanteCreacionRequest);
+                datoConstante.FechaCreado = DateTime.Now;
+                datoConstante.UsuarioCreadorId = _usuarioContextoServicio.ObtenerUsuarioIdToken();
+
+                _datoConstanteRepositorio.MarcarCrear(datoConstante);
+                await _unidadDeTrabajo.GuardarCambiosAsync();
+                var datosListasDetalle = await this.ListarPorCodigoListaAsync(listaExiste.Codigo);
+
+                var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
+                colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
+
+                await _unidadDeTrabajo.GuardarCambiosAsync();
+
+                id = listaDetalle.Id;
+            });
+
+            _servicioComun.EncolarSolicitudes(colas);
+            return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
+
+
+
             var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorCodigoAsync(datoConstanteCreacionRequest.Codigo);
             _datoConstanteValidador.ValidarDatoYaExiste(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_CODIGO_EXISTE);
 

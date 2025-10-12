@@ -11,6 +11,7 @@ namespace DCO.Dominio.Repositorio
         Task<DCO_ListaDetalle?> ObtenerPorIdAsync(int id);
         Task<DCO_ListaDetalle?> ObtenerPorListaIdYCodigoAsync(int listaId,string codigo);
         IQueryable<ListaDetalleMV> Listar();
+        IQueryable<ListaDetalleMV> ListarPorCodigoLista(string codigoLista);
         IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante);
     }
 }

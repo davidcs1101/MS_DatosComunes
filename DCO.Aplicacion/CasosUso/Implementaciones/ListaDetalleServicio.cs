@@ -143,9 +143,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista)
         {
-            var listasDetallesMV = await _listaDetalleRepositorio.Listar()
-                .Where(ld => ld.CodigoLista == codigoLista)
-                .ToListAsync();
+            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoLista(codigoLista).ToListAsync();
             var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
 
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);

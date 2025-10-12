@@ -15,6 +15,11 @@ namespace DCO.DataAcces.EntidadesConfig
             builder.Property(x => x.FechaModificado).HasColumnType("datetime");
 
             builder.HasIndex(x => new { x.Codigo }).IsUnique();
+
+            builder.HasOne(x => x.Lista)
+                .WithMany(x => x.DatosConstantes)
+                .HasForeignKey(x => x.ListaId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

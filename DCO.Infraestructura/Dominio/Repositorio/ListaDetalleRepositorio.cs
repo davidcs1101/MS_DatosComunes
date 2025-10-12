@@ -59,6 +59,27 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                          });
         }
 
+        public IQueryable<ListaDetalleMV> ListarPorCodigoLista(string codigoLista)
+        {
+            return _context.DCO_ListasDetalles
+                         .Include(ld => ld.Lista)
+                         .Where(ld => ld.Lista.Codigo == codigoLista)
+                         .Select(ld => new ListaDetalleMV
+                         {
+                             Id = ld.Id,
+                             ListaId = ld.ListaId,
+                             Codigo = ld.Codigo,
+                             Nombre = ld.Nombre,
+                             UsuarioCreadorId = ld.UsuarioCreadorId,
+                             FechaCreado = ld.FechaCreado,
+                             UsuarioModificadorId = ld.UsuarioModificadorId,
+                             FechaModificado = ld.FechaModificado,
+                             EstadoActivo = ld.EstadoActivo,
+
+                             CodigoLista = ld.Lista.Codigo
+                         });
+        }
+
         public IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante)
         {
             return from dc in _context.DCO_DatosConstantes

@@ -24,14 +24,14 @@ namespace DCO.DataAcces.Semilla
             );
 
             builder.Entity<DCO_DatoConstante>().HasData(
-                new DCO_DatoConstante { Id = 1, Codigo = "CAUSAEXTERNAANEXO2", Nombre = "CAUSAS EXTERNAS DE CONSULTA PARA ANEXO 2", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
-                new DCO_DatoConstante { Id = 2, Codigo = "TIPOIDENTIANEXO", Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE ANEXOS TÉCNICOS A PACIENTES", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
-                new DCO_DatoConstante { Id = 3, Codigo = "TIPOIDENTIEMPRESA", Nombre = "TIPOS DE IDENTIFICACION PARA REGISTRO DE EMPRESAS", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
-                new DCO_DatoConstante { Id = 4, Codigo = "TIPOIDENTIREGISTROUSUARIO", Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE USUARIOS DE APLICACIÓN", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
-                new DCO_DatoConstante { Id = 5, Codigo = "TIPOREGIMENANEXO2", Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 2", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
-                new DCO_DatoConstante { Id = 6, Codigo = "TIPOREGIMENANEXO3", Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 3", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
-                new DCO_DatoConstante { Id = 7, Codigo = "TIPOREGIMENANEXO9", Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 9", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
-                new DCO_DatoConstante { Id = 8, Codigo = "TRIAGEANEXO2", Nombre = "NIVELES DE TRIAGE PARA EL ANEXO 2", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now }
+                new DCO_DatoConstante { Id = 1, ListaId = 2, Codigo = "CAUSAEXTERNAANEXO2", Nombre = "CAUSAS EXTERNAS DE CONSULTA PARA ANEXO 2", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
+                new DCO_DatoConstante { Id = 2, ListaId = 9, Codigo = "TIPOIDENTIANEXO", Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE ANEXOS TÉCNICOS A PACIENTES", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
+                new DCO_DatoConstante { Id = 3, ListaId = 9, Codigo = "TIPOIDENTIEMPRESA", Nombre = "TIPOS DE IDENTIFICACION PARA REGISTRO DE EMPRESAS", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
+                new DCO_DatoConstante { Id = 4, ListaId = 9, Codigo = "TIPOIDENTIREGISTROUSUARIO", Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE USUARIOS DE APLICACIÓN", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
+                new DCO_DatoConstante { Id = 5, ListaId = 10, Codigo = "TIPOREGIMENANEXO2", Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 2", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
+                new DCO_DatoConstante { Id = 6, ListaId = 10, Codigo = "TIPOREGIMENANEXO3", Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 3", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
+                new DCO_DatoConstante { Id = 7, ListaId = 10, Codigo = "TIPOREGIMENANEXO9", Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 9", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now },
+                new DCO_DatoConstante { Id = 8, ListaId = 11, Codigo = "TRIAGEANEXO2", Nombre = "NIVELES DE TRIAGE PARA EL ANEXO 2", EstadoActivo = true, UsuarioCreadorId = 1, FechaCreado = DateTime.Now }
             );
 
             builder.Entity<DCO_Departamento>().HasData(

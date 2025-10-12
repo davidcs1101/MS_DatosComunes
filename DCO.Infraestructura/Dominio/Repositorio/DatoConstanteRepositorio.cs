@@ -13,19 +13,23 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             _context = context;
         }
 
-        public void MarcarCrear(DCO_DatoConstante datoConstante)
+        public async Task<int> CrearAsync(DCO_DatoConstante datoConstante)
         {
             _context.DCO_DatosConstantes.Add(datoConstante);
+            await _context.SaveChangesAsync();
+            return datoConstante.Id;
         }
 
-        public void MarcarModificar(DCO_DatoConstante datoConstante)
+        public async Task ModificarAsync(DCO_DatoConstante datoConstante)
         {
             _context.DCO_DatosConstantes.Update(datoConstante);
+            await _context.SaveChangesAsync();
         }
 
-        public void MarcarEliminar(DCO_DatoConstante datoConstante)
+        public async Task<bool> EliminarAsync(int id)
         {
-            _context.DCO_DatosConstantes.Remove(datoConstante);
+            var eliminado = await _context.DCO_DatosConstantes.Where(u => u.Id == id).ExecuteDeleteAsync();
+            return eliminado > 0;
         }
 
         public async Task<DCO_DatoConstante?> ObtenerPorIdAsync(int id)

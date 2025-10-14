@@ -2,6 +2,10 @@
 using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Dominio.Excepciones;
 using DCO.Dominio.Entidades;
+using DCO.Dominio.Repositorio;
+using DCO.Dtos;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace DCO.Aplicacion.Servicios.Interfaces
 {
@@ -9,11 +13,15 @@ namespace DCO.Aplicacion.Servicios.Interfaces
     {
         private readonly IUnidadDeTrabajo _unidadDeTrabajo;
         private readonly IJobEncoladorServicio _jobEncoladorServicio;
+        private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
+        private readonly IMapper _mapper;
 
-        public ServicioComun(IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio)
+        public ServicioComun(IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio, IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper)
         {
             _unidadDeTrabajo = unidadDeTrabajo;
             _jobEncoladorServicio = jobEncoladorServicio;
+            _listaDetalleRepositorio = listaDetalleRepositorio;
+            _mapper = mapper;
         }
 
         public async Task EjecutarEnTransaccionAsync(Func<Task> operacion)
@@ -41,6 +49,22 @@ namespace DCO.Aplicacion.Servicios.Interfaces
         {
             foreach (var cola in listaColasSolicitudes)
                 _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
+        }
+
+        public async Task<List<ListaDetalleDto>?> ObtenerListasDetallePorCodigoListaAsync(string codigoLista)
+        {
+            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoLista(codigoLista).ToListAsync();
+            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
+
+            return listasDetallesDto;
+        }
+
+        public async Task<List<ListaDetalleDto>?> ObtenerListasDetalleCodigoConstanteAsync(string codigoConstante)
+        {
+            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoConstante(codigoConstante).ToListAsync();
+            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
+
+            return listasDetallesDto;
         }
 
     }

@@ -20,5 +20,6 @@
     public class EventosNotificarSettings
     {
         public List<string?> ActualizarListasDetalleServicios { get; set; } = new List<string?>();
+        public List<string?> ActualizarConstantesDetalleServicios { get; set; } = new List<string?>();
     }
 }

@@ -7,23 +7,23 @@ namespace ApiDCO.Controllers
 {
     [ApiController]
     [Route("api/datosConstantesDetalles")]
-    [Authorize(policy: "DatosConstantesPermiso")]
+    //[Authorize(policy: "DatosConstantesPermiso")]
     public class DatoConstanteDetalleController : Controller
     {
-        private readonly IDatoConstanteServicio _datoConstanteServicio;
+        private readonly IDatoConstanteDetalleServicio _datoConstanteDetalleServicio;
 
-        public DatoConstanteDetalleController(IDatoConstanteServicio datoConstanteServicio)
+        public DatoConstanteDetalleController(IDatoConstanteDetalleServicio datoConstanteDetalleServicio)
         {
-            _datoConstanteServicio = datoConstanteServicio;
+            _datoConstanteDetalleServicio = datoConstanteDetalleServicio;
         }
 
         [HttpPost("crear")]
-        public async Task<ActionResult<ApiResponse<int>>> Crear(DatoConstanteCreacionRequest datoConstanteCreacionRequest)
+        public async Task<ActionResult<ApiResponse<int>>> Crear(DatoConstanteDetalleCreacionRequest datoConstanteDetalleCreacionRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var respuesta = await _datoConstanteServicio.CrearAsync(datoConstanteCreacionRequest);
+            var respuesta = await _datoConstanteDetalleServicio.CrearAsync(datoConstanteDetalleCreacionRequest);
             return respuesta;
         }
 

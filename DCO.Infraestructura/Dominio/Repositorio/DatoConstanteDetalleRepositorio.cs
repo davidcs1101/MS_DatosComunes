@@ -1,6 +1,7 @@
 ﻿using DCO.DataAccess;
 using DCO.Dominio.Repositorio;
 using DCO.Dominio.Entidades;
+using Microsoft.EntityFrameworkCore;
 
 namespace DCO.Infraestructura.Dominio.Repositorio
 {
@@ -25,6 +26,11 @@ namespace DCO.Infraestructura.Dominio.Repositorio
         public void MarcarEliminar(DCO_DatoConstanteDetalle datoConstanteDetalle)
         {
             _context.DCO_DatosConstantesDetalles.Remove(datoConstanteDetalle);
+        }
+
+        public async Task<DCO_DatoConstanteDetalle?> ObtenerPorDatoConstanteIdYListaDetalleIdAsync(int datoConstanteId, int listaDetalleId)
+        {
+            return await _context.DCO_DatosConstantesDetalles.FirstOrDefaultAsync(g => g.DatoConstanteId == datoConstanteId && g.ListaDetalleId == listaDetalleId);
         }
     }
 }

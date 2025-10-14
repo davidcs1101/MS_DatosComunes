@@ -3,5 +3,6 @@
     public interface IConfiguracionesEventosNotificar
     {
         List<string?> ObtenerActualizarListasDetalleServicios();
+        List<string?> ObtenerActualizarConstantesDetalleServicios();
     }
 }

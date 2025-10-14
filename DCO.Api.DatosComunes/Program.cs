@@ -113,6 +113,9 @@ builder.Services.AddScoped<IListaDetalleServicio, ListaDetalleServicio>();
 builder.Services.AddScoped<IDatoConstanteRepositorio, DatoConstanteRepositorio>();
 builder.Services.AddScoped<IDatoConstanteServicio, DatoConstanteServicio>();
 builder.Services.AddScoped<IColaSolicitudRepositorio, ColaSolicitudRepositorio>();
+builder.Services.AddScoped<IDatoConstanteDetalleRepositorio, DatoConstanteDetalleRepositorio>();
+builder.Services.AddScoped<IDatoConstanteDetalleServicio, DatoConstanteDetalleServicio>();
+
 
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajoEF>();
 

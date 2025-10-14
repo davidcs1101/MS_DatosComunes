@@ -72,10 +72,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 _listaDetalleRepositorio.MarcarCrear(listaDetalle);
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
-                var datosListasDetalle = await this.ListarPorCodigoListaAsync(listaExiste.Codigo);
+                var datosListasDetalle = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(listaExiste.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
-                colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
+                colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
@@ -102,10 +102,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
                 var lista = await _listaRepositorio.ObtenerPorIdAsync(listaDetalleExiste.ListaId);
-                var datosListasDetalle = await this.ListarPorCodigoListaAsync(lista.Codigo);
+                var datosListasDetalle = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(lista.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
-                colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
+                colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
             });
@@ -128,10 +128,10 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
                 var lista = await _listaRepositorio.ObtenerPorIdAsync(listaId);
-                var datosListasDetalle = await this.ListarPorCodigoListaAsync(lista.Codigo);
+                var datosListasDetalle = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(lista.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
-                var colas = this.AgregarColaSolicitud(datosListasDetalle.Data, urls);
+                var colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
@@ -143,17 +143,13 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista)
         {
-            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoLista(codigoLista).ToListAsync();
-            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
-
+            var listasDetallesDto = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(codigoLista);
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
  
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoConstanteAsync(string codigoConstante)
         {
-            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoConstante(codigoConstante).ToListAsync();
-            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
-
+            var listasDetallesDto = await _servicioComun.ObtenerListasDetalleCodigoConstanteAsync(codigoConstante);
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
 

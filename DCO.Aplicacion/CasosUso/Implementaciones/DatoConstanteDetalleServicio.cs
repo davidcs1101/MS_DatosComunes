@@ -20,9 +20,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IDatoConstanteRepositorio _datoConstanteRepositorio;
         private readonly IDatoConstanteDetalleRepositorio _datoConstanteDetalleRepositorio;
         private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
-        private readonly IMapper _mapper;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
-        private readonly IMSSeguridad _msSeguridad;
         private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
         private readonly IApisResponse _apiResponse;
         private readonly IServicioComun _servicioComun;
@@ -36,9 +34,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         public DatoConstanteDetalleServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApisResponse apiResponseServicio, IServicioComun servicioComun, IDatoConstanteDetalleRepositorio datoConstanteDetalleRepositorio, IListaDetalleRepositorio listaDetalleRepositorio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IEntidadValidador<DCO_DatoConstanteDetalle> datoConstanteDetalleValidador, IUnidadDeTrabajo unidadDeTrabajo, IConfiguracionesEventosNotificar configuracionesEventosNotificar, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
-            _mapper = mapper;
             _usuarioContextoServicio = usuarioContextoServicio;
-            _msSeguridad = msSeguridad;
             _datoConstanteValidador = datoConstanteValidador;
             _apiResponse = apiResponseServicio;
             _servicioComun = servicioComun;
@@ -77,6 +73,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
                 _datoConstanteDetalleRepositorio.MarcarCrear(datoConstanteDetalle);
                 await _unidadDeTrabajo.GuardarCambiosAsync();
+
                 var datosListasDetalle = await _servicioComun.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteExiste.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarConstantesDetalleServicios();

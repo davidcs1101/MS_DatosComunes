@@ -20,22 +20,19 @@ namespace ApiDCO.Controllers
         [HttpGet("obtenerPorId")]
         public async Task<ActionResult<ApiResponse<ListaDto?>>> ObtenerPorId(int id)
         {
-            var respuesta = await _listaServicio.ObtenerPorIdAsync(id);
-            return respuesta;
+            return await _listaServicio.ObtenerPorIdAsync(id);
         }
 
         [HttpGet("obtenerPorCodigo")]
         public async Task<ActionResult<ApiResponse<ListaDto?>>> ObtenerPorCodigo(string codigo)
         {
-            var respuesta = await _listaServicio.ObtenerPorCodigoAsync(codigo);
-            return respuesta;
+            return await _listaServicio.ObtenerPorCodigoAsync(codigo);
         }
 
         [HttpGet("listar")]
         public async Task<ActionResult<ApiResponse<List<ListaDto>?>>> Listar()
         {
-            var listas = await _listaServicio.ListarAsync();
-            return listas;
+            return await _listaServicio.ListarAsync();
         }
 
         [HttpPost("crear")]
@@ -44,8 +41,7 @@ namespace ApiDCO.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var respuesta = await _listaServicio.CrearAsync(listaCreacionRequest);
-            return respuesta;
+            return await _listaServicio.CrearAsync(listaCreacionRequest);
         }
 
         [HttpPut("modificar")]
@@ -54,15 +50,13 @@ namespace ApiDCO.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var respuesta = await _listaServicio.ModificarAsync(listaModificacionRequest);
-            return respuesta;
+            return await _listaServicio.ModificarAsync(listaModificacionRequest);
         }
 
         [HttpDelete("eliminar")]
         public async Task<ActionResult<ApiResponse<string>>> Eliminar(int id)
         {
-            var respuesta = await _listaServicio.EliminarAsync(id);
-            return respuesta;
+            return await _listaServicio.EliminarAsync(id);
         }
     }
 }

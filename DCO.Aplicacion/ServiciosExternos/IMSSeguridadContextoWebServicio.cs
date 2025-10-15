@@ -7,6 +7,7 @@ namespace DCO.Aplicacion.ServiciosExternos
     {
         [Get("/usuarios/obtenerNombreUsuarioPorId")]
         Task<HttpResponseMessage> ObtenerNombreUsuarioPorIdAsync([Query] int id);
+
         [Post("/usuarios/listar")]
         Task<HttpResponseMessage> ObtenerNombresUsuariosPorIds([Body] IdsListadoDto usuarioIds);
     }

@@ -49,7 +49,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             var id = await _datoConstanteRepositorio.CrearAsync(datoConstante);
 
-            return new ApiResponse<int> { Correcto = true, Mensaje = Textos.Generales.MENSAJE_REGISTRO_CREADO, Data = id };
+            return _apiResponse.CrearRespuesta<int>(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
         public async Task<ApiResponse<string>> ModificarAsync(DatoConstanteModificacionRequest datoConstanteModificacionRequest)

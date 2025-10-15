@@ -158,6 +158,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             var lista = await _listaRepositorio.ObtenerPorCodigoAsync(codigoDetalleRequest.Codigo);
             _listaValidador.ValidarDatoNoEncontrado(lista, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_CODIGO);
 
+
             var listasDetallesMV = await _listaDetalleRepositorio.Listar()
                 .Where(ld => ld.CodigoLista == codigoDetalleRequest.Codigo && ld.Codigo == codigoDetalleRequest.CodigoListaDetalle).FirstOrDefaultAsync();
 

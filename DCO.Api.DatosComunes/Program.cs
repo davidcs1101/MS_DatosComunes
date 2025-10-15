@@ -121,14 +121,14 @@ builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajoEF>();
 
 builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<>));
 
-builder.Services.AddScoped<IApisResponse, ApisResponse>();
+builder.Services.AddSingleton<IApisResponse, ApisResponse>();
 builder.Services.AddScoped<IMSSeguridad, MSSeguridad>();
-builder.Services.AddScoped<IRespuestaHttpValidador, RespuestaHttpValidador>();
+builder.Services.AddSingleton<IRespuestaHttpValidador, RespuestaHttpValidador>();
 builder.Services.AddScoped<IColaSolicitudServicio, ColaSolicitudServicio>();
 builder.Services.AddScoped<IJobEncoladorServicio, JobEncoladorServicio>();
 builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
 
-builder.Services.AddScoped<ISerializadorJsonServicio, SerializadorJsonServicio>();
+builder.Services.AddSingleton<ISerializadorJsonServicio, SerializadorJsonServicio>();
 
 builder.Services.AddScoped<IServicioComun, ServicioComun>();
 

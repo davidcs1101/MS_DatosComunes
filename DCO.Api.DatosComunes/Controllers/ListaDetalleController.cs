@@ -45,29 +45,25 @@ namespace ApiDCO.Controllers
         [HttpGet("listarPorCodigoLista")]
         public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoLista(string codigoLista)
         {
-            var listasDetatalles = await _listaDetalleServicio.ListarPorCodigoListaAsync(codigoLista);
-            return listasDetatalles;
+            return await _listaDetalleServicio.ListarPorCodigoListaAsync(codigoLista);
         }
 
         [HttpGet("listarPorCodigoConstante")]
         public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstante)
         {
-            var listasDetatalles = await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstante);
-            return listasDetatalles;
+            return await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstante);
         }
 
         [HttpPost("obtenerPorCodigoConstanteYCodigoListaDetalle")]
         public async Task<ActionResult<ApiResponse<ListaDetalleDto?>>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
         {
-            var listasDetatalles = await _listaDetalleServicio.ObtenerPorCodigoConstanteYCodigoListaDetalle(codigoDetalleRequest);
-            return listasDetatalles;
+            return await _listaDetalleServicio.ObtenerPorCodigoConstanteYCodigoListaDetalle(codigoDetalleRequest);
         }
 
         [HttpPost("obtenerPorCodigoListaYCodigoListaDetalle")]
         public async Task<ActionResult<ApiResponse<ListaDetalleDto?>>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
         {
-            var listasDetatalles = await _listaDetalleServicio.ObtenerPorCodigoListaYCodigoListaDetalle(codigoDetalleRequest);
-            return listasDetatalles;
+            return await _listaDetalleServicio.ObtenerPorCodigoListaYCodigoListaDetalle(codigoDetalleRequest);
         }
     }
 }

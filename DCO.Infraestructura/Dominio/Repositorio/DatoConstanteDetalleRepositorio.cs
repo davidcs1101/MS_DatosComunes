@@ -28,6 +28,13 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             _context.DCO_DatosConstantesDetalles.Remove(datoConstanteDetalle);
         }
 
+        public async Task<DCO_DatoConstanteDetalle?> ObtenerPorId(int id)
+        {
+            return await _context.DCO_DatosConstantesDetalles
+                .Include(d => d.DatoConstante)
+                .FirstOrDefaultAsync(d => d.Id == id);
+        }
+
         public async Task<DCO_DatoConstanteDetalle?> ObtenerPorDatoConstanteIdYListaDetalleIdAsync(int datoConstanteId, int listaDetalleId)
         {
             return await _context.DCO_DatosConstantesDetalles.FirstOrDefaultAsync(g => g.DatoConstanteId == datoConstanteId && g.ListaDetalleId == listaDetalleId);

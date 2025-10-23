@@ -59,7 +59,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
                 var listaDetalleExiste = await _listaDetalleRepositorio.ObtenerPorListaIdYCodigoAsync(
                     datoConstanteExiste.ListaId,datoConstanteDetalleCreacionRequest.CodigoListaDetalle);
-                _listaDetalleValidador.ValidarDatoNoEncontrado(listaDetalleExiste, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_CODIGO);
+                _listaDetalleValidador.ValidarDatoNoEncontrado(listaDetalleExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_LISTA_NO_EXISTE_CODIGO);
 
                 var datoConstanteDetalleExiste = await _datoConstanteDetalleRepositorio.ObtenerPorDatoConstanteIdYListaDetalleIdAsync(
                     datoConstanteExiste.Id, listaDetalleExiste.Id);
@@ -86,6 +86,33 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             _servicioComun.EncolarSolicitudes(colas);
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
+        }
+
+        public async Task<ApiResponse<string>> ModificarAsync(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
+        {
+            var colas = new List<DCO_ColaSolicitud>();
+            await _servicioComun.EjecutarEnTransaccionAsync(async () =>
+            {
+                var datoConstanteDetalleExiste = await _datoConstanteDetalleRepositorio.ObtenerPorId(datoConstanteDetalleModificacionRequest.Id);
+                _datoConstanteDetalleValidador.ValidarDatoNoEncontrado(datoConstanteDetalleExiste, Textos.DatosConstantesDetalles.MENSAJE_DATOCONSTANTEDETALLE_LISTADETALLE_NO_EXISTE_ID);
+
+                datoConstanteDetalleExiste.FechaModificado = DateTime.Now;
+                datoConstanteDetalleExiste.UsuarioModificadorId = _usuarioContextoServicio.ObtenerUsuarioIdToken();
+                datoConstanteDetalleExiste.EstadoActivo = datoConstanteDetalleModificacionRequest.EstadoActivo;
+
+                _datoConstanteDetalleRepositorio.MarcarModificar(datoConstanteDetalleExiste);
+                await _unidadDeTrabajo.GuardarCambiosAsync();
+
+                var datosListasDetalle = await _servicioComun.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteDetalleExiste.DatoConstante.Codigo);
+
+                var urls = _configuracionesEventosNotificar.ObtenerActualizarConstantesDetalleServicios();
+                colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
+
+                await _unidadDeTrabajo.GuardarCambiosAsync();
+            });
+
+            _servicioComun.EncolarSolicitudes(colas);
+            return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
         private List<DCO_ColaSolicitud> AgregarColaSolicitud(List<ListaDetalleDto> datosListasDetalle, List<string> urls)

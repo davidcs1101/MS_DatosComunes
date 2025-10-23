@@ -25,5 +25,14 @@ namespace ApiDCO.Controllers
 
             return await _datoConstanteDetalleServicio.CrearAsync(datoConstanteDetalleCreacionRequest);
         }
+
+        [HttpPut("modificar")]
+        public async Task<ActionResult<ApiResponse<string>>> Modificar(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return await _datoConstanteDetalleServicio.ModificarAsync(datoConstanteDetalleModificacionRequest);
+        }
     }
 }

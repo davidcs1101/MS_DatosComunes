@@ -1,6 +1,6 @@
-﻿using DCO.Dominio.Excepciones;
+﻿using DCO.Aplicacion.ServiciosExternos;
+using DCO.Dominio.Excepciones;
 using DCO.Dtos;
-using DCO.Infraestructura.Servicios.Interfaces;
 using System.Net.Http.Json;
 
 namespace DCO.Infraestructura.Servicios.Implementaciones

@@ -32,9 +32,9 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IColaSolicitudRepositorio _colaSolicitudRepositorio;
         private readonly IConfiguracionesEventosNotificar _configuracionesEventosNotificar;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
-        private readonly IServicioComun _servicioComun;
+        private readonly IProcesadorTransacciones _procesadorTransacciones;
 
-        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApisResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleMVValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio, IListaRepositorio listaRepositorio, IEntidadValidador<DCO_Lista> listaValidador, IUnidadDeTrabajo unidadDeTrabajo, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio, IConfiguracionesEventosNotificar configuracionesEventosNotificar, IUsuarioContextoServicio usuarioContextoServicio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IServicioComun servicioComun)
+        public ListaDetalleServicio(IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper, IApisResponse apiResponseServicio, IEntidadValidador<ListaDetalleMV> entidadValidador, IEntidadValidador<ListaDetalleMV> listaDetalleMVValidador, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IDatoConstanteRepositorio datoConstanteRepositorio, IListaRepositorio listaRepositorio, IEntidadValidador<DCO_Lista> listaValidador, IUnidadDeTrabajo unidadDeTrabajo, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio, IConfiguracionesEventosNotificar configuracionesEventosNotificar, IUsuarioContextoServicio usuarioContextoServicio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IProcesadorTransacciones procesadorTransacciones)
         {
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _mapper = mapper;
@@ -50,14 +50,14 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _configuracionesEventosNotificar = configuracionesEventosNotificar;
             _usuarioContextoServicio = usuarioContextoServicio;
             _listaDetalleValidador = listaDetalleValidador;
-            _servicioComun = servicioComun;
+            _procesadorTransacciones = procesadorTransacciones;
         }
 
         public async Task<ApiResponse<int>> CrearAsync(ListaDetalleCreacionRequest listaDetalleCreacionRequest)
         {
             var id = 0;
             var colas = new List<DCO_ColaSolicitud>();
-            await _servicioComun.EjecutarEnTransaccionAsync(async () =>
+            await _procesadorTransacciones.EjecutarEnTransaccionAsync(async () =>
             {
                 var listaExiste = await _listaRepositorio.ObtenerPorCodigoAsync(listaDetalleCreacionRequest.CodigoLista);
                 _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_CODIGO);
@@ -72,7 +72,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 _listaDetalleRepositorio.MarcarCrear(listaDetalle);
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
-                var datosListasDetalle = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(listaExiste.Codigo);
+                var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetallePorCodigoListaAsync(listaExiste.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
                 colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
@@ -82,14 +82,14 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 id = listaDetalle.Id;
             });
 
-            _servicioComun.EncolarSolicitudes(colas);
+            _procesadorTransacciones.EncolarSolicitudes(colas);
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
         public async Task<ApiResponse<string>> ModificarAsync(ListaDetalleModificacionRequest listaDetalleModificacionRequest)
         {
             var colas = new List<DCO_ColaSolicitud>();
-            await _servicioComun.EjecutarEnTransaccionAsync(async() => 
+            await _procesadorTransacciones.EjecutarEnTransaccionAsync(async() => 
             {
                 var listaDetalleExiste = await _listaDetalleRepositorio.ObtenerPorIdAsync(listaDetalleModificacionRequest.Id);
                 _listaDetalleValidador.ValidarDatoNoEncontrado(listaDetalleExiste, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_ID);
@@ -102,7 +102,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
                 var lista = await _listaRepositorio.ObtenerPorIdAsync(listaDetalleExiste.ListaId);
-                var datosListasDetalle = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(lista.Codigo);
+                var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetallePorCodigoListaAsync(lista.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
                 colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
@@ -110,14 +110,14 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 await _unidadDeTrabajo.GuardarCambiosAsync();
             });
 
-            _servicioComun.EncolarSolicitudes(colas);
+            _procesadorTransacciones.EncolarSolicitudes(colas);
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
         public async Task<ApiResponse<string>> EliminarAsync(int id)
         {
             var colas = new List<DCO_ColaSolicitud>();
-            await _servicioComun.EjecutarEnTransaccionAsync(async () =>
+            await _procesadorTransacciones.EjecutarEnTransaccionAsync(async () =>
             {
                 var listaDetalleExiste = await _listaDetalleRepositorio.ObtenerPorIdAsync(id);
                 _listaDetalleValidador.ValidarDatoNoEncontrado(listaDetalleExiste, Textos.ListasDetalles.MENSAJE_LISTADETALLE_NO_EXISTE_ID);
@@ -128,7 +128,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
                 var lista = await _listaRepositorio.ObtenerPorIdAsync(listaId);
-                var datosListasDetalle = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(lista.Codigo);
+                var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetallePorCodigoListaAsync(lista.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarListasDetalleServicios();
                 var colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
@@ -137,19 +137,19 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
             });
 
-            _servicioComun.EncolarSolicitudes(colas);
+            _procesadorTransacciones.EncolarSolicitudes(colas);
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ELIMINADO, "");
         }
 
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista)
         {
-            var listasDetallesDto = await _servicioComun.ObtenerListasDetallePorCodigoListaAsync(codigoLista);
+            var listasDetallesDto = await _procesadorTransacciones.ObtenerListasDetallePorCodigoListaAsync(codigoLista);
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
  
         public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoConstanteAsync(string codigoConstante)
         {
-            var listasDetallesDto = await _servicioComun.ObtenerListasDetalleCodigoConstanteAsync(codigoConstante);
+            var listasDetallesDto = await _procesadorTransacciones.ObtenerListasDetalleCodigoConstanteAsync(codigoConstante);
             return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
         }
 

@@ -1,6 +1,5 @@
 ﻿using DCO.Dtos;
 using DCO.Aplicacion.ServiciosExternos;
-using DCO.Infraestructura.Servicios.Interfaces;
 using System.Net.Http.Json;
 using Utilidades;
 using DCO.Aplicacion.ServiciosExternos.config;

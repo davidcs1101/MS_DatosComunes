@@ -3,7 +3,6 @@ using DCO.Aplicacion.ServiciosExternos;
 using DCO.Dtos;
 using Utilidades;
 using DCO.Aplicacion.ServiciosExternos.config;
-using DCO.Infraestructura.Servicios.Interfaces;
 using DCO.Dominio.Excepciones;
 
 namespace DCO.Api.DatosComunes.Middlewares

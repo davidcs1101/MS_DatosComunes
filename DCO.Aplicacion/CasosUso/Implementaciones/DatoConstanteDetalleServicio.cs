@@ -23,7 +23,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
         private readonly IApisResponse _apiResponse;
-        private readonly IServicioComun _servicioComun;
+        private readonly IProcesadorTransacciones _procesadorTransacciones;
         private readonly IEntidadValidador<DCO_ListaDetalle> _listaDetalleValidador;
         private readonly IEntidadValidador<DCO_DatoConstanteDetalle> _datoConstanteDetalleValidador;
         private readonly IUnidadDeTrabajo _unidadDeTrabajo;
@@ -31,13 +31,13 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly ISerializadorJsonServicio _serializadorJsonServicio;
         private readonly IColaSolicitudRepositorio _colaSolicitudRepositorio;
 
-        public DatoConstanteDetalleServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApisResponse apiResponseServicio, IServicioComun servicioComun, IDatoConstanteDetalleRepositorio datoConstanteDetalleRepositorio, IListaDetalleRepositorio listaDetalleRepositorio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IEntidadValidador<DCO_DatoConstanteDetalle> datoConstanteDetalleValidador, IUnidadDeTrabajo unidadDeTrabajo, IConfiguracionesEventosNotificar configuracionesEventosNotificar, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio)
+        public DatoConstanteDetalleServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApisResponse apiResponseServicio, IProcesadorTransacciones procesadorTransacciones, IDatoConstanteDetalleRepositorio datoConstanteDetalleRepositorio, IListaDetalleRepositorio listaDetalleRepositorio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IEntidadValidador<DCO_DatoConstanteDetalle> datoConstanteDetalleValidador, IUnidadDeTrabajo unidadDeTrabajo, IConfiguracionesEventosNotificar configuracionesEventosNotificar, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _usuarioContextoServicio = usuarioContextoServicio;
             _datoConstanteValidador = datoConstanteValidador;
             _apiResponse = apiResponseServicio;
-            _servicioComun = servicioComun;
+            _procesadorTransacciones = procesadorTransacciones;
             _datoConstanteDetalleRepositorio = datoConstanteDetalleRepositorio;
             _listaDetalleRepositorio = listaDetalleRepositorio;
             _listaDetalleValidador = listaDetalleValidador;
@@ -52,7 +52,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         {
             var id = 0;
             var colas = new List<DCO_ColaSolicitud>();
-            await _servicioComun.EjecutarEnTransaccionAsync(async () =>
+            await _procesadorTransacciones.EjecutarEnTransaccionAsync(async () =>
             {
                 var datoConstanteExiste = await _datoConstanteRepositorio.ObtenerPorCodigoAsync(datoConstanteDetalleCreacionRequest.CodigoConstante);
                 _datoConstanteValidador.ValidarDatoNoEncontrado(datoConstanteExiste, Textos.DatosConstantes.MENSAJE_DATOCONSTANTE_NO_EXISTE_CODIGO);
@@ -74,7 +74,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 _datoConstanteDetalleRepositorio.MarcarCrear(datoConstanteDetalle);
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
-                var datosListasDetalle = await _servicioComun.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteExiste.Codigo);
+                var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteExiste.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarConstantesDetalleServicios();
                 colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
@@ -84,14 +84,14 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 id = datoConstanteDetalle.Id;
             });
 
-            _servicioComun.EncolarSolicitudes(colas);
+            _procesadorTransacciones.EncolarSolicitudes(colas);
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
         public async Task<ApiResponse<string>> ModificarAsync(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
         {
             var colas = new List<DCO_ColaSolicitud>();
-            await _servicioComun.EjecutarEnTransaccionAsync(async () =>
+            await _procesadorTransacciones.EjecutarEnTransaccionAsync(async () =>
             {
                 var datoConstanteDetalleExiste = await _datoConstanteDetalleRepositorio.ObtenerPorId(datoConstanteDetalleModificacionRequest.Id);
                 _datoConstanteDetalleValidador.ValidarDatoNoEncontrado(datoConstanteDetalleExiste, Textos.DatosConstantesDetalles.MENSAJE_DATOCONSTANTEDETALLE_LISTADETALLE_NO_EXISTE_ID);
@@ -103,7 +103,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 _datoConstanteDetalleRepositorio.MarcarModificar(datoConstanteDetalleExiste);
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
-                var datosListasDetalle = await _servicioComun.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteDetalleExiste.DatoConstante.Codigo);
+                var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteDetalleExiste.DatoConstante.Codigo);
 
                 var urls = _configuracionesEventosNotificar.ObtenerActualizarConstantesDetalleServicios();
                 colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
@@ -111,7 +111,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 await _unidadDeTrabajo.GuardarCambiosAsync();
             });
 
-            _servicioComun.EncolarSolicitudes(colas);
+            _procesadorTransacciones.EncolarSolicitudes(colas);
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 

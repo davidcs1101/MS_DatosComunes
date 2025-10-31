@@ -1,71 +1,31 @@
 ﻿using DCO.Aplicacion.ServiciosExternos;
-using DCO.Dominio.Repositorio.UnidadTrabajo;
-using DCO.Dominio.Excepciones;
-using DCO.Dominio.Entidades;
-using DCO.Dominio.Repositorio;
 using DCO.Dtos;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace DCO.Aplicacion.Servicios.Interfaces
 {
     public class ServicioComun : IServicioComun
     {
-        private readonly IUnidadDeTrabajo _unidadDeTrabajo;
-        private readonly IJobEncoladorServicio _jobEncoladorServicio;
-        private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
-        private readonly IMapper _mapper;
+        private readonly IRespuestaHttpValidador _respuestaHttpValidador;
+        private readonly ISerializadorJsonServicio _serializadorJsonServicio;
 
-        public ServicioComun(IUnidadDeTrabajo unidadDeTrabajo, IJobEncoladorServicio jobEncoladorServicio, IListaDetalleRepositorio listaDetalleRepositorio, IMapper mapper)
+        public ServicioComun(IRespuestaHttpValidador respuestaHttpValidador, ISerializadorJsonServicio serializadorJsonServicio)
         {
-            _unidadDeTrabajo = unidadDeTrabajo;
-            _jobEncoladorServicio = jobEncoladorServicio;
-            _listaDetalleRepositorio = listaDetalleRepositorio;
-            _mapper = mapper;
+            _respuestaHttpValidador = respuestaHttpValidador;
+            _serializadorJsonServicio = serializadorJsonServicio;
         }
 
-        public async Task EjecutarEnTransaccionAsync(Func<Task> operacion)
+        public async Task<TReturn> ObtenerIdListaDetalleAsync<TRequest, TSerializacion, TReturn>
+            (Func<TRequest, Task<HttpResponseMessage>> funcionEjecutar
+            , TRequest request
+            , Func<TSerializacion, TReturn> obtenerValor
+            )
         {
-            await using var transaccion = await _unidadDeTrabajo.IniciarTransaccionAsync();
+            var respuesta = await funcionEjecutar(request);
+            await _respuestaHttpValidador.ValidarRespuesta(respuesta, Utilidades.Textos.Generales.MENSAJE_ERROR_CONSUMO_SERVICIO);
+            var contenidoJson = await respuesta.Content.ReadAsStringAsync();
+            var resultado = _serializadorJsonServicio.Deserializar<ApiResponse<TSerializacion?>>(contenidoJson);
 
-            try{
-                await operacion();
-                await transaccion.CommitAsync();
-            }
-            catch (DatoNoEncontradoException){
-                await transaccion.RollbackAsync();
-                throw;
-            }
-            catch (DatoYaExisteException){
-                await transaccion.RollbackAsync();
-                throw;}
-            catch{
-                await transaccion.RollbackAsync();
-                throw;
-            }
+            return obtenerValor(resultado.Data);
         }
-
-        public void EncolarSolicitudes(List<DCO_ColaSolicitud> listaColasSolicitudes) 
-        {
-            foreach (var cola in listaColasSolicitudes)
-                _ = _jobEncoladorServicio.EncolarPorColaSolicitudId(cola.Id, true);
-        }
-
-        public async Task<List<ListaDetalleDto>?> ObtenerListasDetallePorCodigoListaAsync(string codigoLista)
-        {
-            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoLista(codigoLista).ToListAsync();
-            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
-
-            return listasDetallesDto;
-        }
-
-        public async Task<List<ListaDetalleDto>?> ObtenerListasDetalleCodigoConstanteAsync(string codigoConstante)
-        {
-            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigoConstante(codigoConstante).ToListAsync();
-            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
-
-            return listasDetallesDto;
-        }
-
     }
 }

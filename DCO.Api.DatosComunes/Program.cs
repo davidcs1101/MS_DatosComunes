@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using DCO.Api.DatosComunes.Middlewares;
 using DCO.Infraestructura.Dominio.Repositorio;
 using DCO.Infraestructura.Aplicacion.ServiciosExternos;
-using DCO.Infraestructura.Servicios.Interfaces;
 using DCO.Infraestructura.Servicios.Implementaciones;
 using DCO.Aplicacion.CasosUso.Implementaciones;
 using DCO.Aplicacion.CasosUso.Interfaces;
@@ -122,7 +121,7 @@ builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajoEF>();
 builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<>));
 
 builder.Services.AddSingleton<IApisResponse, ApisResponse>();
-builder.Services.AddScoped<IMSSeguridad, MSSeguridad>();
+builder.Services.AddSingleton<IMSSeguridad, MSSeguridad>();
 builder.Services.AddSingleton<IRespuestaHttpValidador, RespuestaHttpValidador>();
 builder.Services.AddScoped<IColaSolicitudServicio, ColaSolicitudServicio>();
 builder.Services.AddScoped<IJobEncoladorServicio, JobEncoladorServicio>();
@@ -130,7 +129,8 @@ builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
 
 builder.Services.AddSingleton<ISerializadorJsonServicio, SerializadorJsonServicio>();
 
-builder.Services.AddScoped<IServicioComun, ServicioComun>();
+builder.Services.AddScoped<IProcesadorTransacciones, ProcesadorTransacciones>();
+builder.Services.AddSingleton<IServicioComun, ServicioComun>();
 
 #region REG_Servicios de configuraciones Appsettings
 builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));

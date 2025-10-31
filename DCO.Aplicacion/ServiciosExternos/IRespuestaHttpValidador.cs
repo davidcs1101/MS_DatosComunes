@@ -1,4 +1,4 @@
-﻿namespace DCO.Infraestructura.Servicios.Interfaces
+﻿namespace DCO.Aplicacion.ServiciosExternos
 {
     public interface IRespuestaHttpValidador
     {

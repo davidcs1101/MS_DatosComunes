@@ -130,7 +130,6 @@ builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
 builder.Services.AddSingleton<ISerializadorJsonServicio, SerializadorJsonServicio>();
 
 builder.Services.AddScoped<IProcesadorTransacciones, ProcesadorTransacciones>();
-builder.Services.AddSingleton<IServicioComun, ServicioComun>();
 
 #region REG_Servicios de configuraciones Appsettings
 builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));

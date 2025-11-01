@@ -28,9 +28,19 @@ namespace DCO.Aplicacion.Servicios.Interfaces
         {
             await using var transaccion = await _unidadDeTrabajo.IniciarTransaccionAsync();
 
-            try{
+            try
+            {
                 await operacion();
                 await transaccion.CommitAsync();
+            }
+            catch (SolicitudHttpException){
+                /*
+                 *Tabmbien Hacemos RollBack si las solicitudes Http 
+                 *fallan dado que puede ocurrir presencia de consumo a microservicios antes o despues de haber
+                 *guardado cambios de base de datos.
+                */
+                await transaccion.RollbackAsync();
+                throw;
             }
             catch (DatoNoEncontradoException){
                 await transaccion.RollbackAsync();
@@ -38,7 +48,8 @@ namespace DCO.Aplicacion.Servicios.Interfaces
             }
             catch (DatoYaExisteException){
                 await transaccion.RollbackAsync();
-                throw;}
+                throw;
+            }
             catch{
                 await transaccion.RollbackAsync();
                 throw;

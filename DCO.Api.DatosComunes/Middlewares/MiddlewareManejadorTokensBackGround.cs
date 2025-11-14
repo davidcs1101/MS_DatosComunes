@@ -25,7 +25,7 @@ namespace DCO.Api.DatosComunes.Middlewares
             var token = await this.AutenticarUsuarioAsync();
             if (!string.IsNullOrEmpty(token))
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.Replace("Bearer", ""));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
             return await base.SendAsync(request, cancellationToken);
         }
@@ -50,11 +50,11 @@ namespace DCO.Api.DatosComunes.Middlewares
 
             var respuesta = await _msSeguridadBackgroundServicio.AutenticarUsuarioAsync(autenticacionRequest);
             await _respuestaHttpValidador.ValidarRespuesta(respuesta, Textos.Generales.MENSAJE_ERROR_CONSUMO_SERVICIO);
-            var contenido = await respuesta.Content.ReadFromJsonAsync<ApiResponse<string>>();
+            var contenido = await respuesta.Content.ReadFromJsonAsync<ApiResponse<AutenticacionResponse>>();
             if (contenido?.Data == null)
                 throw new LoguinException(Textos.Usuarios.MENSAJE_LOGIN_INCORRECTO);
 
-            return contenido?.Data;
+            return contenido?.Data.Token;
         }
     }
 }

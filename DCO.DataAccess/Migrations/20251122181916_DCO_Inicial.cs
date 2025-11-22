@@ -43,29 +43,6 @@ namespace DCO.DataAcces.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "DCO_Departamento",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Codigo = table.Column<string>(type: "varchar(5)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Nombre = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Indicativo = table.Column<short>(type: "smallint", nullable: false),
-                    UsuarioCreadorId = table.Column<int>(type: "int", nullable: false),
-                    FechaCreado = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UsuarioModificadorId = table.Column<int>(type: "int", nullable: true),
-                    FechaModificado = table.Column<DateTime>(type: "datetime", nullable: true),
-                    EstadoActivo = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DCO_Departamento", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "DCO_Listas",
                 columns: table => new
                 {
@@ -88,16 +65,16 @@ namespace DCO.DataAcces.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "DCO_Municipio",
+                name: "DCO_Pais",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    DepartamentoId = table.Column<int>(type: "int", nullable: false),
                     Codigo = table.Column<string>(type: "varchar(5)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Nombre = table.Column<string>(type: "varchar(250)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Indicativo = table.Column<short>(type: "smallint", nullable: false),
                     UsuarioCreadorId = table.Column<int>(type: "int", nullable: false),
                     FechaCreado = table.Column<DateTime>(type: "datetime", nullable: false),
                     UsuarioModificadorId = table.Column<int>(type: "int", nullable: true),
@@ -106,13 +83,7 @@ namespace DCO.DataAcces.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DCO_Municipio", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DCO_Municipio_DCO_Departamento_DepartamentoId",
-                        column: x => x.DepartamentoId,
-                        principalTable: "DCO_Departamento",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_DCO_Pais", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -175,16 +146,17 @@ namespace DCO.DataAcces.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "DCO_Barrio",
+                name: "DCO_Departamento",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    MunicipioId = table.Column<int>(type: "int", nullable: false),
+                    PaisId = table.Column<int>(type: "int", nullable: false),
                     Codigo = table.Column<string>(type: "varchar(5)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Nombre = table.Column<string>(type: "varchar(250)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Indicativo = table.Column<short>(type: "smallint", nullable: false),
                     UsuarioCreadorId = table.Column<int>(type: "int", nullable: false),
                     FechaCreado = table.Column<DateTime>(type: "datetime", nullable: false),
                     UsuarioModificadorId = table.Column<int>(type: "int", nullable: true),
@@ -193,11 +165,11 @@ namespace DCO.DataAcces.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DCO_Barrio", x => x.Id);
+                    table.PrimaryKey("PK_DCO_Departamento", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DCO_Barrio_DCO_Municipio_MunicipioId",
-                        column: x => x.MunicipioId,
-                        principalTable: "DCO_Municipio",
+                        name: "FK_DCO_Departamento_DCO_Pais_PaisId",
+                        column: x => x.PaisId,
+                        principalTable: "DCO_Pais",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -235,78 +207,141 @@ namespace DCO.DataAcces.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.InsertData(
-                table: "DCO_Departamento",
-                columns: new[] { "Id", "Codigo", "EstadoActivo", "FechaCreado", "FechaModificado", "Indicativo", "Nombre", "UsuarioCreadorId", "UsuarioModificadorId" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "DCO_Municipio",
+                columns: table => new
                 {
-                    { 1, "05", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9510), null, (short)4, "ANTIOQUIA", 1, null },
-                    { 2, "08", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9512), null, (short)5, "ATLANTICO", 1, null },
-                    { 3, "11", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9514), null, (short)1, "BOGOTA", 1, null },
-                    { 4, "13", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9516), null, (short)5, "BOLIVAR", 1, null },
-                    { 5, "15", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9518), null, (short)8, "BOYACA", 1, null },
-                    { 6, "17", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9519), null, (short)6, "CALDAS", 1, null },
-                    { 7, "18", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9521), null, (short)8, "CAQUETA", 1, null },
-                    { 8, "19", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9523), null, (short)2, "CAUCA", 1, null },
-                    { 9, "20", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9524), null, (short)5, "CESAR", 1, null },
-                    { 10, "23", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9526), null, (short)4, "CORDOBA", 1, null },
-                    { 11, "25", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9528), null, (short)1, "CUNDINAMARCA", 1, null },
-                    { 12, "27", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9530), null, (short)4, "CHOCO", 1, null },
-                    { 13, "41", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9531), null, (short)8, "HUILA", 1, null },
-                    { 14, "44", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9533), null, (short)5, "LA GUAJIRA", 1, null },
-                    { 15, "47", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9535), null, (short)5, "MAGDALENA", 1, null },
-                    { 16, "50", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9536), null, (short)8, "META", 1, null },
-                    { 17, "52", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9538), null, (short)2, "NARIÑO", 1, null },
-                    { 18, "54", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9539), null, (short)7, "N. DE SANTANDER", 1, null },
-                    { 19, "63", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9541), null, (short)6, "QUINDIO", 1, null },
-                    { 20, "66", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9543), null, (short)6, "RISARALDA", 1, null },
-                    { 21, "68", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9544), null, (short)7, "SANTANDER", 1, null },
-                    { 22, "70", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9546), null, (short)5, "SUCRE", 1, null },
-                    { 23, "73", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9548), null, (short)8, "TOLIMA", 1, null },
-                    { 24, "76", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9549), null, (short)2, "VALLE DEL CAUCA", 1, null },
-                    { 25, "81", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9551), null, (short)7, "ARAUCA", 1, null },
-                    { 26, "85", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9553), null, (short)8, "CASANARE", 1, null },
-                    { 27, "86", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9554), null, (short)8, "PUTUMAYO", 1, null },
-                    { 28, "88", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9556), null, (short)8, "SAN ANDRES", 1, null },
-                    { 29, "91", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9557), null, (short)8, "AMAZONAS", 1, null },
-                    { 30, "94", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9559), null, (short)8, "GUAINIA", 1, null },
-                    { 31, "95", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9561), null, (short)8, "GUAVIARE", 1, null },
-                    { 32, "97", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9563), null, (short)8, "VAUPES", 1, null },
-                    { 33, "98", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9564), null, (short)0, "EXTRANJERO", 1, null },
-                    { 34, "99", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9566), null, (short)8, "VICHADA", 1, null }
-                });
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    DepartamentoId = table.Column<int>(type: "int", nullable: false),
+                    Codigo = table.Column<string>(type: "varchar(5)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nombre = table.Column<string>(type: "varchar(250)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UsuarioCreadorId = table.Column<int>(type: "int", nullable: false),
+                    FechaCreado = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UsuarioModificadorId = table.Column<int>(type: "int", nullable: true),
+                    FechaModificado = table.Column<DateTime>(type: "datetime", nullable: true),
+                    EstadoActivo = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DCO_Municipio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DCO_Municipio_DCO_Departamento_DepartamentoId",
+                        column: x => x.DepartamentoId,
+                        principalTable: "DCO_Departamento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "DCO_Barrio",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    MunicipioId = table.Column<int>(type: "int", nullable: false),
+                    Codigo = table.Column<string>(type: "varchar(5)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nombre = table.Column<string>(type: "varchar(250)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UsuarioCreadorId = table.Column<int>(type: "int", nullable: false),
+                    FechaCreado = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UsuarioModificadorId = table.Column<int>(type: "int", nullable: true),
+                    FechaModificado = table.Column<DateTime>(type: "datetime", nullable: true),
+                    EstadoActivo = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DCO_Barrio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DCO_Barrio_DCO_Municipio_MunicipioId",
+                        column: x => x.MunicipioId,
+                        principalTable: "DCO_Municipio",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.InsertData(
                 table: "DCO_Listas",
                 columns: new[] { "Id", "Codigo", "EstadoActivo", "FechaCreado", "FechaModificado", "Nombre", "UsuarioCreadorId", "UsuarioModificadorId" },
                 values: new object[,]
                 {
-                    { 1, "CARGOSEMPLEADOS", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9288), null, "CARGOS PARA EMPLEADOS", 1, null },
-                    { 2, "CAUSASEXTERNAS", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9292), null, "CAUSAS EXTERNAS SALUD", 1, null },
-                    { 3, "ESPECIALIDAD", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9294), null, "ESPECIALIDADES", 1, null },
-                    { 4, "NIVELESCOMPLEJIDAD", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9296), null, "NIVELES DE COMPLEJIDAD EN SALUD", 1, null },
-                    { 5, "ESTADOANEXOS", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9298), null, "ESTADOS DE LOS ANEXOS TÉCNICOS", 1, null },
-                    { 6, "SERVICIOS", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9300), null, "SERVICIOS DE SALUD", 1, null },
-                    { 7, "SEXOBIOLOGICO", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9302), null, "SEXO BIOLÓGICO", 1, null },
-                    { 8, "TIPOAFILIACION", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9303), null, "TIPOS DE AFILIACIÓN EN SALUD", 1, null },
-                    { 9, "TIPOSIDENTIFICACION", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9345), null, "TIPOS DE IDENTIFICACIÓN", 1, null },
-                    { 10, "TIPOREGIMEN", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9347), null, "TIPOS DE REGIMEN EN SALUD", 1, null },
-                    { 11, "TIPOSTRIAGE", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9349), null, "TIPOS DE TRIAGE", 1, null }
+                    { 1, "CARGOSEMPLEADOS", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3859), null, "CARGOS PARA EMPLEADOS", 1, null },
+                    { 2, "CAUSASEXTERNAS", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3862), null, "CAUSAS EXTERNAS SALUD", 1, null },
+                    { 3, "ESPECIALIDAD", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3864), null, "ESPECIALIDADES", 1, null },
+                    { 4, "NIVELESCOMPLEJIDAD", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3866), null, "NIVELES DE COMPLEJIDAD EN SALUD", 1, null },
+                    { 5, "ESTADOANEXOS", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3868), null, "ESTADOS DE LOS ANEXOS TÉCNICOS", 1, null },
+                    { 6, "SERVICIOS", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3870), null, "SERVICIOS DE SALUD", 1, null },
+                    { 7, "SEXOBIOLOGICO", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3871), null, "SEXO BIOLÓGICO", 1, null },
+                    { 8, "TIPOAFILIACION", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3873), null, "TIPOS DE AFILIACIÓN EN SALUD", 1, null },
+                    { 9, "TIPOSIDENTIFICACION", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3875), null, "TIPOS DE IDENTIFICACIÓN", 1, null },
+                    { 10, "TIPOREGIMEN", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3877), null, "TIPOS DE REGIMEN EN SALUD", 1, null },
+                    { 11, "TIPOSTRIAGE", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3878), null, "TIPOS DE TRIAGE", 1, null }
                 });
+
+            migrationBuilder.InsertData(
+                table: "DCO_Pais",
+                columns: new[] { "Id", "Codigo", "EstadoActivo", "FechaCreado", "FechaModificado", "Indicativo", "Nombre", "UsuarioCreadorId", "UsuarioModificadorId" },
+                values: new object[] { 1, "COL", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4052), null, (short)57, "COLOMBIA", 1, null });
 
             migrationBuilder.InsertData(
                 table: "DCO_DatosConstantes",
                 columns: new[] { "Id", "Codigo", "EstadoActivo", "FechaCreado", "FechaModificado", "ListaId", "Nombre", "UsuarioCreadorId", "UsuarioModificadorId" },
                 values: new object[,]
                 {
-                    { 1, "CAUSAEXTERNAANEXO2", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9467), null, 2, "CAUSAS EXTERNAS DE CONSULTA PARA ANEXO 2", 1, null },
-                    { 2, "TIPOIDENTIANEXO", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9469), null, 9, "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE ANEXOS TÉCNICOS A PACIENTES", 1, null },
-                    { 3, "TIPOIDENTIEMPRESA", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9471), null, 9, "TIPOS DE IDENTIFICACION PARA REGISTRO DE EMPRESAS", 1, null },
-                    { 4, "TIPOIDENTIREGISTROUSUARIO", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9473), null, 9, "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE USUARIOS DE APLICACIÓN", 1, null },
-                    { 5, "TIPOREGIMENANEXO2", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9475), null, 10, "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 2", 1, null },
-                    { 6, "TIPOREGIMENANEXO3", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9477), null, 10, "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 3", 1, null },
-                    { 7, "TIPOREGIMENANEXO9", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9479), null, 10, "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 9", 1, null },
-                    { 8, "TRIAGEANEXO2", true, new DateTime(2025, 10, 12, 11, 40, 9, 673, DateTimeKind.Local).AddTicks(9480), null, 11, "NIVELES DE TRIAGE PARA EL ANEXO 2", 1, null }
+                    { 1, "CAUSAEXTERNAANEXO2", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4007), null, 2, "CAUSAS EXTERNAS DE CONSULTA PARA ANEXO 2", 1, null },
+                    { 2, "TIPOIDENTIANEXO", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4009), null, 9, "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE ANEXOS TÉCNICOS A PACIENTES", 1, null },
+                    { 3, "TIPOIDENTIEMPRESA", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4011), null, 9, "TIPOS DE IDENTIFICACION PARA REGISTRO DE EMPRESAS", 1, null },
+                    { 4, "TIPOIDENTIREGISTROUSUARIO", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4013), null, 9, "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE USUARIOS DE APLICACIÓN", 1, null },
+                    { 5, "TIPOREGIMENANEXO2", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4015), null, 10, "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 2", 1, null },
+                    { 6, "TIPOREGIMENANEXO3", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4017), null, 10, "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 3", 1, null },
+                    { 7, "TIPOREGIMENANEXO9", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4019), null, 10, "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 9", 1, null },
+                    { 8, "TRIAGEANEXO2", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4021), null, 11, "NIVELES DE TRIAGE PARA EL ANEXO 2", 1, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "DCO_Departamento",
+                columns: new[] { "Id", "Codigo", "EstadoActivo", "FechaCreado", "FechaModificado", "Indicativo", "Nombre", "PaisId", "UsuarioCreadorId", "UsuarioModificadorId" },
+                values: new object[,]
+                {
+                    { 1, "05", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4080), null, (short)4, "ANTIOQUIA", 1, 1, null },
+                    { 2, "08", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4083), null, (short)5, "ATLANTICO", 1, 1, null },
+                    { 3, "11", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4084), null, (short)1, "BOGOTA", 1, 1, null },
+                    { 4, "13", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4086), null, (short)5, "BOLIVAR", 1, 1, null },
+                    { 5, "15", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4120), null, (short)8, "BOYACA", 1, 1, null },
+                    { 6, "17", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4122), null, (short)6, "CALDAS", 1, 1, null },
+                    { 7, "18", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4124), null, (short)8, "CAQUETA", 1, 1, null },
+                    { 8, "19", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4126), null, (short)2, "CAUCA", 1, 1, null },
+                    { 9, "20", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4128), null, (short)5, "CESAR", 1, 1, null },
+                    { 10, "23", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4130), null, (short)4, "CORDOBA", 1, 1, null },
+                    { 11, "25", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4132), null, (short)1, "CUNDINAMARCA", 1, 1, null },
+                    { 12, "27", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4134), null, (short)4, "CHOCO", 1, 1, null },
+                    { 13, "41", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4136), null, (short)8, "HUILA", 1, 1, null },
+                    { 14, "44", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4137), null, (short)5, "LA GUAJIRA", 1, 1, null },
+                    { 15, "47", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4139), null, (short)5, "MAGDALENA", 1, 1, null },
+                    { 16, "50", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4141), null, (short)8, "META", 1, 1, null },
+                    { 17, "52", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4143), null, (short)2, "NARIÑO", 1, 1, null },
+                    { 18, "54", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4145), null, (short)7, "N. DE SANTANDER", 1, 1, null },
+                    { 19, "63", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4146), null, (short)6, "QUINDIO", 1, 1, null },
+                    { 20, "66", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4148), null, (short)6, "RISARALDA", 1, 1, null },
+                    { 21, "68", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4150), null, (short)7, "SANTANDER", 1, 1, null },
+                    { 22, "70", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4152), null, (short)5, "SUCRE", 1, 1, null },
+                    { 23, "73", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4154), null, (short)8, "TOLIMA", 1, 1, null },
+                    { 24, "76", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4155), null, (short)2, "VALLE DEL CAUCA", 1, 1, null },
+                    { 25, "81", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4157), null, (short)7, "ARAUCA", 1, 1, null },
+                    { 26, "85", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4159), null, (short)8, "CASANARE", 1, 1, null },
+                    { 27, "86", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4161), null, (short)8, "PUTUMAYO", 1, 1, null },
+                    { 28, "88", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4163), null, (short)8, "SAN ANDRES", 1, 1, null },
+                    { 29, "91", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4164), null, (short)8, "AMAZONAS", 1, 1, null },
+                    { 30, "94", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4166), null, (short)8, "GUAINIA", 1, 1, null },
+                    { 31, "95", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4168), null, (short)8, "GUAVIARE", 1, 1, null },
+                    { 32, "97", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4170), null, (short)8, "VAUPES", 1, 1, null },
+                    { 33, "98", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4172), null, (short)0, "EXTRANJERO", 1, 1, null },
+                    { 34, "99", true, new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4173), null, (short)8, "VICHADA", 1, 1, null }
                 });
 
 
@@ -3586,6 +3621,7 @@ namespace DCO.DataAcces.Migrations
 
 
 
+
             migrationBuilder.CreateIndex(
                 name: "IX_DCO_Barrio_MunicipioId_Codigo",
                 table: "DCO_Barrio",
@@ -3625,9 +3661,9 @@ namespace DCO.DataAcces.Migrations
                 column: "ListaDetalleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DCO_Departamento_Codigo",
+                name: "IX_DCO_Departamento_PaisId_Codigo",
                 table: "DCO_Departamento",
-                column: "Codigo",
+                columns: new[] { "PaisId", "Codigo" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -3646,6 +3682,12 @@ namespace DCO.DataAcces.Migrations
                 name: "IX_DCO_Municipio_DepartamentoId_Codigo",
                 table: "DCO_Municipio",
                 columns: new[] { "DepartamentoId", "Codigo" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DCO_Pais_Codigo",
+                table: "DCO_Pais",
+                column: "Codigo",
                 unique: true);
         }
 
@@ -3675,6 +3717,9 @@ namespace DCO.DataAcces.Migrations
 
             migrationBuilder.DropTable(
                 name: "DCO_Listas");
+
+            migrationBuilder.DropTable(
+                name: "DCO_Pais");
         }
     }
 }

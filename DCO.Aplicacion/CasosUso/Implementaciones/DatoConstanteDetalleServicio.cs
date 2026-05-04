@@ -122,7 +122,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             {
                 var solicitud = new DCO_ColaSolicitud
                 {
-                    Tipo = Textos.EventosColas.CONSTANTESDETALLEACTUALIZADO,
+                    Tipo = EventosColas.CONSTANTESDETALLEACTUALIZADO,
                     UrlDestino = url,
                     Payload = _serializadorJsonServicio.Serializar(datosListasDetalle),
                     Estado = EstadoCola.Pendiente,

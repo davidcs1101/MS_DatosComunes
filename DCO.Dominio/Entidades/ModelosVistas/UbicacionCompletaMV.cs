@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DCO.Dominio.Entidades.ModelosVistas
 {
-    public class MunicipioMV
+    public class UbicacionCompletaMV
     {
         public int PaisId { get; set; }
         public string CodigoPais { get; set; } = null!;

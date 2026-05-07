@@ -6,7 +6,7 @@
         public int PaisId { get; set; }
         public string Codigo { get; set; } = null!;
         public string Nombre { get; set; } = null!;
-        public short Indicativo { get; set; }
+        public string Indicativo { get; set; } = null!;
 
         public DCO_Pais Pais { get; set; } = null!;
         public List<DCO_Municipio> Municipios { get; set; } = new List<DCO_Municipio>();

@@ -30,5 +30,8 @@ namespace DCO.DataAccess
         public DbSet<DCO_DatoConstante> DCO_DatosConstantes { get; set; }
         public DbSet<DCO_DatoConstanteDetalle> DCO_DatosConstantesDetalles { get; set; }
         public DbSet<DCO_ColaSolicitud> DCO_ColaSolicitudes { get; set; }
+        public DbSet<DCO_Pais> DCO_Paises { get; set; }
+        public DbSet<DCO_Departamento> DCO_Departamentos { get; set; }
+        public DbSet<DCO_Municipio> DCO_Municipios { get; set; }
     }
 }

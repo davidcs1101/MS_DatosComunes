@@ -167,7 +167,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 1,
                             Codigo = "CAUSAEXTERNAANEXO2",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4007),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3333),
                             ListaId = 2,
                             Nombre = "CAUSAS EXTERNAS DE CONSULTA PARA ANEXO 2",
                             UsuarioCreadorId = 1
@@ -177,7 +177,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 2,
                             Codigo = "TIPOIDENTIANEXO",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4009),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3336),
                             ListaId = 9,
                             Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE ANEXOS TÉCNICOS A PACIENTES",
                             UsuarioCreadorId = 1
@@ -187,7 +187,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 3,
                             Codigo = "TIPOIDENTIEMPRESA",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4011),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3339),
                             ListaId = 9,
                             Nombre = "TIPOS DE IDENTIFICACION PARA REGISTRO DE EMPRESAS",
                             UsuarioCreadorId = 1
@@ -197,7 +197,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 4,
                             Codigo = "TIPOIDENTIREGISTROUSUARIO",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4013),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3341),
                             ListaId = 9,
                             Nombre = "TIPOS DE IDENTIFICACIÓN PARA REGISTRO DE USUARIOS DE APLICACIÓN",
                             UsuarioCreadorId = 1
@@ -207,7 +207,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 5,
                             Codigo = "TIPOREGIMENANEXO2",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4015),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3343),
                             ListaId = 10,
                             Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 2",
                             UsuarioCreadorId = 1
@@ -217,7 +217,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 6,
                             Codigo = "TIPOREGIMENANEXO3",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4017),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3346),
                             ListaId = 10,
                             Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 3",
                             UsuarioCreadorId = 1
@@ -227,7 +227,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 7,
                             Codigo = "TIPOREGIMENANEXO9",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4019),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3348),
                             ListaId = 10,
                             Nombre = "TIPOS DE REGIMEN DISPONIBLES PARA ANEXO 9",
                             UsuarioCreadorId = 1
@@ -237,7 +237,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 8,
                             Codigo = "TRIAGEANEXO2",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4021),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3350),
                             ListaId = 11,
                             Nombre = "NIVELES DE TRIAGE PARA EL ANEXO 2",
                             UsuarioCreadorId = 1
@@ -304,8 +304,9 @@ namespace DCO.DataAcces.Migrations
                     b.Property<DateTime?>("FechaModificado")
                         .HasColumnType("datetime");
 
-                    b.Property<short>("Indicativo")
-                        .HasColumnType("smallint");
+                    b.Property<string>("Indicativo")
+                        .IsRequired()
+                        .HasColumnType("varchar(6)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -325,7 +326,7 @@ namespace DCO.DataAcces.Migrations
                     b.HasIndex("PaisId", "Codigo")
                         .IsUnique();
 
-                    b.ToTable("DCO_Departamento");
+                    b.ToTable("DCO_Departamentos");
 
                     b.HasData(
                         new
@@ -333,8 +334,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 1,
                             Codigo = "05",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4080),
-                            Indicativo = (short)4,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3450),
+                            Indicativo = "4",
                             Nombre = "ANTIOQUIA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -344,8 +345,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 2,
                             Codigo = "08",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4083),
-                            Indicativo = (short)5,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3454),
+                            Indicativo = "5",
                             Nombre = "ATLANTICO",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -355,8 +356,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 3,
                             Codigo = "11",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4084),
-                            Indicativo = (short)1,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3456),
+                            Indicativo = "1",
                             Nombre = "BOGOTA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -366,8 +367,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 4,
                             Codigo = "13",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4086),
-                            Indicativo = (short)5,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3459),
+                            Indicativo = "5",
                             Nombre = "BOLIVAR",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -377,8 +378,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 5,
                             Codigo = "15",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4120),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3462),
+                            Indicativo = "8",
                             Nombre = "BOYACA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -388,8 +389,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 6,
                             Codigo = "17",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4122),
-                            Indicativo = (short)6,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3464),
+                            Indicativo = "6",
                             Nombre = "CALDAS",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -399,8 +400,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 7,
                             Codigo = "18",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4124),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3467),
+                            Indicativo = "8",
                             Nombre = "CAQUETA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -410,8 +411,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 8,
                             Codigo = "19",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4126),
-                            Indicativo = (short)2,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3469),
+                            Indicativo = "2",
                             Nombre = "CAUCA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -421,8 +422,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 9,
                             Codigo = "20",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4128),
-                            Indicativo = (short)5,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3472),
+                            Indicativo = "5",
                             Nombre = "CESAR",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -432,8 +433,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 10,
                             Codigo = "23",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4130),
-                            Indicativo = (short)4,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3474),
+                            Indicativo = "4",
                             Nombre = "CORDOBA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -443,8 +444,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 11,
                             Codigo = "25",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4132),
-                            Indicativo = (short)1,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3477),
+                            Indicativo = "1",
                             Nombre = "CUNDINAMARCA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -454,8 +455,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 12,
                             Codigo = "27",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4134),
-                            Indicativo = (short)4,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3479),
+                            Indicativo = "4",
                             Nombre = "CHOCO",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -465,8 +466,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 13,
                             Codigo = "41",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4136),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3482),
+                            Indicativo = "8",
                             Nombre = "HUILA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -476,8 +477,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 14,
                             Codigo = "44",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4137),
-                            Indicativo = (short)5,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3484),
+                            Indicativo = "5",
                             Nombre = "LA GUAJIRA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -487,8 +488,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 15,
                             Codigo = "47",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4139),
-                            Indicativo = (short)5,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3486),
+                            Indicativo = "5",
                             Nombre = "MAGDALENA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -498,8 +499,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 16,
                             Codigo = "50",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4141),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3489),
+                            Indicativo = "8",
                             Nombre = "META",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -509,8 +510,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 17,
                             Codigo = "52",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4143),
-                            Indicativo = (short)2,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3491),
+                            Indicativo = "2",
                             Nombre = "NARIÑO",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -520,8 +521,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 18,
                             Codigo = "54",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4145),
-                            Indicativo = (short)7,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3494),
+                            Indicativo = "7",
                             Nombre = "N. DE SANTANDER",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -531,8 +532,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 19,
                             Codigo = "63",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4146),
-                            Indicativo = (short)6,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3496),
+                            Indicativo = "6",
                             Nombre = "QUINDIO",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -542,8 +543,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 20,
                             Codigo = "66",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4148),
-                            Indicativo = (short)6,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3498),
+                            Indicativo = "6",
                             Nombre = "RISARALDA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -553,8 +554,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 21,
                             Codigo = "68",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4150),
-                            Indicativo = (short)7,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3501),
+                            Indicativo = "7",
                             Nombre = "SANTANDER",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -564,8 +565,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 22,
                             Codigo = "70",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4152),
-                            Indicativo = (short)5,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3503),
+                            Indicativo = "5",
                             Nombre = "SUCRE",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -575,8 +576,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 23,
                             Codigo = "73",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4154),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3505),
+                            Indicativo = "8",
                             Nombre = "TOLIMA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -586,8 +587,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 24,
                             Codigo = "76",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4155),
-                            Indicativo = (short)2,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3508),
+                            Indicativo = "2",
                             Nombre = "VALLE DEL CAUCA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -597,8 +598,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 25,
                             Codigo = "81",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4157),
-                            Indicativo = (short)7,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3510),
+                            Indicativo = "7",
                             Nombre = "ARAUCA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -608,8 +609,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 26,
                             Codigo = "85",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4159),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3512),
+                            Indicativo = "8",
                             Nombre = "CASANARE",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -619,8 +620,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 27,
                             Codigo = "86",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4161),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3515),
+                            Indicativo = "8",
                             Nombre = "PUTUMAYO",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -630,8 +631,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 28,
                             Codigo = "88",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4163),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3517),
+                            Indicativo = "8",
                             Nombre = "SAN ANDRES",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -641,8 +642,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 29,
                             Codigo = "91",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4164),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3519),
+                            Indicativo = "8",
                             Nombre = "AMAZONAS",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -652,8 +653,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 30,
                             Codigo = "94",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4166),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3522),
+                            Indicativo = "8",
                             Nombre = "GUAINIA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -663,8 +664,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 31,
                             Codigo = "95",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4168),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3524),
+                            Indicativo = "8",
                             Nombre = "GUAVIARE",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -674,8 +675,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 32,
                             Codigo = "97",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4170),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3526),
+                            Indicativo = "8",
                             Nombre = "VAUPES",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -685,8 +686,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 33,
                             Codigo = "98",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4172),
-                            Indicativo = (short)0,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3529),
+                            Indicativo = "0",
                             Nombre = "EXTRANJERO",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -696,8 +697,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 34,
                             Codigo = "99",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4173),
-                            Indicativo = (short)8,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3531),
+                            Indicativo = "8",
                             Nombre = "VICHADA",
                             PaisId = 1,
                             UsuarioCreadorId = 1
@@ -748,7 +749,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 1,
                             Codigo = "CARGOSEMPLEADOS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3859),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3164),
                             Nombre = "CARGOS PARA EMPLEADOS",
                             UsuarioCreadorId = 1
                         },
@@ -757,7 +758,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 2,
                             Codigo = "CAUSASEXTERNAS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3862),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3167),
                             Nombre = "CAUSAS EXTERNAS SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -766,7 +767,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 3,
                             Codigo = "ESPECIALIDAD",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3864),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3170),
                             Nombre = "ESPECIALIDADES",
                             UsuarioCreadorId = 1
                         },
@@ -775,7 +776,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 4,
                             Codigo = "NIVELESCOMPLEJIDAD",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3866),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3173),
                             Nombre = "NIVELES DE COMPLEJIDAD EN SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -784,7 +785,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 5,
                             Codigo = "ESTADOANEXOS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3868),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3175),
                             Nombre = "ESTADOS DE LOS ANEXOS TÉCNICOS",
                             UsuarioCreadorId = 1
                         },
@@ -793,7 +794,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 6,
                             Codigo = "SERVICIOS",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3870),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3178),
                             Nombre = "SERVICIOS DE SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -802,7 +803,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 7,
                             Codigo = "SEXOBIOLOGICO",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3871),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3180),
                             Nombre = "SEXO BIOLÓGICO",
                             UsuarioCreadorId = 1
                         },
@@ -811,7 +812,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 8,
                             Codigo = "TIPOAFILIACION",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3873),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3182),
                             Nombre = "TIPOS DE AFILIACIÓN EN SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -820,7 +821,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 9,
                             Codigo = "TIPOSIDENTIFICACION",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3875),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3185),
                             Nombre = "TIPOS DE IDENTIFICACIÓN",
                             UsuarioCreadorId = 1
                         },
@@ -829,7 +830,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 10,
                             Codigo = "TIPOREGIMEN",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3877),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3187),
                             Nombre = "TIPOS DE REGIMEN EN SALUD",
                             UsuarioCreadorId = 1
                         },
@@ -838,7 +839,7 @@ namespace DCO.DataAcces.Migrations
                             Id = 11,
                             Codigo = "TIPOSTRIAGE",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(3878),
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3189),
                             Nombre = "TIPOS DE TRIAGE",
                             UsuarioCreadorId = 1
                         });
@@ -925,7 +926,7 @@ namespace DCO.DataAcces.Migrations
                     b.HasIndex("DepartamentoId", "Codigo")
                         .IsUnique();
 
-                    b.ToTable("DCO_Municipio");
+                    b.ToTable("DCO_Municipios");
                 });
 
             modelBuilder.Entity("DCO.Dominio.Entidades.DCO_Pais", b =>
@@ -949,8 +950,9 @@ namespace DCO.DataAcces.Migrations
                     b.Property<DateTime?>("FechaModificado")
                         .HasColumnType("datetime");
 
-                    b.Property<short>("Indicativo")
-                        .HasColumnType("smallint");
+                    b.Property<string>("Indicativo")
+                        .IsRequired()
+                        .HasColumnType("varchar(6)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -967,7 +969,7 @@ namespace DCO.DataAcces.Migrations
                     b.HasIndex("Codigo")
                         .IsUnique();
 
-                    b.ToTable("DCO_Pais");
+                    b.ToTable("DCO_Paises");
 
                     b.HasData(
                         new
@@ -975,8 +977,8 @@ namespace DCO.DataAcces.Migrations
                             Id = 1,
                             Codigo = "COL",
                             EstadoActivo = true,
-                            FechaCreado = new DateTime(2025, 11, 22, 13, 19, 16, 527, DateTimeKind.Local).AddTicks(4052),
-                            Indicativo = (short)57,
+                            FechaCreado = new DateTime(2026, 5, 6, 21, 56, 32, 284, DateTimeKind.Local).AddTicks(3424),
+                            Indicativo = "57",
                             Nombre = "COLOMBIA",
                             UsuarioCreadorId = 1
                         });

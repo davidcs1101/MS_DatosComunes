@@ -1,6 +1,6 @@
-﻿namespace DCO.Dominio.Entidades.ModelosVistas
+﻿namespace DCO.Dtos
 {
-    public class UbicacionCompletaMV
+    public class UbicacionCompletaDto
     {
         public int PaisId { get; set; }
         public string CodigoPais { get; set; } = null!;
@@ -18,7 +18,5 @@
         public string CodigoMunicipio { get; set; } = null!;
         public string NombreMunicipio { get; set; } = null!;
         public bool EstadoMunicipio { get; set; }
-
-
     }
 }

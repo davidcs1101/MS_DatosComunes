@@ -42,5 +42,31 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                 })
                 .FirstOrDefaultAsync();
         }
+
+        public IQueryable<UbicacionCompletaMV> ListarUbicaciones()
+        {
+            return _context.DCO_Municipios
+                .Include(m => m.Departamento)
+                    .ThenInclude(d => d.Pais)
+                .Select(m => new UbicacionCompletaMV
+                {
+                    PaisId = m.Departamento.Pais.Id,
+                    CodigoPais = m.Departamento.Pais.Codigo,
+                    NombrePais = m.Departamento.Pais.Nombre,
+                    IndicativoPais = m.Departamento.Pais.Indicativo,
+                    EstadoPais = m.Departamento.Pais.EstadoActivo,
+
+                    DepartamentoId = m.Departamento.Id,
+                    CodigoDepartamento = m.Departamento.Codigo,
+                    NombreDepartamento = m.Departamento.Nombre,
+                    IndicativoDepartamento = m.Departamento.Indicativo,
+                    EstadoDepartamento = m.Departamento.EstadoActivo,
+
+                    MunicipioId = m.Id,
+                    CodigoMunicipio = m.Codigo,
+                    NombreMunicipio = m.Nombre,
+                    EstadoMunicipio = m.EstadoActivo
+                });
+        }
     }
 }

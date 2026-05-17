@@ -1,33 +1,35 @@
-using Microsoft.EntityFrameworkCore;
+using DCO.Api.DatosComunes.Middlewares;
+using DCO.Aplicacion.CasosUso.Implementaciones;
+using DCO.Aplicacion.CasosUso.Interfaces;
+using DCO.Aplicacion.Servicios.Implementaciones;
+using DCO.Aplicacion.Servicios.Interfaces;
+using DCO.Aplicacion.ServiciosExternos;
+using DCO.Aplicacion.ServiciosExternos.config;
+using DCO.Aplicacion.ServiciosExternos.Mapeo;
+using DCO.DataAccess;
+using DCO.Dominio.Repositorio;
+using DCO.Dominio.Repositorio.UnidadTrabajo;
+using DCO.Dominio.Servicios.Implementaciones;
+using DCO.Dominio.Servicios.Interfaces;
+using DCO.Dtos.AppSettings;
+using DCO.Infraestructura.Aplicacion.ServiciosExternos;
+using DCO.Infraestructura.Aplicacion.ServiciosExternos.Config;
+using DCO.Infraestructura.Dominio.Repositorio;
+using DCO.Infraestructura.Mapeo;
+using DCO.Infraestructura.Servicios.Implementaciones;
+using DCO.Intraestructura.Dominio.Repositorio;
+using DCO.Intraestructura.Dominio.Repositorio.UnidadTrabajo;
+using Hangfire;
+using Hangfire.MySql;
 using log4net;
 using log4net.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
-using DCO.Api.DatosComunes.Middlewares;
-using DCO.Infraestructura.Dominio.Repositorio;
-using DCO.Infraestructura.Aplicacion.ServiciosExternos;
-using DCO.Infraestructura.Servicios.Implementaciones;
-using DCO.Aplicacion.CasosUso.Implementaciones;
-using DCO.Aplicacion.CasosUso.Interfaces;
-using DCO.Aplicacion.ServiciosExternos;
-using DCO.Aplicacion.Servicios.Interfaces;
-using DCO.Aplicacion.Servicios.Implementaciones;
-using DCO.DataAccess;
-using DCO.Dominio.Repositorio;
-using DCO.Dominio.Servicios.Interfaces;
-using DCO.Dominio.Servicios.Implementaciones;
-using DCO.Dominio.Repositorio.UnidadTrabajo;
-using DCO.Intraestructura.Dominio.Repositorio.UnidadTrabajo;
-using DCO.Intraestructura.Dominio.Repositorio;
-using DCO.Aplicacion.ServiciosExternos.config;
-using DCO.Dtos.AppSettings;
-using DCO.Infraestructura.Aplicacion.ServiciosExternos.Config;
-using SEG.Infraestructura.Aplicacion.ServiciosExternos.Config;
-using Hangfire;
-using Hangfire.MySql;
 using Refit;
+using SEG.Infraestructura.Aplicacion.ServiciosExternos.Config;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +72,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+//Mapperly
+builder.Services.AddSingleton<IMapperPerfiles, MapperPerfiles>();
 
 //Configuramos AutoMapper para el mapeo de DTOS a las entidades y le decimos que se hará a nivel de Ensamblado
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -115,6 +119,8 @@ builder.Services.AddScoped<IColaSolicitudRepositorio, ColaSolicitudRepositorio>(
 builder.Services.AddScoped<IDatoConstanteDetalleRepositorio, DatoConstanteDetalleRepositorio>();
 builder.Services.AddScoped<IDatoConstanteDetalleServicio, DatoConstanteDetalleServicio>();
 
+builder.Services.AddScoped<IMunicipioRepositorio, MunicipioRepositorio>();
+builder.Services.AddScoped<IGeografiaServicio, GeografiaServicio>();
 
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajoEF>();
 

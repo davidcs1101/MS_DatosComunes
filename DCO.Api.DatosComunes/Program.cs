@@ -167,7 +167,7 @@ builder.Services.AddHangfireServer(opciones => { opciones.ServerName = "MSDatosC
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<MiddlewareManejadorTokens>();
-builder.Services.AddTransient<MiddlewareManejadorTokensBackGround>();
+builder.Services.AddTransient<MiddlewareManejadorTokensBackground>();
 
 //Configuracion para llamado de otros MicroServicios atraves de la Url Gateway
 var urlMsSeguridad = builder.Configuration["UrlMSSeguridad"];
@@ -195,7 +195,7 @@ builder.Services
     {
         cliente.DefaultRequestHeaders.Add("Accept", "application/json");
     })
-    .AddHttpMessageHandler<MiddlewareManejadorTokensBackGround>();
+    .AddHttpMessageHandler<MiddlewareManejadorTokensBackground>();
 
 var app = builder.Build();
 

@@ -11,7 +11,7 @@ namespace DCO.Infraestructura.Aplicacion.ServiciosExternos
         private readonly HttpClient _httpClient;
         private readonly IRespuestaHttpValidador _respuestaHttpValidador;
 
-        public PublicadorEventosBackgroundServicio(HttpClient httpClient, IRespuestaHttpValidador respuestaHttpValidador, IConfiguracionesTrabajosColas configuracionesTrabajosColas)
+        public PublicadorEventosBackgroundServicio(HttpClient httpClient, IRespuestaHttpValidador respuestaHttpValidador)
         {
             _httpClient = httpClient;
             _respuestaHttpValidador = respuestaHttpValidador;

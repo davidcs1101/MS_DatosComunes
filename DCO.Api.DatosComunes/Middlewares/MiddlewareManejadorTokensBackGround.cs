@@ -7,13 +7,13 @@ using DCO.Dominio.Excepciones;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {
-    public class MiddlewareManejadorTokensBackGround : DelegatingHandler
+    public class MiddlewareManejadorTokensBackground : DelegatingHandler
     {
         private readonly IMSSeguridadBackgroundServicio _msSeguridadBackgroundServicio;
         private readonly IConfiguracionesTrabajosColas _configuracionesTrabajosColas;
         private readonly IRespuestaHttpValidador _respuestaHttpValidador;
 
-        public MiddlewareManejadorTokensBackGround(IMSSeguridadBackgroundServicio msSeguridadBackgroundServicio, IConfiguracionesTrabajosColas configuracionesTrabajosColas, IRespuestaHttpValidador respuestaHttpValidador)
+        public MiddlewareManejadorTokensBackground(IMSSeguridadBackgroundServicio msSeguridadBackgroundServicio, IConfiguracionesTrabajosColas configuracionesTrabajosColas, IRespuestaHttpValidador respuestaHttpValidador)
         {
             _msSeguridadBackgroundServicio = msSeguridadBackgroundServicio;
             _configuracionesTrabajosColas = configuracionesTrabajosColas;

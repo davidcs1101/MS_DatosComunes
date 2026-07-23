@@ -9,7 +9,7 @@ namespace DCO.Infraestructura.Dominio.Repositorio
     public class ListaDetalleRepositorio : IListaDetalleRepositorio
     {
         private readonly AppDbContext _context;
-        public ListaDetalleRepositorio(AppDbContext context) 
+        public ListaDetalleRepositorio(AppDbContext context)
         {
             _context = context;
         }
@@ -83,23 +83,65 @@ namespace DCO.Infraestructura.Dominio.Repositorio
         public IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante)
         {
             return from dc in _context.DCO_DatosConstantes
-                                          join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
-                                          join ld in _context.DCO_ListasDetalles on dcd.ListaDetalleId equals ld.Id
-                                          where dc.Codigo == codigoDatoConstante
-                                          select new ListaDetalleMV
-                                          {
-                                              Id = ld.Id,
-                                              ListaId = ld.ListaId,
-                                              Codigo = ld.Codigo,
-                                              Nombre = ld.Nombre,
-                                              UsuarioCreadorId = ld.UsuarioCreadorId,
-                                              FechaCreado = ld.FechaCreado,
-                                              UsuarioModificadorId = ld.UsuarioModificadorId,
-                                              FechaModificado = ld.FechaModificado,
-                                              EstadoActivo = ld.EstadoActivo,
+                   join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
+                   join ld in _context.DCO_ListasDetalles on dcd.ListaDetalleId equals ld.Id
+                   where dc.Codigo == codigoDatoConstante
+                   select new ListaDetalleMV
+                   {
+                       Id = ld.Id,
+                       ListaId = ld.ListaId,
+                       Codigo = ld.Codigo,
+                       Nombre = ld.Nombre,
+                       UsuarioCreadorId = ld.UsuarioCreadorId,
+                       FechaCreado = ld.FechaCreado,
+                       UsuarioModificadorId = ld.UsuarioModificadorId,
+                       FechaModificado = ld.FechaModificado,
+                       EstadoActivo = ld.EstadoActivo,
 
-                                              CodigoDatoConstante = dc.Codigo
-                                          };
+                       CodigoDatoConstante = dc.Codigo
+                   };
+        }
+
+
+        public IQueryable<ListaDetalleMV> ListarPorCodigosLista(List<string> codigosLista)
+        {
+            return _context.DCO_ListasDetalles
+                         .Include(ld => ld.Lista)
+                         .Where(ld => codigosLista.Contains(ld.Lista.Codigo))
+                         .Select(ld => new ListaDetalleMV
+                         {
+                             Id = ld.Id,
+                             ListaId = ld.ListaId,
+                             Codigo = ld.Codigo,
+                             Nombre = ld.Nombre,
+                             UsuarioCreadorId = ld.UsuarioCreadorId,
+                             FechaCreado = ld.FechaCreado,
+                             UsuarioModificadorId = ld.UsuarioModificadorId,
+                             FechaModificado = ld.FechaModificado,
+                             EstadoActivo = ld.EstadoActivo,
+                             CodigoLista = ld.Lista.Codigo
+                         });
+        }
+
+        public IQueryable<ListaDetalleMV> ListarPorCodigosConstante(List<string> codigosConstante)
+        {
+            return from dc in _context.DCO_DatosConstantes
+                   join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
+                   join ld in _context.DCO_ListasDetalles on dcd.ListaDetalleId equals ld.Id
+                   where codigosConstante.Contains(dc.Codigo)
+                   select new ListaDetalleMV
+                   {
+                       Id = ld.Id,
+                       ListaId = ld.ListaId,
+                       Codigo = ld.Codigo,
+                       Nombre = ld.Nombre,
+                       UsuarioCreadorId = ld.UsuarioCreadorId,
+                       FechaCreado = ld.FechaCreado,
+                       UsuarioModificadorId = ld.UsuarioModificadorId,
+                       FechaModificado = ld.FechaModificado,
+                       EstadoActivo = ld.EstadoActivo,
+                       CodigoDatoConstante = dc.Codigo
+                   };
         }
     }
 }

@@ -65,5 +65,18 @@ namespace ApiDCO.Controllers
         {
             return await _listaDetalleServicio.ObtenerPorCodigoListaYCodigoListaDetalle(codigoDetalleRequest);
         }
+
+        [HttpPost("listarPorCodigosLista")]
+        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorCodigosLista(List<string> codigosLista)
+        {
+            return await _listaDetalleServicio.ListarPorCodigosListaAsync(codigosLista);
+        }
+
+        [HttpPost("listarPorCodigosConstante")]
+        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorCodigosConstante(List<string> codigosConstante)
+        {
+            return await _listaDetalleServicio.ListarPorCodigosConstanteAsync(codigosConstante);
+        }
+
     }
 }

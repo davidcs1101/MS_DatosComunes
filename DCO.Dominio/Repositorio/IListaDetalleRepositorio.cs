@@ -13,5 +13,9 @@ namespace DCO.Dominio.Repositorio
         IQueryable<ListaDetalleMV> Listar();
         IQueryable<ListaDetalleMV> ListarPorCodigoLista(string codigoLista);
         IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante);
+
+
+        IQueryable<ListaDetalleMV> ListarPorCodigosLista(List<string> codigosLista);
+        IQueryable<ListaDetalleMV> ListarPorCodigosConstante(List<string> codigosConstante);
     }
 }

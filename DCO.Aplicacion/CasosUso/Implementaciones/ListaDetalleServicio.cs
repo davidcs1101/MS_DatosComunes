@@ -201,5 +201,22 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             }
             return colas;
         }
+
+
+
+        public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigosListaAsync(List<string> codigosLista)
+        {
+            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigosLista(codigosLista).ToListAsync();
+            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
+            return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
+        }
+
+        public async Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigosConstanteAsync(List<string> codigosConstante)
+        {
+            var listasDetallesMV = await _listaDetalleRepositorio.ListarPorCodigosConstante(codigosConstante).ToListAsync();
+            var listasDetallesDto = _mapper.Map<List<ListaDetalleDto>>(listasDetallesMV);
+            return _apiResponse.CrearRespuesta<List<ListaDetalleDto>?>(true, "", listasDetallesDto);
+        } 
+
     }
 }

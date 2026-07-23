@@ -12,5 +12,8 @@ namespace DCO.Aplicacion.CasosUso.Interfaces
         Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoConstanteAsync(string codigoConstante);
         Task<ApiResponse<ListaDetalleDto?>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest);
         Task<ApiResponse<ListaDetalleDto?>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest);
+
+        Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigosListaAsync(List<string> codigosLista);
+        Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigosConstanteAsync(List<string> codigosConstante);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using DCO.Dominio.Entidades;
-using DCO.Dtos;
+using Utilidades.Dtos;
 
 namespace DCO.Aplicacion.Servicios.Interfaces
 {

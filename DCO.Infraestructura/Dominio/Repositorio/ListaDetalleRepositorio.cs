@@ -53,7 +53,7 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                              FechaCreado = ld.FechaCreado,
                              UsuarioModificadorId = ld.UsuarioModificadorId,
                              FechaModificado = ld.FechaModificado,
-                             EstadoActivo = ld.EstadoActivo,
+                             EstadoActivoListaDetalle = ld.EstadoActivo,
 
                              CodigoLista = ld.Lista.Codigo
                          });
@@ -74,7 +74,7 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                              FechaCreado = ld.FechaCreado,
                              UsuarioModificadorId = ld.UsuarioModificadorId,
                              FechaModificado = ld.FechaModificado,
-                             EstadoActivo = ld.EstadoActivo,
+                             EstadoActivoListaDetalle = ld.EstadoActivo,
 
                              CodigoLista = ld.Lista.Codigo
                          });
@@ -96,7 +96,8 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                        FechaCreado = ld.FechaCreado,
                        UsuarioModificadorId = ld.UsuarioModificadorId,
                        FechaModificado = ld.FechaModificado,
-                       EstadoActivo = ld.EstadoActivo,
+                       EstadoActivoListaDetalle = ld.EstadoActivo,
+                       EstadoActivoConstanteDetalle = dc.EstadoActivo,
 
                        CodigoDatoConstante = dc.Codigo
                    };
@@ -118,7 +119,7 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                              FechaCreado = ld.FechaCreado,
                              UsuarioModificadorId = ld.UsuarioModificadorId,
                              FechaModificado = ld.FechaModificado,
-                             EstadoActivo = ld.EstadoActivo,
+                             EstadoActivoListaDetalle = ld.EstadoActivo,
                              CodigoLista = ld.Lista.Codigo
                          });
         }
@@ -139,7 +140,8 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                        FechaCreado = ld.FechaCreado,
                        UsuarioModificadorId = ld.UsuarioModificadorId,
                        FechaModificado = ld.FechaModificado,
-                       EstadoActivo = ld.EstadoActivo,
+                       EstadoActivoListaDetalle = ld.EstadoActivo,
+                       EstadoActivoConstanteDetalle = dc.EstadoActivo,
                        CodigoDatoConstante = dc.Codigo
                    };
         }

@@ -1,5 +1,4 @@
-﻿using DCO.Dtos;
-
+﻿using Utilidades.Dtos;
 namespace DCO.Aplicacion.ServiciosExternos
 {
     public interface IPublicadorEventosBackgroundServicio

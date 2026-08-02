@@ -13,7 +13,8 @@
         public int? UsuarioModificadorId { get; set; }
         public string? NombreUsuarioModificador { get; set; }
         public DateTime? FechaModificado { get; set; }
-        public bool EstadoActivo { get; set; }
+        public bool EstadoActivoListaDetalle { get; set; }
+        public bool EstadoActivoConstanteDetalle { get; set; }
 
         public string CodigoLista { get; set; } = null!;
         public string CodigoDatoConstante { get; set; } = null!;

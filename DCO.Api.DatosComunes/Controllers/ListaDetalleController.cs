@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DCO.Dtos;
 using DCO.Aplicacion.CasosUso.Interfaces;
+using Utilidades.Dtos;
 
 namespace ApiDCO.Controllers
 {

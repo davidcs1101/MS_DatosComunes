@@ -2,6 +2,7 @@
 using DCO.Dtos;
 using DCO.Dominio.Entidades;
 using DCO.Dominio.Entidades.ModelosVistas;
+using Utilidades.Dtos;
 
 namespace DCO.Infraestructura.Mapeos
 {

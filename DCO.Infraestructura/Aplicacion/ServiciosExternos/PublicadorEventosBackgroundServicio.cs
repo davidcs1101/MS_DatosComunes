@@ -2,7 +2,7 @@
 using DCO.Aplicacion.ServiciosExternos;
 using System.Net.Http.Json;
 using Utilidades;
-using DCO.Aplicacion.ServiciosExternos.config;
+using Utilidades.Dtos;
 
 namespace DCO.Infraestructura.Aplicacion.ServiciosExternos
 {

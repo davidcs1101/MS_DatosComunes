@@ -3,9 +3,9 @@ using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Dominio.Excepciones;
 using DCO.Dominio.Entidades;
 using DCO.Dominio.Repositorio;
-using DCO.Dtos;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Utilidades.Dtos;
 
 namespace DCO.Aplicacion.Servicios.Interfaces
 {

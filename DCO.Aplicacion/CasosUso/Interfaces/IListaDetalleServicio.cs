@@ -1,5 +1,5 @@
-﻿using DCO.Dominio.Entidades.ModelosVistas;
-using DCO.Dtos;
+﻿using DCO.Dtos;
+using Utilidades.Dtos;
 
 namespace DCO.Aplicacion.CasosUso.Interfaces
 {

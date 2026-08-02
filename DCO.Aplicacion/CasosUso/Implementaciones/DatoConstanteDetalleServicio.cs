@@ -12,6 +12,7 @@ using DCO.Dominio.Servicios.Interfaces;
 using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Dominio.Enumeraciones;
+using Utilidades.Dtos;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {

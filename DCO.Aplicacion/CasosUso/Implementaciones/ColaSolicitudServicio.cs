@@ -9,6 +9,7 @@ using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Dominio.Servicios.Interfaces;
 using DCO.Dtos;
 using Utilidades;
+using Utilidades.Dtos;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {

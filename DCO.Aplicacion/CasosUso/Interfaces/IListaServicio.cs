@@ -1,14 +1,15 @@
 ﻿using DCO.Dtos;
+using Utilidades.Dtos;
 
 namespace DCO.Aplicacion.CasosUso.Interfaces
 {
     public interface IListaServicio
     {
-        Task<ApiResponse<int>> CrearAsync(ListaCreacionRequest listaCreacionRequest);
-        Task<ApiResponse<string>> ModificarAsync(ListaModificacionRequest listaModificacionRequest);
-        Task<ApiResponse<string>> EliminarAsync(int id);
-        Task<ApiResponse<ListaDto?>> ObtenerPorIdAsync(int id);
-        Task<ApiResponse<ListaDto?>> ObtenerPorCodigoAsync(string codigo);
-        Task<ApiResponse<List<ListaDto>?>> ListarAsync();
+        Task<ApiResponseDto<int>> CrearAsync(ListaCreacionRequest listaCreacionRequest);
+        Task<ApiResponseDto<string>> ModificarAsync(ListaModificacionRequest listaModificacionRequest);
+        Task<ApiResponseDto<string>> EliminarAsync(int id);
+        Task<ApiResponseDto<ListaDto?>> ObtenerPorIdAsync(int id);
+        Task<ApiResponseDto<ListaDto?>> ObtenerPorCodigoAsync(string codigo);
+        Task<ApiResponseDto<List<ListaDto>?>> ListarAsync();
     }
 }

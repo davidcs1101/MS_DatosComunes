@@ -8,6 +8,8 @@ using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Dominio.Servicios.Interfaces;
+using Utilidades.Dtos;
+using Utilidades.Servicios.Responses.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -16,11 +18,11 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IListaRepositorio _listaRepositorio;
         private readonly IMapper _mapper;
         private readonly IEntidadValidador<DCO_Lista> _listaValidador;
-        private readonly IApisResponse _apiResponse;
+        private readonly IApiResponse _apiResponse;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly IMSSeguridad _msSeguridad;
 
-        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IEntidadValidador<DCO_Lista> listaValidador, IApisResponse apiResponseServicio, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad)
+        public ListaServicio(IListaRepositorio listaRepositorio, IMapper mapper, IEntidadValidador<DCO_Lista> listaValidador, IApiResponse apiResponseServicio, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad)
         {
             _listaRepositorio = listaRepositorio;
             _mapper = mapper;
@@ -30,7 +32,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _msSeguridad = msSeguridad;
         }
 
-        public async Task<ApiResponse<int>> CrearAsync(ListaCreacionRequest listaCreacionRequest)
+        public async Task<ApiResponseDto<int>> CrearAsync(ListaCreacionRequest listaCreacionRequest)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorCodigoAsync(listaCreacionRequest.Codigo);
             _listaValidador.ValidarDatoYaExiste(listaExiste, Textos.Listas.MENSAJE_LISTA_CODIGO_EXISTE);
@@ -44,7 +46,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
-        public async Task<ApiResponse<string>> ModificarAsync(ListaModificacionRequest listaModificacionRequest)
+        public async Task<ApiResponseDto<string>> ModificarAsync(ListaModificacionRequest listaModificacionRequest)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorIdAsync(listaModificacionRequest.Id);
             _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
@@ -58,7 +60,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
-        public async Task<ApiResponse<string>> EliminarAsync(int id)
+        public async Task<ApiResponseDto<string>> EliminarAsync(int id)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorIdAsync(id);
             _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
@@ -71,7 +73,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta(false, Textos.Generales.MENSAJE_REGISTRO_NO_ELIMINADO, "");
         }
 
-        public async Task<ApiResponse<ListaDto?>> ObtenerPorIdAsync(int id)
+        public async Task<ApiResponseDto<ListaDto?>> ObtenerPorIdAsync(int id)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorIdAsync(id);
             _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_ID);
@@ -81,7 +83,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta<ListaDto?>(true, "", listaDto);
         }
 
-        public async Task<ApiResponse<ListaDto?>> ObtenerPorCodigoAsync(string codigo)
+        public async Task<ApiResponseDto<ListaDto?>> ObtenerPorCodigoAsync(string codigo)
         {
             var listaExiste = await _listaRepositorio.ObtenerPorCodigoAsync(codigo);
             _listaValidador.ValidarDatoNoEncontrado(listaExiste, Textos.Listas.MENSAJE_LISTA_NO_EXISTE_CODIGO);
@@ -91,7 +93,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta<ListaDto?>(true, "", listaDto);
         }
 
-        public async Task<ApiResponse<List<ListaDto>?>> ListarAsync()
+        public async Task<ApiResponseDto<List<ListaDto>?>> ListarAsync()
         {
             var listas = await _listaRepositorio.Listar().ToListAsync();
             var listasDto = _mapper.Map<List<ListaDto>>(listas);

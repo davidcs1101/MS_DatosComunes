@@ -1,8 +1,8 @@
-﻿using DCO.Dtos;
-using DCO.Aplicacion.ServiciosExternos;
+﻿using DCO.Aplicacion.ServiciosExternos;
 using System.Net.Http.Json;
 using Utilidades;
 using Utilidades.Dtos;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Infraestructura.Aplicacion.ServiciosExternos
 {

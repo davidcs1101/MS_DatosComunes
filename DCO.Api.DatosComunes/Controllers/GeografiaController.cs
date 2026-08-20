@@ -2,6 +2,7 @@
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Utilidades.Dtos;
 
 namespace DCO.Api.DatosComunes.Controllers
 {
@@ -18,7 +19,7 @@ namespace DCO.Api.DatosComunes.Controllers
         }
 
         [HttpGet("listar")]
-        public async Task<ApiResponse<List<UbicacionCompletaDto>?>> Listar()
+        public async Task<ApiResponseDto<List<UbicacionCompletaDto>?>> Listar()
         {
             return await _geografiaServicio.ListarAsync();
         }

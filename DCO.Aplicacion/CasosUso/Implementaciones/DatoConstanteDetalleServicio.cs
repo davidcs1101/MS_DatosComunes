@@ -1,18 +1,18 @@
 ﻿using DCO.Dtos;
 using DCO.Dominio.Entidades;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Utilidades;
 using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
-using System.Net.Http.Json;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Dominio.Servicios.Interfaces;
 using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Dominio.Enumeraciones;
 using Utilidades.Dtos;
+using Utilidades.Servicios.Serializacion.Interfaces;
+using Utilidades.Servicios.Responses.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -23,16 +23,17 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly IListaDetalleRepositorio _listaDetalleRepositorio;
         private readonly IUsuarioContextoServicio _usuarioContextoServicio;
         private readonly IEntidadValidador<DCO_DatoConstante> _datoConstanteValidador;
-        private readonly IApisResponse _apiResponse;
+        private readonly IApiResponse _apiResponse;
         private readonly IProcesadorTransacciones _procesadorTransacciones;
         private readonly IEntidadValidador<DCO_ListaDetalle> _listaDetalleValidador;
         private readonly IEntidadValidador<DCO_DatoConstanteDetalle> _datoConstanteDetalleValidador;
         private readonly IUnidadDeTrabajo _unidadDeTrabajo;
-        private readonly IConfiguracionesEventosNotificar _configuracionesEventosNotificar;
+        private readonly IAppSettings _appSettings;
         private readonly ISerializadorJsonServicio _serializadorJsonServicio;
         private readonly IColaSolicitudRepositorio _colaSolicitudRepositorio;
 
-        public DatoConstanteDetalleServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApisResponse apiResponseServicio, IProcesadorTransacciones procesadorTransacciones, IDatoConstanteDetalleRepositorio datoConstanteDetalleRepositorio, IListaDetalleRepositorio listaDetalleRepositorio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IEntidadValidador<DCO_DatoConstanteDetalle> datoConstanteDetalleValidador, IUnidadDeTrabajo unidadDeTrabajo, IConfiguracionesEventosNotificar configuracionesEventosNotificar, ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio)
+        public DatoConstanteDetalleServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApiResponse apiResponseServicio, IProcesadorTransacciones procesadorTransacciones, IDatoConstanteDetalleRepositorio datoConstanteDetalleRepositorio, IListaDetalleRepositorio listaDetalleRepositorio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IEntidadValidador<DCO_DatoConstanteDetalle> datoConstanteDetalleValidador, IUnidadDeTrabajo unidadDeTrabajo, 
+            ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio, IAppSettings appSettings)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;
             _usuarioContextoServicio = usuarioContextoServicio;
@@ -44,12 +45,12 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             _listaDetalleValidador = listaDetalleValidador;
             _datoConstanteDetalleValidador = datoConstanteDetalleValidador;
             _unidadDeTrabajo = unidadDeTrabajo;
-            _configuracionesEventosNotificar = configuracionesEventosNotificar;
             _serializadorJsonServicio = serializadorJsonServicio;
             _colaSolicitudRepositorio = colaSolicitudRepositorio;
+            _appSettings = appSettings;
         }
 
-        public async Task<ApiResponse<int>> CrearAsync(DatoConstanteDetalleCreacionRequest datoConstanteDetalleCreacionRequest)
+        public async Task<ApiResponseDto<int>> CrearAsync(DatoConstanteDetalleCreacionRequest datoConstanteDetalleCreacionRequest)
         {
             var id = 0;
             var colas = new List<DCO_ColaSolicitud>();
@@ -77,7 +78,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
                 var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteExiste.Codigo);
 
-                var urls = _configuracionesEventosNotificar.ObtenerActualizarConstantesDetalleServicios();
+                var urls = _appSettings.ObtenerActualizarConstantesDetalleServicios();
                 colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
@@ -89,7 +90,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_CREADO, id);
         }
 
-        public async Task<ApiResponse<string>> ModificarAsync(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
+        public async Task<ApiResponseDto<string>> ModificarAsync(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
         {
             var colas = new List<DCO_ColaSolicitud>();
             await _procesadorTransacciones.EjecutarEnTransaccionAsync(async () =>
@@ -106,7 +107,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
                 var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteDetalleExiste.DatoConstante.Codigo);
 
-                var urls = _configuracionesEventosNotificar.ObtenerActualizarConstantesDetalleServicios();
+                var urls = _appSettings.ObtenerActualizarConstantesDetalleServicios();
                 colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();

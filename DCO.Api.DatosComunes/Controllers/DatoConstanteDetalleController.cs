@@ -2,12 +2,13 @@
 using DCO.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using DCO.Aplicacion.CasosUso.Interfaces;
+using Utilidades.Dtos;
 
 namespace ApiDCO.Controllers
 {
     [ApiController]
     [Route("api/datosConstantesDetalles")]
-    [Authorize(policy: "DatosConstantesPermiso")]
+    //[Authorize(policy: "DatosConstantesPermiso")]
     public class DatoConstanteDetalleController : Controller
     {
         private readonly IDatoConstanteDetalleServicio _datoConstanteDetalleServicio;
@@ -18,7 +19,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPost("crear")]
-        public async Task<ActionResult<ApiResponse<int>>> Crear(DatoConstanteDetalleCreacionRequest datoConstanteDetalleCreacionRequest)
+        public async Task<ActionResult<ApiResponseDto<int>>> Crear(DatoConstanteDetalleCreacionRequest datoConstanteDetalleCreacionRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -27,7 +28,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPut("modificar")]
-        public async Task<ActionResult<ApiResponse<string>>> Modificar(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
+        public async Task<ActionResult<ApiResponseDto<string>>> Modificar(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

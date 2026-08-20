@@ -1,14 +1,14 @@
 ﻿using DCO.Dtos;
-
+using Utilidades.Dtos;
 namespace DCO.Aplicacion.CasosUso.Interfaces
 {
     public interface IDatoConstanteServicio
     {
-        Task<ApiResponse<int>> CrearAsync(DatoConstanteCreacionRequest datoConstanteCreacionRequest);
-        Task<ApiResponse<string>> ModificarAsync(DatoConstanteModificacionRequest datoConstanteModificacionRequest);
-        Task<ApiResponse<string>> EliminarAsync(int id);
-        Task<ApiResponse<DatoConstanteDto?>> ObtenerPorIdAsync(int id);
-        Task<ApiResponse<DatoConstanteDto?>> ObtenerPorCodigoAsync(string codigo);
-        Task<ApiResponse<List<DatoConstanteDto>?>> ListarAsync();
+        Task<ApiResponseDto<int>> CrearAsync(DatoConstanteCreacionRequest datoConstanteCreacionRequest);
+        Task<ApiResponseDto<string>> ModificarAsync(DatoConstanteModificacionRequest datoConstanteModificacionRequest);
+        Task<ApiResponseDto<string>> EliminarAsync(int id);
+        Task<ApiResponseDto<DatoConstanteDto?>> ObtenerPorIdAsync(int id);
+        Task<ApiResponseDto<DatoConstanteDto?>> ObtenerPorCodigoAsync(string codigo);
+        Task<ApiResponseDto<List<DatoConstanteDto>?>> ListarAsync();
     }
 }

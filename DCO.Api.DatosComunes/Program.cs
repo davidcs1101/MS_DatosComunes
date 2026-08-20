@@ -16,7 +16,6 @@ using DCO.Infraestructura.Aplicacion.ServiciosExternos;
 using DCO.Infraestructura.Aplicacion.ServiciosExternos.Config;
 using DCO.Infraestructura.Dominio.Repositorio;
 using DCO.Infraestructura.Mapeo;
-using DCO.Infraestructura.Servicios.Implementaciones;
 using DCO.Intraestructura.Dominio.Repositorio;
 using DCO.Intraestructura.Dominio.Repositorio.UnidadTrabajo;
 using Hangfire;
@@ -28,8 +27,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Refit;
-using SEG.Infraestructura.Aplicacion.ServiciosExternos.Config;
 using System.Text;
+using Utilidades.Servicios.Http.Implementaciones;
+using Utilidades.Servicios.Http.Interfaces;
+using Utilidades.Servicios.Responses.Implementaciones;
+using Utilidades.Servicios.Serializacion.Implementaciones;
+using Utilidades.Servicios.Serializacion.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -126,7 +129,7 @@ builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajoEF>();
 
 builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<>));
 
-builder.Services.AddSingleton<IApisResponse, ApisResponse>();
+builder.Services.AddSingleton<Utilidades.Servicios.Responses.Interfaces.IApiResponse, ApiResponse>();
 builder.Services.AddSingleton<IMSSeguridad, MSSeguridad>();
 builder.Services.AddSingleton<IRespuestaHttpValidador, RespuestaHttpValidador>();
 builder.Services.AddScoped<IColaSolicitudServicio, ColaSolicitudServicio>();
@@ -136,13 +139,12 @@ builder.Services.AddScoped<IUsuarioContextoServicio, UsuarioContextoServicio>();
 builder.Services.AddSingleton<ISerializadorJsonServicio, SerializadorJsonServicio>();
 
 builder.Services.AddScoped<IProcesadorTransacciones, ProcesadorTransacciones>();
+builder.Services.AddSingleton<IServicioEjecutorHttp, ServicioEjecutorHttp>();
 
 #region REG_Servicios de configuraciones Appsettings
 builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));
-builder.Services.AddSingleton<IConfiguracionesTrabajosColas, ConfiguracionesTrabajosColas>();
-
 builder.Services.Configure<EventosNotificarSettings>(builder.Configuration.GetSection("EventosNotificar"));
-builder.Services.AddSingleton<IConfiguracionesEventosNotificar, ConfiguracionesEventosNotificar>();
+builder.Services.AddSingleton<IAppSettings, AppSettings>();
 #endregion
 
 builder.Services.AddDbContext<AppDbContext>
@@ -187,7 +189,8 @@ builder.Services
     {
         c.BaseAddress = new Uri(urlMsSeguridad);
         c.DefaultRequestHeaders.Add("Accept", "application/json");
-    });
+    })
+    .AddHttpMessageHandler<MiddlewareManejadorTokensBackground>();
 
 builder.Services
     .AddHttpClient<IPublicadorEventosBackgroundServicio, PublicadorEventosBackgroundServicio>
@@ -203,9 +206,9 @@ var app = builder.Build();
 app.UseHangfireDashboard("/hangfire");
 
 //Configuracion para la tarea Job en segundo plano que rastrea las solicitudes pendientes de procesar.
-var configuracionTrabajosColas = app.Services.GetRequiredService<IConfiguracionesTrabajosColas>();
+var configuracionTrabajosColas = app.Services.GetRequiredService<IAppSettings>();
 RecurringJob.AddOrUpdate<IColaSolicitudServicio>("procesador_solicitudes", x => x.ProcesarColaSolicitudesAsync(),
-    configuracionTrabajosColas.ObtenerProcesarColaSolicitudesCron());
+    configuracionTrabajosColas.ObtenerTrabajosColasSettings().ProcesarColaSolicitudesCron);
 
 
 // Configure the HTTP request pipeline.

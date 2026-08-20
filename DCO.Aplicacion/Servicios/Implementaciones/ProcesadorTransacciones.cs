@@ -6,8 +6,9 @@ using DCO.Dominio.Repositorio;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Utilidades.Dtos;
+using DCO.Aplicacion.Servicios.Interfaces;
 
-namespace DCO.Aplicacion.Servicios.Interfaces
+namespace DCO.Aplicacion.Servicios.Implementaciones
 {
     public class ProcesadorTransacciones : IProcesadorTransacciones
     {

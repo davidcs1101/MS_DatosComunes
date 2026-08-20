@@ -10,11 +10,11 @@
 
     public class TrabajosColasSettings
     {
-        public string? ProcesarColaSolicitudesCron { get; set; }
-        public string? CantidadIntentosPorRegistroEnCola { get; set; }
-        public string? CantidadRegistrosProcesarIteracion { get; set; }
-        public string? UsuarioIntegracion { get; set; }
-        public string? ClaveIntegracion { get; set; }
+        public int CantidadIntentosPorRegistroEnCola { get; set; } = 0; //Cantidad de Reintentos para procesar un registro en la cola antes de marcarlo como error.
+        public string ProcesarColaSolicitudesCron { get; set; } = "*/5 * * * *";
+        public int CantidadRegistrosProcesarIteracion { get; set; } = 10;
+        public string UsuarioIntegracion { get; set; } = "";
+        public string ClaveIntegracion { get; set; } = "";
     }
 
     public class EventosNotificarSettings

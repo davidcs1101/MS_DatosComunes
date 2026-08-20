@@ -3,7 +3,8 @@ using System.Net;
 using Utilidades;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Dominio.Excepciones;
-using DCO.Aplicacion.ServiciosExternos;
+using Utilidades.Servicios.Serializacion.Interfaces;
+using Utilidades.Servicios.Responses.Interfaces;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {
@@ -11,8 +12,8 @@ namespace DCO.Api.DatosComunes.Middlewares
     {
         private readonly RequestDelegate _requestDelegate;
         private readonly ISerializadorJsonServicio _serializadorJsonServicio;
-        private readonly IApisResponse _apiResponse;
-        public MiddlewareExcepcionesGlobales(RequestDelegate requestDelegate, IServiceProvider serviceProvider, ISerializadorJsonServicio serializadorJsonServicio, IApisResponse apiResponse)
+        private readonly IApiResponse _apiResponse;
+        public MiddlewareExcepcionesGlobales(RequestDelegate requestDelegate, IServiceProvider serviceProvider, ISerializadorJsonServicio serializadorJsonServicio, IApiResponse apiResponse)
         {
             _requestDelegate = requestDelegate;
             _serializadorJsonServicio = serializadorJsonServicio;

@@ -17,7 +17,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPost("crear")]
-        public async Task<ActionResult<ApiResponse<int>>> Crear(ListaDetalleCreacionRequest listaDetalleCreacionRequest)
+        public async Task<ActionResult<ApiResponseDto<int>>> Crear(ListaDetalleCreacionRequest listaDetalleCreacionRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -26,7 +26,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPut("modificar")]
-        public async Task<ActionResult<ApiResponse<string>>> Modificar(ListaDetalleModificacionRequest listaDetalleModificacionRequest)
+        public async Task<ActionResult<ApiResponseDto<string>>> Modificar(ListaDetalleModificacionRequest listaDetalleModificacionRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -35,7 +35,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpDelete("eliminar")]
-        public async Task<ActionResult<ApiResponse<string>>> Eliminar(int id)
+        public async Task<ActionResult<ApiResponseDto<string>>> Eliminar(int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -44,37 +44,37 @@ namespace ApiDCO.Controllers
         }
 
         [HttpGet("listarPorCodigoLista")]
-        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoLista(string codigoLista)
+        public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorcodigoLista(string codigoLista)
         {
             return await _listaDetalleServicio.ListarPorCodigoListaAsync(codigoLista);
         }
 
         [HttpGet("listarPorCodigoConstante")]
-        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstante)
+        public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstante)
         {
             return await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstante);
         }
 
         [HttpPost("obtenerPorCodigoConstanteYCodigoListaDetalle")]
-        public async Task<ActionResult<ApiResponse<ListaDetalleDto?>>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
+        public async Task<ActionResult<ApiResponseDto<ListaDetalleDto?>>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
         {
             return await _listaDetalleServicio.ObtenerPorCodigoConstanteYCodigoListaDetalle(codigoDetalleRequest);
         }
 
         [HttpPost("obtenerPorCodigoListaYCodigoListaDetalle")]
-        public async Task<ActionResult<ApiResponse<ListaDetalleDto?>>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
+        public async Task<ActionResult<ApiResponseDto<ListaDetalleDto?>>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
         {
             return await _listaDetalleServicio.ObtenerPorCodigoListaYCodigoListaDetalle(codigoDetalleRequest);
         }
 
         [HttpPost("listarPorCodigosLista")]
-        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorCodigosLista(List<string> codigosLista)
+        public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorCodigosLista(List<string> codigosLista)
         {
             return await _listaDetalleServicio.ListarPorCodigosListaAsync(codigosLista);
         }
 
         [HttpPost("listarPorCodigosConstante")]
-        public async Task<ActionResult<ApiResponse<List<ListaDetalleDto>?>>> ListarPorCodigosConstante(List<string> codigosConstante)
+        public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorCodigosConstante(List<string> codigosConstante)
         {
             return await _listaDetalleServicio.ListarPorCodigosConstanteAsync(codigosConstante);
         }

@@ -2,6 +2,7 @@
 using DCO.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using DCO.Aplicacion.CasosUso.Interfaces;
+using Utilidades.Dtos;
 
 namespace ApiDCO.Controllers
 {
@@ -18,25 +19,25 @@ namespace ApiDCO.Controllers
         }
 
         [HttpGet("obtenerPorId")]
-        public async Task<ActionResult<ApiResponse<ListaDto?>>> ObtenerPorId(int id)
+        public async Task<ActionResult<ApiResponseDto<ListaDto?>>> ObtenerPorId(int id)
         {
             return await _listaServicio.ObtenerPorIdAsync(id);
         }
 
         [HttpGet("obtenerPorCodigo")]
-        public async Task<ActionResult<ApiResponse<ListaDto?>>> ObtenerPorCodigo(string codigo)
+        public async Task<ActionResult<ApiResponseDto<ListaDto?>>> ObtenerPorCodigo(string codigo)
         {
             return await _listaServicio.ObtenerPorCodigoAsync(codigo);
         }
 
         [HttpGet("listar")]
-        public async Task<ActionResult<ApiResponse<List<ListaDto>?>>> Listar()
+        public async Task<ActionResult<ApiResponseDto<List<ListaDto>?>>> Listar()
         {
             return await _listaServicio.ListarAsync();
         }
 
         [HttpPost("crear")]
-        public async Task<ActionResult<ApiResponse<int>>> Crear(ListaCreacionRequest listaCreacionRequest)
+        public async Task<ActionResult<ApiResponseDto<int>>> Crear(ListaCreacionRequest listaCreacionRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -45,7 +46,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPut("modificar")]
-        public async Task<ActionResult<ApiResponse<string>>> Modificar(ListaModificacionRequest listaModificacionRequest)
+        public async Task<ActionResult<ApiResponseDto<string>>> Modificar(ListaModificacionRequest listaModificacionRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -54,7 +55,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpDelete("eliminar")]
-        public async Task<ActionResult<ApiResponse<string>>> Eliminar(int id)
+        public async Task<ActionResult<ApiResponseDto<string>>> Eliminar(int id)
         {
             return await _listaServicio.EliminarAsync(id);
         }

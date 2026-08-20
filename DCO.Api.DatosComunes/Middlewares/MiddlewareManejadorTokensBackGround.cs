@@ -4,20 +4,23 @@ using DCO.Dtos;
 using Utilidades;
 using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Dominio.Excepciones;
+using Utilidades.Dtos;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {
     public class MiddlewareManejadorTokensBackground : DelegatingHandler
     {
         private readonly IMSSeguridadBackgroundServicio _msSeguridadBackgroundServicio;
-        private readonly IConfiguracionesTrabajosColas _configuracionesTrabajosColas;
+        private readonly IAppSettings _appSettings;
         private readonly IRespuestaHttpValidador _respuestaHttpValidador;
 
-        public MiddlewareManejadorTokensBackground(IMSSeguridadBackgroundServicio msSeguridadBackgroundServicio, IConfiguracionesTrabajosColas configuracionesTrabajosColas, IRespuestaHttpValidador respuestaHttpValidador)
+        public MiddlewareManejadorTokensBackground(IMSSeguridadBackgroundServicio msSeguridadBackgroundServicio, 
+            IRespuestaHttpValidador respuestaHttpValidador, IAppSettings appSettings)
         {
             _msSeguridadBackgroundServicio = msSeguridadBackgroundServicio;
-            _configuracionesTrabajosColas = configuracionesTrabajosColas;
             _respuestaHttpValidador = respuestaHttpValidador;
+            _appSettings = appSettings;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -42,15 +45,16 @@ namespace DCO.Api.DatosComunes.Middlewares
         /// <exception cref="LoguinException"></exception>
         private async Task<string> AutenticarUsuarioAsync()
         {
+            var trabajosColasSettings = _appSettings.ObtenerTrabajosColasSettings();
             AutenticacionRequest autenticacionRequest = new AutenticacionRequest()
             {
-                NombreUsuario = _configuracionesTrabajosColas.ObtenerUsuarioIntegracion(),
-                Clave = _configuracionesTrabajosColas.ObtenerClaveIntegracion()
+                NombreUsuario = trabajosColasSettings.UsuarioIntegracion,
+                Clave = trabajosColasSettings.ClaveIntegracion
             };
 
             var respuesta = await _msSeguridadBackgroundServicio.AutenticarUsuarioAsync(autenticacionRequest);
             await _respuestaHttpValidador.ValidarRespuesta(respuesta, Textos.Generales.MENSAJE_ERROR_CONSUMO_SERVICIO);
-            var contenido = await respuesta.Content.ReadFromJsonAsync<ApiResponse<AutenticacionResponse>>();
+            var contenido = await respuesta.Content.ReadFromJsonAsync<ApiResponseDto<AutenticacionResponse>>();
             if (contenido?.Data == null)
                 throw new LoguinException(Textos.Usuarios.MENSAJE_LOGIN_INCORRECTO);
 

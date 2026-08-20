@@ -5,15 +5,15 @@ namespace DCO.Aplicacion.CasosUso.Interfaces
 {
     public interface IListaDetalleServicio
     {
-        Task<ApiResponse<int>> CrearAsync(ListaDetalleCreacionRequest listaDetalleCreacionRequest);
-        Task<ApiResponse<string>> ModificarAsync(ListaDetalleModificacionRequest listaDetalleModificacionRequest);
-        Task<ApiResponse<string>> EliminarAsync(int id);
-        Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista);
-        Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigoConstanteAsync(string codigoConstante);
-        Task<ApiResponse<ListaDetalleDto?>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest);
-        Task<ApiResponse<ListaDetalleDto?>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest);
+        Task<ApiResponseDto<int>> CrearAsync(ListaDetalleCreacionRequest listaDetalleCreacionRequest);
+        Task<ApiResponseDto<string>> ModificarAsync(ListaDetalleModificacionRequest listaDetalleModificacionRequest);
+        Task<ApiResponseDto<string>> EliminarAsync(int id);
+        Task<ApiResponseDto<List<ListaDetalleDto>?>> ListarPorCodigoListaAsync(string codigoLista);
+        Task<ApiResponseDto<List<ListaDetalleDto>?>> ListarPorCodigoConstanteAsync(string codigoConstante);
+        Task<ApiResponseDto<ListaDetalleDto?>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest);
+        Task<ApiResponseDto<ListaDetalleDto?>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest);
 
-        Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigosListaAsync(List<string> codigosLista);
-        Task<ApiResponse<List<ListaDetalleDto>?>> ListarPorCodigosConstanteAsync(List<string> codigosConstante);
+        Task<ApiResponseDto<List<ListaDetalleDto>?>> ListarPorCodigosListaAsync(List<string> codigosLista);
+        Task<ApiResponseDto<List<ListaDetalleDto>?>> ListarPorCodigosConstanteAsync(List<string> codigosConstante);
     }
 }

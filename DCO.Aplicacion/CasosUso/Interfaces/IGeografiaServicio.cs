@@ -1,10 +1,10 @@
 ﻿using DCO.Dtos;
-
+using Utilidades.Dtos;
 namespace DCO.Aplicacion.CasosUso.Interfaces
 {
     public interface IGeografiaServicio
     {
-        Task<ApiResponse<ListaDto?>> ObtenerUbicacionPorCodigoDepartamentoMunicipio(string codigoDepartamentoMunicipio);
-        Task<ApiResponse<List<UbicacionCompletaDto>?>> ListarAsync();
+        Task<ApiResponseDto<ListaDto?>> ObtenerUbicacionPorCodigoDepartamentoMunicipio(string codigoDepartamentoMunicipio);
+        Task<ApiResponseDto<List<UbicacionCompletaDto>?>> ListarAsync();
     }
 }

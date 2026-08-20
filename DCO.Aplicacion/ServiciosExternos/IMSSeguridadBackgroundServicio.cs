@@ -7,5 +7,8 @@ namespace DCO.Aplicacion.ServiciosExternos
     {
         [Post("/autenticacion/autenticarUsuario")]
         Task<HttpResponseMessage> AutenticarUsuarioAsync([Body] AutenticacionRequest autenticacionRequest);
+
+        [Get("/permisos/listar")]
+        Task<HttpResponseMessage> ListarPermisosAsync();
     }
 }

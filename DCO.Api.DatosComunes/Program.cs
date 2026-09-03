@@ -189,8 +189,8 @@ builder.Services
     {
         c.BaseAddress = new Uri(urlMsSeguridad);
         c.DefaultRequestHeaders.Add("Accept", "application/json");
-    })
-    .AddHttpMessageHandler<MiddlewareManejadorTokensBackground>();
+    });
+    //.AddHttpMessageHandler<MiddlewareManejadorTokensBackground>();
 
 builder.Services
     .AddHttpClient<IPublicadorEventosBackgroundServicio, PublicadorEventosBackgroundServicio>

@@ -5,6 +5,7 @@ using Utilidades;
 using Utilidades.Dtos;
 using Utilidades.Dtos.Seguridad;
 using Utilidades.Servicios.Serializacion.Interfaces;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Aplicacion.Servicios.Implementaciones
 {

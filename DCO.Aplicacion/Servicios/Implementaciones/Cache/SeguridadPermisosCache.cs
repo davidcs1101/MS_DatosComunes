@@ -1,22 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using DCO.Aplicacion.Servicios.Interfaces.Cache;
+﻿using DCO.Aplicacion.Servicios.Interfaces.Cache;
 using Utilidades.Dtos;
 using Utilidades.Dtos.Seguridad;
 using Utilidades.Servicios.Responses.Interfaces;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Aplicacion.Servicios.Implementaciones.Cache
 {
     public class SeguridadPermisosCache : ISeguridadPermisosCache
     {
         private readonly object _lock = new();
-        private readonly IServiceScopeFactory _scopeFactory;
+        private IMSSeguridad _msSeguridad;
         private Dictionary<string, HashSet<string>> _permisos = new Dictionary<string, HashSet<string>>();
         private readonly IApiResponse _apiResponse;
 
-        public SeguridadPermisosCache(IApiResponse apiResponse, IServiceScopeFactory scopeFactory)
+        public SeguridadPermisosCache(IApiResponse apiResponse, IMSSeguridad msSeguridad)
         {
             _apiResponse = apiResponse;
-            _scopeFactory = scopeFactory;
+            _msSeguridad = msSeguridad;
         }
 
         public async Task InicializarAsync()
@@ -71,12 +71,8 @@ namespace DCO.Aplicacion.Servicios.Implementaciones.Cache
         }
         private async Task ObtenerListaCatalogosAutorizacionAsync() 
         {
-            //using var scope = _scopeFactory.CreateScope();
-            //var autorizacionServicio = scope.ServiceProvider.GetRequiredService<IAutorizacionServicio>();
-
-            //var autorizaciones = await autorizacionServicio.ListarCatalogoAutorizacionAsync();
-
-            //Actualizar(autorizaciones);
+            var autorizaciones = await _msSeguridad.ListarCatalogoAutorizacion();
+            Actualizar(autorizaciones);
         }
 
     }

@@ -1,6 +1,4 @@
 ﻿using DCO.Aplicacion.CasosUso.Interfaces;
-using DCO.Aplicacion.Servicios.Interfaces;
-using DCO.Aplicacion.ServiciosExternos;
 using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Dominio.Entidades;
 using DCO.Dominio.Enumeraciones;
@@ -8,8 +6,8 @@ using DCO.Dominio.Repositorio;
 using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Dominio.Servicios.Interfaces;
 using Utilidades;
-using Utilidades.Dtos;
 using Utilidades.Servicios.Serializacion.Interfaces;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -68,11 +66,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 _colaSolicitudRepositorio.MarcarModificar(solicitudExiste);
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
-                await _publicadorEventosBackgroundServicio.PublicarActualizacionListaDetalle
-                    (
-                    solicitudExiste.UrlDestino,
-                    _serializadorJsonServicio.Deserializar<List<ListaDetalleDto>>(solicitudExiste.Payload)
-                    );
+                await _publicadorEventosBackgroundServicio.PublicarActualizacion(solicitudExiste.UrlDestino,"OJO_CAMBIAR");
 
                 solicitudExiste.Estado = EstadoCola.Exitoso;
                 solicitudExiste.ErrorMensaje = null;

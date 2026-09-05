@@ -1,33 +1,26 @@
 ﻿using System.Net.Http.Headers;
-using DCO.Aplicacion.ServiciosExternos;
-using DCO.Dtos;
-using Utilidades;
 using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Dominio.Excepciones;
-using Utilidades.Dtos;
 using Utilidades.Servicios.Http.Interfaces;
 using Utilidades.Dtos.Seguridad;
-using Utilidades.Servicios.Http.Interfaces.Contextos;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {
     public class MiddlewareManejadorTokensBackground : DelegatingHandler
     {
-        private readonly IMSSeguridadBackgroundServicio _msSeguridadBackgroundServicio;
+        private readonly IMSSeguridadAutenticacion _seguridadAutenticacion;
         private readonly IAppSettings _appSettings;
-        private readonly IRespuestaHttpValidador _respuestaHttpValidador;
 
-        public MiddlewareManejadorTokensBackground(IMSSeguridadBackgroundServicio msSeguridadBackgroundServicio, 
-            IRespuestaHttpValidador respuestaHttpValidador, IAppSettings appSettings)
+        public MiddlewareManejadorTokensBackground(IMSSeguridadAutenticacion msSeguridadAutenticacion, IAppSettings appSettings)
         {
-            _msSeguridadBackgroundServicio = msSeguridadBackgroundServicio;
-            _respuestaHttpValidador = respuestaHttpValidador;
+            _seguridadAutenticacion = msSeguridadAutenticacion;
             _appSettings = appSettings;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var token = await this.AutenticarUsuarioAsync();
+            var datosToken = await AutenticarUsuarioAsync();
+            var token = datosToken.Token;
             if (!string.IsNullOrEmpty(token))
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -45,7 +38,7 @@ namespace DCO.Api.DatosComunes.Middlewares
         /// </summary>
         /// <returns></returns>
         /// <exception cref="LoguinException"></exception>
-        private async Task<string> AutenticarUsuarioAsync()
+        private async Task<AutenticacionResponse> AutenticarUsuarioAsync()
         {
             var trabajosColasSettings = _appSettings.ObtenerTrabajosColasSettings();
             AutenticacionRequest autenticacionRequest = new AutenticacionRequest()
@@ -53,14 +46,7 @@ namespace DCO.Api.DatosComunes.Middlewares
                 NombreUsuario = trabajosColasSettings.UsuarioIntegracion,
                 Clave = trabajosColasSettings.ClaveIntegracion
             };
-
-            var respuesta = await _msSeguridadBackgroundServicio.AutenticarUsuarioAsync(autenticacionRequest);
-            await _respuestaHttpValidador.ValidarRespuesta(respuesta, Textos.Generales.MENSAJE_ERROR_CONSUMO_SERVICIO);
-            var contenido = await respuesta.Content.ReadFromJsonAsync<ApiResponseDto<AutenticacionResponse>>();
-            if (contenido?.Data == null)
-                throw new LoguinException(Textos.Usuarios.MENSAJE_LOGIN_INCORRECTO);
-
-            return contenido?.Data.Token;
+            return await _seguridadAutenticacion.AutenticarUsuarioAsync(autenticacionRequest);
         }
     }
 }

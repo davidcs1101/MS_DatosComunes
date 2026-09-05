@@ -2,7 +2,9 @@ using DCO.Api.DatosComunes.Middlewares;
 using DCO.Aplicacion.CasosUso.Implementaciones;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.Servicios.Implementaciones;
+using DCO.Aplicacion.Servicios.Implementaciones.Cache;
 using DCO.Aplicacion.Servicios.Interfaces;
+using DCO.Aplicacion.Servicios.Interfaces.Cache;
 using DCO.Aplicacion.ServiciosExternos;
 using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Aplicacion.ServiciosExternos.Mapeo;
@@ -12,7 +14,6 @@ using DCO.Dominio.Repositorio.UnidadTrabajo;
 using DCO.Dominio.Servicios.Implementaciones;
 using DCO.Dominio.Servicios.Interfaces;
 using DCO.Dtos.AppSettings;
-using DCO.Infraestructura.Aplicacion.ServiciosExternos;
 using DCO.Infraestructura.Aplicacion.ServiciosExternos.Config;
 using DCO.Infraestructura.Dominio.Repositorio;
 using DCO.Infraestructura.Mapeo;
@@ -132,6 +133,11 @@ builder.Services.AddScoped(typeof(IEntidadValidador<>), typeof(EntidadValidador<
 
 builder.Services.AddSingleton<Utilidades.Servicios.Responses.Interfaces.IApiResponse, ApiResponse>();
 builder.Services.AddSingleton<IMSSeguridad, MSSeguridad>();
+builder.Services.AddScoped<IMSSeguridadAutenticacion, MSSeguridadAutenticacion>();
+
+//Para cachear datos de otros microservicios
+builder.Services.AddSingleton<ISeguridadPermisosCache, SeguridadPermisosCache>();
+
 builder.Services.AddSingleton<IRespuestaHttpValidador, RespuestaHttpValidador>();
 builder.Services.AddScoped<IColaSolicitudServicio, ColaSolicitudServicio>();
 builder.Services.AddScoped<IJobEncoladorServicio, JobEncoladorServicio>();
@@ -190,8 +196,16 @@ builder.Services
     {
         c.BaseAddress = new Uri(urlMsSeguridad);
         c.DefaultRequestHeaders.Add("Accept", "application/json");
+    })
+    .AddHttpMessageHandler<MiddlewareManejadorTokensBackground>();
+
+builder.Services
+    .AddRefitClient<IMSSeguridadAutenticacionServicio>()
+    .ConfigureHttpClient(c =>
+    {
+        c.BaseAddress = new Uri(urlMsSeguridad);
+        c.DefaultRequestHeaders.Add("Accept", "application/json");
     });
-    //.AddHttpMessageHandler<MiddlewareManejadorTokensBackground>();
 
 builder.Services
     .AddHttpClient<IPublicadorEventosBackgroundServicio, PublicadorEventosBackgroundServicio>
@@ -211,6 +225,10 @@ var configuracionTrabajosColas = app.Services.GetRequiredService<IAppSettings>()
 RecurringJob.AddOrUpdate<IColaSolicitudServicio>("procesador_solicitudes", x => x.ProcesarColaSolicitudesAsync(),
     configuracionTrabajosColas.ObtenerTrabajosColasSettings().ProcesarColaSolicitudesCron);
 
+// Se configura un job para inicializar la caché de permisos desde la base de datos al iniciar el microservicio y luego se programa para que se ejecute periódicamente.
+BackgroundJob.Enqueue<ISeguridadPermisosCache>(x => x.InicializarAsync());
+RecurringJob.AddOrUpdate<ISeguridadPermisosCache>("inicializar_permisos", x => x.InicializarAsync(),
+    configuracionTrabajosColas.ObtenerTrabajosColasSettings().ProcesarColaSolicitudesCron);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

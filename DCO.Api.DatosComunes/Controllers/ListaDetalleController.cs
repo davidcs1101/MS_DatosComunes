@@ -79,14 +79,14 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPost("listarPorCodigosLista")]
-        [Permiso(CodigosPermisos.ListasDetalles.LISTAR)]
+        //[Permiso(CodigosPermisos.ListasDetalles.LISTAR)]
         public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorCodigosLista(List<string> codigosLista)
         {
             return await _listaDetalleServicio.ListarPorCodigosListaAsync(codigosLista);
         }
 
         [HttpPost("listarPorCodigosConstante")]
-        [Permiso(CodigosPermisos.ListasDetalles.LISTAR)]
+        //[Permiso(CodigosPermisos.ListasDetalles.LISTAR)]
         public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorCodigosConstante(List<string> codigosConstante)
         {
             return await _listaDetalleServicio.ListarPorCodigosConstanteAsync(codigosConstante);

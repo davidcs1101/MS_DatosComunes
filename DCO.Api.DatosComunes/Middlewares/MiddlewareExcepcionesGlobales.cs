@@ -5,6 +5,7 @@ using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Dominio.Excepciones;
 using Utilidades.Servicios.Serializacion.Interfaces;
 using Utilidades.Servicios.Responses.Interfaces;
+using Utilidades.Excepciones;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {
@@ -51,6 +52,11 @@ namespace DCO.Api.DatosComunes.Middlewares
             else if (e is SolicitudHttpException)
             {
                 contexto.Response.StatusCode = (int)HttpStatusCode.BadGateway;
+                respuesta.Mensaje = e.Message;
+            }
+            else if (e is LoguinException || e is UnauthorizedAccessException)
+            {
+                contexto.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 respuesta.Mensaje = e.Message;
             }
             else

@@ -1,14 +1,16 @@
-﻿using DCO.Aplicacion.CasosUso.Implementaciones;
+﻿using DCO.Api.DatosComunes.Middlewares.Permisos;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilidades.Dtos;
+using Utilidades.Seguridad;
 
 namespace DCO.Api.DatosComunes.Controllers
 {
     [ApiController]
     [Route("api/geografia")]
-    //[Authorize(policy: "DatosConstantesPermiso")]
+    [Authorize]
     public class GeografiaController : Controller
     {
         private readonly IGeografiaServicio _geografiaServicio;
@@ -19,6 +21,7 @@ namespace DCO.Api.DatosComunes.Controllers
         }
 
         [HttpGet("listar")]
+        [Permiso(CodigosPermisos.Geografia.LISTAR)]
         public async Task<ApiResponseDto<List<UbicacionCompletaDto>?>> Listar()
         {
             return await _geografiaServicio.ListarAsync();

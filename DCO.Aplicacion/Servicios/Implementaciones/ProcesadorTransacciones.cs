@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Utilidades.Dtos;
 using DCO.Aplicacion.Servicios.Interfaces;
+using Utilidades.Excepciones;
 
 namespace DCO.Aplicacion.Servicios.Implementaciones
 {

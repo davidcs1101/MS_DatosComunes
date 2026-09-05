@@ -6,6 +6,8 @@ using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Dominio.Excepciones;
 using Utilidades.Dtos;
 using Utilidades.Servicios.Http.Interfaces;
+using Utilidades.Dtos.Seguridad;
+using Utilidades.Servicios.Http.Interfaces.Contextos;
 
 namespace DCO.Api.DatosComunes.Middlewares
 {

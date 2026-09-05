@@ -13,6 +13,7 @@ using DCO.Dominio.Enumeraciones;
 using Utilidades.Dtos;
 using Utilidades.Servicios.Serializacion.Interfaces;
 using Utilidades.Servicios.Responses.Interfaces;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {
@@ -32,7 +33,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
         private readonly ISerializadorJsonServicio _serializadorJsonServicio;
         private readonly IColaSolicitudRepositorio _colaSolicitudRepositorio;
 
-        public DatoConstanteDetalleServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IMSSeguridad msSeguridad, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApiResponse apiResponseServicio, IProcesadorTransacciones procesadorTransacciones, IDatoConstanteDetalleRepositorio datoConstanteDetalleRepositorio, IListaDetalleRepositorio listaDetalleRepositorio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IEntidadValidador<DCO_DatoConstanteDetalle> datoConstanteDetalleValidador, IUnidadDeTrabajo unidadDeTrabajo, 
+        public DatoConstanteDetalleServicio(IDatoConstanteRepositorio datoConstanteRepositorio, IMapper mapper, IUsuarioContextoServicio usuarioContextoServicio, IEntidadValidador<DCO_DatoConstante> datoConstanteValidador, IApiResponse apiResponseServicio, IProcesadorTransacciones procesadorTransacciones, IDatoConstanteDetalleRepositorio datoConstanteDetalleRepositorio, IListaDetalleRepositorio listaDetalleRepositorio, IEntidadValidador<DCO_ListaDetalle> listaDetalleValidador, IEntidadValidador<DCO_DatoConstanteDetalle> datoConstanteDetalleValidador, IUnidadDeTrabajo unidadDeTrabajo, 
             ISerializadorJsonServicio serializadorJsonServicio, IColaSolicitudRepositorio colaSolicitudRepositorio, IAppSettings appSettings)
         {
             _datoConstanteRepositorio = datoConstanteRepositorio;

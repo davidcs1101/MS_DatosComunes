@@ -6,10 +6,10 @@ using Utilidades;
 using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.ServiciosExternos;
-using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Dominio.Servicios.Interfaces;
 using Utilidades.Dtos;
 using Utilidades.Servicios.Responses.Interfaces;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {

@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DCO.Api.DatosComunes.Middlewares.Permisos;
+using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using DCO.Aplicacion.CasosUso.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Utilidades.Dtos;
+using Utilidades.Seguridad;
 
 namespace ApiDCO.Controllers
 {
     [ApiController]
     [Route("api/listas")]
-    [Authorize(policy: "ListasPermiso")]
+    [Authorize]
     public class ListaController : Controller
     {
         private readonly IListaServicio _listaServicio;
@@ -19,24 +21,28 @@ namespace ApiDCO.Controllers
         }
 
         [HttpGet("obtenerPorId")]
+        [Permiso(CodigosPermisos.Listas.CONSULTAR)]
         public async Task<ActionResult<ApiResponseDto<ListaDto?>>> ObtenerPorId(int id)
         {
             return await _listaServicio.ObtenerPorIdAsync(id);
         }
 
         [HttpGet("obtenerPorCodigo")]
+        [Permiso(CodigosPermisos.Listas.CONSULTAR)]
         public async Task<ActionResult<ApiResponseDto<ListaDto?>>> ObtenerPorCodigo(string codigo)
         {
             return await _listaServicio.ObtenerPorCodigoAsync(codigo);
         }
 
         [HttpGet("listar")]
+        [Permiso(CodigosPermisos.Listas.LISTAR)]
         public async Task<ActionResult<ApiResponseDto<List<ListaDto>?>>> Listar()
         {
             return await _listaServicio.ListarAsync();
         }
 
         [HttpPost("crear")]
+        [Permiso(CodigosPermisos.Listas.CREAR)]
         public async Task<ActionResult<ApiResponseDto<int>>> Crear(ListaCreacionRequest listaCreacionRequest)
         {
             if (!ModelState.IsValid)
@@ -46,6 +52,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPut("modificar")]
+        [Permiso(CodigosPermisos.Listas.MODIFICAR)]
         public async Task<ActionResult<ApiResponseDto<string>>> Modificar(ListaModificacionRequest listaModificacionRequest)
         {
             if (!ModelState.IsValid)
@@ -55,6 +62,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpDelete("eliminar")]
+        [Permiso(CodigosPermisos.Listas.ELIMINAR)]
         public async Task<ActionResult<ApiResponseDto<string>>> Eliminar(int id)
         {
             return await _listaServicio.EliminarAsync(id);

@@ -15,6 +15,7 @@ using DCO.Aplicacion.ServiciosExternos.config;
 using Utilidades.Dtos;
 using Utilidades.Servicios.Serializacion.Interfaces;
 using Utilidades.Servicios.Responses.Interfaces;
+using Utilidades.Servicios.Http.Interfaces;
 
 namespace DCO.Aplicacion.CasosUso.Implementaciones
 {

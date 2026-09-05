@@ -30,6 +30,7 @@ using Refit;
 using System.Text;
 using Utilidades.Servicios.Http.Implementaciones;
 using Utilidades.Servicios.Http.Interfaces;
+using Utilidades.Servicios.Http.Interfaces.Contextos;
 using Utilidades.Servicios.Responses.Implementaciones;
 using Utilidades.Servicios.Serializacion.Implementaciones;
 using Utilidades.Servicios.Serializacion.Interfaces;

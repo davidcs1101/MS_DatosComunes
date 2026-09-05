@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DCO.Api.DatosComunes.Middlewares.Permisos;
+using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using DCO.Aplicacion.CasosUso.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Utilidades.Dtos;
+using Utilidades.Seguridad;
 
 namespace ApiDCO.Controllers
 {
     [ApiController]
     [Route("api/datosConstantesDetalles")]
-    //[Authorize(policy: "DatosConstantesPermiso")]
+    [Authorize]
     public class DatoConstanteDetalleController : Controller
     {
         private readonly IDatoConstanteDetalleServicio _datoConstanteDetalleServicio;
@@ -19,6 +21,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPost("crear")]
+        [Permiso(CodigosPermisos.DatosConstantesDetalles.CREAR)]
         public async Task<ActionResult<ApiResponseDto<int>>> Crear(DatoConstanteDetalleCreacionRequest datoConstanteDetalleCreacionRequest)
         {
             if (!ModelState.IsValid)
@@ -28,6 +31,7 @@ namespace ApiDCO.Controllers
         }
 
         [HttpPut("modificar")]
+        [Permiso(CodigosPermisos.DatosConstantesDetalles.MODIFICAR)]
         public async Task<ActionResult<ApiResponseDto<string>>> Modificar(DatoConstanteDetalleModificacionRequest datoConstanteDetalleModificacionRequest)
         {
             if (!ModelState.IsValid)

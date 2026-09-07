@@ -1,4 +1,5 @@
 using DCO.Api.DatosComunes.Middlewares;
+using DCO.Api.DatosComunes.Middlewares.Permisos;
 using DCO.Aplicacion.CasosUso.Implementaciones;
 using DCO.Aplicacion.CasosUso.Interfaces;
 using DCO.Aplicacion.Servicios.Implementaciones;
@@ -24,11 +25,13 @@ using Hangfire.MySql;
 using log4net;
 using log4net.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Refit;
 using System.Text;
+using Utilidades.Seguridad;
 using Utilidades.Servicios.Http.Implementaciones;
 using Utilidades.Servicios.Http.Interfaces;
 using Utilidades.Servicios.Http.Interfaces.Contextos;
@@ -109,10 +112,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero //No se permite tolerancia de tiempo una vez el token caduca (por defecto es 5 minutos si no se establece)
         };
     });
-builder.Services.AddAuthorization(options => options.AddPolicy("ListasPermiso",
-permiso => permiso.RequireClaim("Programa", "LISTAS")));
-builder.Services.AddAuthorization(options => options.AddPolicy("DatosConstantesPermiso",
-permiso => permiso.RequireClaim("Programa", "DATOSCONSTANTES")));
+
+
+#region REG_Politicas de Autorizacion
+
+builder.Services.AddAuthorization(options =>
+{
+    //Para política basada en permisos.
+    options.AddPolicy(Politicas.PERMISO, policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.Requirements.Add(new PermisoRequirement());
+    });
+
+    //Para política basada en los "CodigoGrupo" con valor específicos.
+    options.AddPolicy(Politicas.GRUPOSFUNCIONESSISTEMA, policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            var grupo = context.User.FindFirst(Claims.CodigoGrupo)?.Value;
+            return
+            grupo == CodigosGrupos.ADMINISTRADORSISTEMA ||
+            grupo == CodigosGrupos.MSINTEGRACION;
+        });
+    });
+
+});
+
+#endregion
 
 builder.Services.AddScoped<IListaRepositorio, ListaRepositorio>();
 builder.Services.AddScoped<IListaServicio, ListaServicio>();
@@ -137,6 +164,12 @@ builder.Services.AddScoped<IMSSeguridadAutenticacion, MSSeguridadAutenticacion>(
 
 //Para cachear datos de otros microservicios
 builder.Services.AddSingleton<ISeguridadPermisosCache, SeguridadPermisosCache>();
+
+//Para cachear tokens de seguridad de acceso de usuarios
+builder.Services.AddMemoryCache();
+
+//IMPORTANTE: esta clase es la que permite que se evalue todo el tema de permisos a nivel de cada EndPoint
+builder.Services.AddSingleton<IAuthorizationHandler, PermisoManejadorAutorizacion>();
 
 builder.Services.AddSingleton<IRespuestaHttpValidador, RespuestaHttpValidador>();
 builder.Services.AddScoped<IColaSolicitudServicio, ColaSolicitudServicio>();

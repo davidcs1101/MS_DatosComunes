@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using DCO.Aplicacion.Servicios.Interfaces.Cache;
-using DCO.Aplicacion.ServiciosExternos;
 using Utilidades;
 using Utilidades.Excepciones;
 using Utilidades.Servicios.Http.Interfaces;

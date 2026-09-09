@@ -15,5 +15,10 @@ namespace DCO.Dominio.Servicios.Implementaciones
             if (entidad == null)
                 throw new DatoNoEncontradoException(mensaje);
         }
+        public void ValidarDatoActivo(bool estadoActivo, string mensaje)
+        {
+            if (!estadoActivo)
+                throw new DatoInactivoException(mensaje);
+        }
     }
 }

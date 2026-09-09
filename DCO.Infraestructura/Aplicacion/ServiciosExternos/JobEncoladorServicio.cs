@@ -5,14 +5,30 @@ using Hangfire;
 
 public class JobEncoladorServicio: IJobEncoladorServicio
 {
-    public Task EncolarPorColaSolicitudId(int Id, bool validarEstadoPendiente = false)
+    public Task EncolarPorColaSolicitudId(int id, bool validarEstadoPendiente = false)
     {
-        try{
-            BackgroundJob.Enqueue<IColaSolicitudServicio>(x => x.ProcesarPorColaSolicitudIdAsync(Id, validarEstadoPendiente));
-        }
-        catch (Exception e){
-            Logs.EscribirLog("e", Textos.ColasSolicitudes.MENSAJE_COLASOLICITUD_ERROR_ENCOLAR_HANGFIRE, e);
+        EncolarSolicitudId(id, validarEstadoPendiente);
+        return Task.CompletedTask;
+    }
+
+    public Task EncolarPorColasSolicitudesIds(List<int> ids, bool validarEstadoPendiente = false)
+    {
+        foreach (var id in ids)
+        {
+            EncolarSolicitudId(id, validarEstadoPendiente);
         }
         return Task.CompletedTask;
+    }
+
+    private void EncolarSolicitudId(int id, bool validarEstadoPendiente = false)
+    {
+        try
+        {
+            BackgroundJob.Enqueue<IColaSolicitudServicio>(x => x.ProcesarPorColaSolicitudIdAsync(id, validarEstadoPendiente));
+        }
+        catch (Exception e)
+        {
+            Logs.EscribirLog("e", Textos.ColasSolicitudes.MENSAJE_COLASOLICITUD_ERROR_ENCOLAR_HANGFIRE, e);
+        }
     }
 }

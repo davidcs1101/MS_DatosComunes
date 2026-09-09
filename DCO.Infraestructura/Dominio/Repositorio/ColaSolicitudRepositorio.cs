@@ -1,6 +1,8 @@
-﻿using DCO.Dominio.Repositorio;
-using DCO.DataAccess;
+﻿using DCO.DataAccess;
 using DCO.Dominio.Entidades;
+using DCO.Dominio.Enumeraciones;
+using DCO.Dominio.Repositorio;
+using Microsoft.EntityFrameworkCore;
 
 namespace DCO.Intraestructura.Dominio.Repositorio
 {
@@ -29,9 +31,20 @@ namespace DCO.Intraestructura.Dominio.Repositorio
             return await _context.DCO_ColaSolicitudes.FindAsync(id);
         }
 
-        public IQueryable<DCO_ColaSolicitud> Listar()
+        public async Task<List<DCO_ColaSolicitud>> ListarAsync(EstadoCola estado, int cantidadRegistros)
         {
-            return _context.DCO_ColaSolicitudes;
+            return await _context.DCO_ColaSolicitudes
+                .Where(c => c.Estado == estado)
+                .OrderBy(c => c.Id)
+                .Take(cantidadRegistros)
+                .ToListAsync();
+        }
+
+        public async Task<int> CrearAsync(DCO_ColaSolicitud colaSolicitud)
+        {
+            _context.DCO_ColaSolicitudes.Add(colaSolicitud);
+            await _context.SaveChangesAsync();
+            return colaSolicitud.Id;
         }
     }
 }

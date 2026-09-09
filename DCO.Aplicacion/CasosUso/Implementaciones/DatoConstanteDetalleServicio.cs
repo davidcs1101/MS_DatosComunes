@@ -80,7 +80,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteExiste.Codigo);
 
                 var urls = _appSettings.ObtenerActualizarConstantesDetalleServicios();
-                colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
+                colas = this.AgregarColaSolicitud(datoConstanteExiste.Codigo, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
 
@@ -109,7 +109,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 var datosListasDetalle = await _procesadorTransacciones.ObtenerListasDetalleCodigoConstanteAsync(datoConstanteDetalleExiste.DatoConstante.Codigo);
 
                 var urls = _appSettings.ObtenerActualizarConstantesDetalleServicios();
-                colas = this.AgregarColaSolicitud(datosListasDetalle, urls);
+                colas = this.AgregarColaSolicitud(datoConstanteDetalleExiste.DatoConstante.Codigo, urls);
 
                 await _unidadDeTrabajo.GuardarCambiosAsync();
             });
@@ -118,8 +118,11 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
             return _apiResponse.CrearRespuesta(true, Textos.Generales.MENSAJE_REGISTRO_ACTUALIZADO, "");
         }
 
-        private List<DCO_ColaSolicitud> AgregarColaSolicitud(List<ListaDetalleDto> datosListasDetalle, List<string> urls)
+        private List<DCO_ColaSolicitud> AgregarColaSolicitud(string codigoDetalle, List<string> urls)
         {
+            var codigo = new MaestroActualizadoEventoDto();
+            codigo.CodigosMaestro.Add(codigoDetalle);
+
             var colas = new List<DCO_ColaSolicitud>();
             foreach (var url in urls)
             {
@@ -127,7 +130,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
                 {
                     Tipo = EventosColas.CONSTANTESDETALLEACTUALIZADO,
                     UrlDestino = url,
-                    Payload = _serializadorJsonServicio.Serializar(datosListasDetalle),
+                    Payload = _serializadorJsonServicio.Serializar(codigo),
                     Estado = EstadoCola.Pendiente,
                     Intentos = 0,
                     FechaCreado = DateTime.Now

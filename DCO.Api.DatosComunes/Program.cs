@@ -181,6 +181,8 @@ builder.Services.AddSingleton<ISerializadorJsonServicio, SerializadorJsonServici
 builder.Services.AddScoped<IProcesadorTransacciones, ProcesadorTransacciones>();
 builder.Services.AddSingleton<IServicioEjecutorHttp, ServicioEjecutorHttp>();
 
+builder.Services.AddScoped<IProcesadorEventos, ProcesadorEventos>();
+
 #region REG_Servicios de configuraciones Appsettings
 builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));
 builder.Services.Configure<EventosNotificarSettings>(builder.Configuration.GetSection("EventosNotificar"));

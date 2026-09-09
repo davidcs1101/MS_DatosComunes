@@ -49,6 +49,11 @@ namespace DCO.Api.DatosComunes.Middlewares
                 contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
                 respuesta.Mensaje = e.Message;
             }
+            else if (e is DatoInactivoException)
+            {
+                contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                respuesta.Mensaje = e.Message;
+            }
             else if (e is SolicitudHttpException)
             {
                 contexto.Response.StatusCode = (int)HttpStatusCode.BadGateway;
@@ -57,6 +62,11 @@ namespace DCO.Api.DatosComunes.Middlewares
             else if (e is LoguinException || e is UnauthorizedAccessException)
             {
                 contexto.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                respuesta.Mensaje = e.Message;
+            }
+            else if (e is PermisoNoAutorizadoException)
+            {
+                contexto.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 respuesta.Mensaje = e.Message;
             }
             else

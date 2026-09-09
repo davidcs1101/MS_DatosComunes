@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using Microsoft.Extensions.Caching.Memory;
 using DCO.Aplicacion.ServiciosExternos.config;
 using DCO.Dominio.Excepciones;
 using Utilidades.Servicios.Http.Interfaces;
@@ -8,23 +9,44 @@ namespace DCO.Api.DatosComunes.Middlewares
 {
     public class MiddlewareManejadorTokensBackground : DelegatingHandler
     {
+        private readonly IMemoryCache _cache;
         private readonly IMSSeguridadAutenticacion _seguridadAutenticacion;
         private readonly IAppSettings _appSettings;
 
-        public MiddlewareManejadorTokensBackground(IMSSeguridadAutenticacion msSeguridadAutenticacion, IAppSettings appSettings)
+        public MiddlewareManejadorTokensBackground(IMSSeguridadAutenticacion msSeguridadAutenticacion, IAppSettings appSettings, IMemoryCache cache)
         {
             _seguridadAutenticacion = msSeguridadAutenticacion;
             _appSettings = appSettings;
+            _cache = cache;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var datosToken = await AutenticarUsuarioAsync();
-            var token = datosToken.Token;
-            if (!string.IsNullOrEmpty(token))
+            // Intenta obtener el token desde caché
+            if (!_cache.TryGetValue("Token", out string token))
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var datosToken = await AutenticarUsuarioAsync();
+                token = datosToken.Token;
+
+                //Calculamos el tiempo hasta la expiración
+                var ahora = DateTime.UtcNow;
+                var expiracion = datosToken.FechaExpiracion.ToUniversalTime();
+                var duracion = expiracion - ahora;
+
+                //Si por alguna razón la diferencia es negativa (ej. reloj del servidor), aplicamos un mínimo
+                if (duracion <= TimeSpan.Zero)
+                    duracion = TimeSpan.FromMinutes(1);
+
+                //Restamos unos minutos de margen antes de que expire (por seguridad)
+                var duracionConMargen = duracion - TimeSpan.FromMinutes(1);
+                if (duracionConMargen < TimeSpan.Zero)
+                    duracionConMargen = TimeSpan.FromMinutes(1);
+
+                //Guardamos el token en memoria segun la duración calculada con base en la fecha de expiración obtenida desde el servicio.
+                _cache.Set("Token", token, duracionConMargen);
             }
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return await base.SendAsync(request, cancellationToken);
         }
 

@@ -4,5 +4,6 @@
     {
         void ValidarDatoYaExiste(TEntity? entidad, string mensaje);
         void ValidarDatoNoEncontrado(TEntity? entidad, string mensaje);
+        void ValidarDatoActivo(bool estadoActivo, string mensaje);
     }
 }

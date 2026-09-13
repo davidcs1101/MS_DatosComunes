@@ -9,6 +9,6 @@ namespace DCO.Dominio.Repositorio
         Task<bool> EliminarAsync(int id);
         Task<DCO_DatoConstante?> ObtenerPorIdAsync(int id);
         Task<DCO_DatoConstante?> ObtenerPorCodigoAsync(string codigo);
-        IQueryable<DCO_DatoConstante> Listar();
+        Task<List<DCO_DatoConstante>> ListarAsync();
     }
 }

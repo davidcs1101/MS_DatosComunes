@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using AutoMapper;
+﻿using AutoMapper;
 using DCO.Dtos;
 using DCO.Dominio.Entidades;
 using Utilidades;
 using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
-using DCO.Aplicacion.ServiciosExternos;
 using DCO.Dominio.Servicios.Interfaces;
 using Utilidades.Dtos;
 using Utilidades.Servicios.Responses.Interfaces;
@@ -95,7 +93,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
         public async Task<ApiResponseDto<List<ListaDto>?>> ListarAsync()
         {
-            var listas = await _listaRepositorio.Listar().ToListAsync();
+            var listas = await _listaRepositorio.ListarAsync();
             var listasDto = _mapper.Map<List<ListaDto>>(listas);
             IdsListadoDto usuarioIds = new IdsListadoDto();
 

@@ -39,74 +39,73 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             return await _context.DCO_ListasDetalles.FirstOrDefaultAsync(g => g.ListaId == listaId && g.Codigo == codigo);
         }
 
-        public IQueryable<ListaDetalleMV> Listar()
+        public async Task<List<ListaDetalleMV>> ListarAsync()
         {
-            return _context.DCO_ListasDetalles
-                         .Include(ld => ld.Lista)
-                         .Select(ld => new ListaDetalleMV
-                         {
-                             Id = ld.Id,
-                             ListaId = ld.ListaId,
-                             Codigo = ld.Codigo,
-                             Nombre = ld.Nombre,
-                             UsuarioCreadorId = ld.UsuarioCreadorId,
-                             FechaCreado = ld.FechaCreado,
-                             UsuarioModificadorId = ld.UsuarioModificadorId,
-                             FechaModificado = ld.FechaModificado,
-                             EstadoActivoListaDetalle = ld.EstadoActivo,
+            return await _context.DCO_ListasDetalles
+                .Include(ld => ld.Lista)
+                .Select(ld => new ListaDetalleMV
+                {
+                    Id = ld.Id,
+                    ListaId = ld.ListaId,
+                    Codigo = ld.Codigo,
+                    Nombre = ld.Nombre,
+                    UsuarioCreadorId = ld.UsuarioCreadorId,
+                    FechaCreado = ld.FechaCreado,
+                    UsuarioModificadorId = ld.UsuarioModificadorId,
+                    FechaModificado = ld.FechaModificado,
+                    EstadoActivoListaDetalle = ld.EstadoActivo,
 
-                             CodigoLista = ld.Lista.Codigo
-                         });
+                    CodigoLista = ld.Lista.Codigo
+                }).ToListAsync();
         }
 
-        public IQueryable<ListaDetalleMV> ListarPorCodigoLista(string codigoLista)
+        public async Task<List<ListaDetalleMV>> ListarPorCodigoListaAsync(string codigoLista)
         {
-            return _context.DCO_ListasDetalles
-                         .Include(ld => ld.Lista)
-                         .Where(ld => ld.Lista.Codigo == codigoLista)
-                         .Select(ld => new ListaDetalleMV
-                         {
-                             Id = ld.Id,
-                             ListaId = ld.ListaId,
-                             Codigo = ld.Codigo,
-                             Nombre = ld.Nombre,
-                             UsuarioCreadorId = ld.UsuarioCreadorId,
-                             FechaCreado = ld.FechaCreado,
-                             UsuarioModificadorId = ld.UsuarioModificadorId,
-                             FechaModificado = ld.FechaModificado,
-                             EstadoActivoListaDetalle = ld.EstadoActivo,
+            return await _context.DCO_ListasDetalles
+                .Where(ld => ld.Lista.Codigo == codigoLista)
+                .Select(ld => new ListaDetalleMV
+                {
+                    Id = ld.Id,
+                    ListaId = ld.ListaId,
+                    Codigo = ld.Codigo,
+                    Nombre = ld.Nombre,
+                    UsuarioCreadorId = ld.UsuarioCreadorId,
+                    FechaCreado = ld.FechaCreado,
+                    UsuarioModificadorId = ld.UsuarioModificadorId,
+                    FechaModificado = ld.FechaModificado,
+                    EstadoActivoListaDetalle = ld.EstadoActivo,
 
-                             CodigoLista = ld.Lista.Codigo
-                         });
+                    CodigoLista = ld.Lista.Codigo
+                }).ToListAsync();
         }
 
-        public IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante)
+        public async Task<List<ListaDetalleMV>> ListarPorCodigoConstanteAsync(string codigoDatoConstante)
         {
-            return from dc in _context.DCO_DatosConstantes
-                   join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
-                   join ld in _context.DCO_ListasDetalles on dcd.ListaDetalleId equals ld.Id
-                   where dc.Codigo == codigoDatoConstante
-                   select new ListaDetalleMV
-                   {
-                       Id = ld.Id,
-                       ListaId = ld.ListaId,
-                       Codigo = ld.Codigo,
-                       Nombre = ld.Nombre,
-                       UsuarioCreadorId = ld.UsuarioCreadorId,
-                       FechaCreado = ld.FechaCreado,
-                       UsuarioModificadorId = ld.UsuarioModificadorId,
-                       FechaModificado = ld.FechaModificado,
-                       EstadoActivoListaDetalle = ld.EstadoActivo,
-                       EstadoActivoConstanteDetalle = dc.EstadoActivo,
+            return await (
+                from dc in _context.DCO_DatosConstantes
+                join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
+                join ld in _context.DCO_ListasDetalles on dcd.ListaDetalleId equals ld.Id
+                where dc.Codigo == codigoDatoConstante
+                select new ListaDetalleMV
+                {
+                    Id = ld.Id,
+                    ListaId = ld.ListaId,
+                    Codigo = ld.Codigo,
+                    Nombre = ld.Nombre,
+                    UsuarioCreadorId = ld.UsuarioCreadorId,
+                    FechaCreado = ld.FechaCreado,
+                    UsuarioModificadorId = ld.UsuarioModificadorId,
+                    FechaModificado = ld.FechaModificado,
+                    EstadoActivoListaDetalle = ld.EstadoActivo,
+                    EstadoActivoConstanteDetalle = dc.EstadoActivo,
 
-                       CodigoDatoConstante = dc.Codigo
-                   };
+                    CodigoDatoConstante = dc.Codigo
+                   }).ToListAsync();
         }
 
-
-        public IQueryable<ListaDetalleMV> ListarPorCodigosLista(List<string> codigosLista)
+        public async Task<List<ListaDetalleMV>> ListarPorCodigosListaAsync(List<string> codigosLista)
         {
-            return _context.DCO_ListasDetalles
+            return await _context.DCO_ListasDetalles
                          .Include(ld => ld.Lista)
                          .Where(ld => codigosLista.Contains(ld.Lista.Codigo))
                          .Select(ld => new ListaDetalleMV
@@ -121,29 +120,32 @@ namespace DCO.Infraestructura.Dominio.Repositorio
                              FechaModificado = ld.FechaModificado,
                              EstadoActivoListaDetalle = ld.EstadoActivo,
                              CodigoLista = ld.Lista.Codigo
-                         });
+                         }).ToListAsync();
         }
 
-        public IQueryable<ListaDetalleMV> ListarPorCodigosConstante(List<string> codigosConstante)
+        public async Task<List<ListaDetalleMV>> ListarPorCodigosConstanteAsync(List<string> codigosConstante)
         {
-            return from dc in _context.DCO_DatosConstantes
-                   join dcd in _context.DCO_DatosConstantesDetalles on dc.Id equals dcd.DatoConstanteId
-                   join ld in _context.DCO_ListasDetalles on dcd.ListaDetalleId equals ld.Id
-                   where codigosConstante.Contains(dc.Codigo)
-                   select new ListaDetalleMV
-                   {
-                       Id = ld.Id,
-                       ListaId = ld.ListaId,
-                       Codigo = ld.Codigo,
-                       Nombre = ld.Nombre,
-                       UsuarioCreadorId = ld.UsuarioCreadorId,
-                       FechaCreado = ld.FechaCreado,
-                       UsuarioModificadorId = ld.UsuarioModificadorId,
-                       FechaModificado = ld.FechaModificado,
-                       EstadoActivoListaDetalle = ld.EstadoActivo,
-                       EstadoActivoConstanteDetalle = dc.EstadoActivo,
-                       CodigoDatoConstante = dc.Codigo
-                   };
+            return await (
+                from dc in _context.DCO_DatosConstantes
+                join dcd in _context.DCO_DatosConstantesDetalles
+                    on dc.Id equals dcd.DatoConstanteId
+                join ld in _context.DCO_ListasDetalles
+                    on dcd.ListaDetalleId equals ld.Id
+                where codigosConstante.Contains(dc.Codigo)
+                select new ListaDetalleMV
+                {
+                    Id = ld.Id,
+                    ListaId = ld.ListaId,
+                    Codigo = ld.Codigo,
+                    Nombre = ld.Nombre,
+                    UsuarioCreadorId = ld.UsuarioCreadorId,
+                    FechaCreado = ld.FechaCreado,
+                    UsuarioModificadorId = ld.UsuarioModificadorId,
+                    FechaModificado = ld.FechaModificado,
+                    EstadoActivoListaDetalle = ld.EstadoActivo,
+                    EstadoActivoConstanteDetalle = dcd.EstadoActivo,
+                    CodigoDatoConstante = dc.Codigo
+                }).ToListAsync();
         }
     }
 }

@@ -182,6 +182,7 @@ builder.Services.AddScoped<IProcesadorTransacciones, ProcesadorTransacciones>();
 builder.Services.AddSingleton<IServicioEjecutorHttp, ServicioEjecutorHttp>();
 
 builder.Services.AddScoped<IProcesadorEventos, ProcesadorEventos>();
+builder.Services.AddScoped<ISincronizadorMicroservicios, SincronizadorMicroservicios>();
 
 #region REG_Servicios de configuraciones Appsettings
 builder.Services.Configure<TrabajosColasSettings>(builder.Configuration.GetSection("TrabajosColas"));

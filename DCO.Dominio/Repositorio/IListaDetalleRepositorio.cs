@@ -10,12 +10,10 @@ namespace DCO.Dominio.Repositorio
         void MarcarEliminar(DCO_ListaDetalle listaDetalle);
         Task<DCO_ListaDetalle?> ObtenerPorIdAsync(int id);
         Task<DCO_ListaDetalle?> ObtenerPorListaIdYCodigoAsync(int listaId,string codigo);
-        IQueryable<ListaDetalleMV> Listar();
-        IQueryable<ListaDetalleMV> ListarPorCodigoLista(string codigoLista);
-        IQueryable<ListaDetalleMV> ListarPorCodigoConstante(string codigoDatoConstante);
-
-
-        IQueryable<ListaDetalleMV> ListarPorCodigosLista(List<string> codigosLista);
-        IQueryable<ListaDetalleMV> ListarPorCodigosConstante(List<string> codigosConstante);
+        Task<List<ListaDetalleMV>> ListarAsync();
+        Task<List<ListaDetalleMV>> ListarPorCodigoListaAsync(string codigoLista);
+        Task<List<ListaDetalleMV>> ListarPorCodigoConstanteAsync(string codigoDatoConstante);
+        Task<List<ListaDetalleMV>> ListarPorCodigosListaAsync(List<string> codigosLista);
+        Task<List<ListaDetalleMV>> ListarPorCodigosConstanteAsync(List<string> codigosConstante);
     }
 }

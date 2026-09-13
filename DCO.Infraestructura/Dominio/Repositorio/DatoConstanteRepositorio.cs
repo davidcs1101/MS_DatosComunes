@@ -42,9 +42,9 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             return await _context.DCO_DatosConstantes.FirstOrDefaultAsync(g => g.Codigo == codigo);
         }
 
-        public IQueryable<DCO_DatoConstante> Listar()
+        public async Task<List<DCO_DatoConstante>> ListarAsync()
         {
-            return _context.DCO_DatosConstantes;
+            return await _context.DCO_DatosConstantes.ToListAsync();
         }
     }
 }

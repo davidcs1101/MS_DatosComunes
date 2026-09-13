@@ -1,11 +1,9 @@
 ﻿using DCO.Dtos;
 using DCO.Dominio.Entidades;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Utilidades;
 using DCO.Dominio.Repositorio;
 using DCO.Aplicacion.CasosUso.Interfaces;
-using DCO.Aplicacion.ServiciosExternos;
 using DCO.Dominio.Servicios.Interfaces;
 using Utilidades.Dtos;
 using Utilidades.Servicios.Responses.Interfaces;
@@ -103,7 +101,7 @@ namespace DCO.Aplicacion.CasosUso.Implementaciones
 
         public async Task<ApiResponseDto<List<DatoConstanteDto>?>> ListarAsync()
         {
-            var datosConstantes = await _datoConstanteRepositorio.Listar().ToListAsync();
+            var datosConstantes = await _datoConstanteRepositorio.ListarAsync();
             var datosConstantesDto = _mapper.Map<List<DatoConstanteDto>>(datosConstantes);
             IdsListadoDto usuarioIds = new IdsListadoDto();
 

@@ -1,5 +1,6 @@
 ﻿using DCO.DataAccess;
 using DCO.Dominio.Entidades;
+using DCO.Dominio.Entidades.ModelosVistas;
 using DCO.Dominio.Repositorio;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,9 +43,9 @@ namespace DCO.Infraestructura.Dominio.Repositorio
             return await _context.DCO_Listas.FirstOrDefaultAsync(g => g.Codigo == codigo);
         }
 
-        public IQueryable<DCO_Lista> Listar()
+        public async Task<List<DCO_Lista>> ListarAsync()
         {
-            return _context.DCO_Listas;
+            return await _context.DCO_Listas.ToListAsync();
         }
     }
 }

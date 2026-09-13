@@ -57,32 +57,18 @@ namespace ApiDCO.Controllers
             return await _listaDetalleServicio.ListarPorCodigoListaAsync(codigoLista);
         }
 
-        [HttpGet("listarPorCodigoConstante")]
-        [Permiso(CodigosPermisos.ListasDetalles.LISTAR)]
-        public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstante)
-        {
-            return await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstante);
-        }
-
-        [HttpPost("obtenerPorCodigoConstanteYCodigoListaDetalle")]
-        [Permiso(CodigosPermisos.ListasDetalles.CONSULTAR)]
-        public async Task<ActionResult<ApiResponseDto<ListaDetalleDto?>>> ObtenerPorCodigoConstanteYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
-        {
-            return await _listaDetalleServicio.ObtenerPorCodigoConstanteYCodigoListaDetalle(codigoDetalleRequest);
-        }
-
-        [HttpPost("obtenerPorCodigoListaYCodigoListaDetalle")]
-        [Permiso(CodigosPermisos.ListasDetalles.CONSULTAR)]
-        public async Task<ActionResult<ApiResponseDto<ListaDetalleDto?>>> ObtenerPorCodigoListaYCodigoListaDetalle(CodigoDetalleRequest codigoDetalleRequest)
-        {
-            return await _listaDetalleServicio.ObtenerPorCodigoListaYCodigoListaDetalle(codigoDetalleRequest);
-        }
-
         [HttpPost("listarPorCodigosLista")]
         //[Permiso(CodigosPermisos.ListasDetalles.LISTAR)]
         public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorCodigosLista(List<string> codigosLista)
         {
             return await _listaDetalleServicio.ListarPorCodigosListaAsync(codigosLista);
+        }
+
+        [HttpGet("listarPorCodigoConstante")]
+        [Permiso(CodigosPermisos.ListasDetalles.LISTAR)]
+        public async Task<ActionResult<ApiResponseDto<List<ListaDetalleDto>?>>> ListarPorcodigoConstante(string codigoConstante)
+        {
+            return await _listaDetalleServicio.ListarPorCodigoConstanteAsync(codigoConstante);
         }
 
         [HttpPost("listarPorCodigosConstante")]

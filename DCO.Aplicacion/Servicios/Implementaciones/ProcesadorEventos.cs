@@ -1,7 +1,4 @@
-﻿using Utilidades.Dtos.Correos;
-using Utilidades;
-using Utilidades.Dtos;
-using Utilidades.Servicios.Serializacion.Interfaces;
+﻿using Utilidades;
 using Utilidades.Servicios.Http.Interfaces;
 using DCO.Aplicacion.Servicios.Interfaces;
 using DCO.Aplicacion.Servicios.Interfaces.Cache;
@@ -10,15 +7,12 @@ namespace DCO.Aplicacion.Servicios.Implementaciones
 {
     public class ProcesadorEventos : IProcesadorEventos
     {
-        private readonly ISerializadorJsonServicio _serializadorJsonServicio;
         private readonly IPublicadorEventosBackgroundServicio _publicadorEventosBackgroundServicio;
         private readonly ISeguridadPermisosCache _seguridadPermisosCache;
 
-        public ProcesadorEventos(ISerializadorJsonServicio serializadorJsonServicio,
-            IPublicadorEventosBackgroundServicio publicadorEventosBackgroundServicio,
+        public ProcesadorEventos(IPublicadorEventosBackgroundServicio publicadorEventosBackgroundServicio,
             ISeguridadPermisosCache seguridadPermisosCache)
         {
-            _serializadorJsonServicio = serializadorJsonServicio;
             _publicadorEventosBackgroundServicio = publicadorEventosBackgroundServicio;
             _seguridadPermisosCache = seguridadPermisosCache;
         }
